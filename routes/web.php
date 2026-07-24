@@ -11,4 +11,5 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/checkouts/{checkout}/pdf-handover', [HandoverFormController::class, 'downloadHandover'])->name('checkouts.pdf-handover');
     Route::get('/admin/checkouts/{checkout}/pdf-return', [HandoverFormController::class, 'downloadReturn'])->name('checkouts.pdf-return');
+    Route::get('/admin/berita-acaras/{beritaAcara}/pdf', [HandoverFormController::class, 'downloadBeritaAcara'])->name('berita-acaras.pdf');
 });

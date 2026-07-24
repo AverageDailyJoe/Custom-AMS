@@ -17,4 +17,10 @@ class HandoverFormController extends Controller
         $checkout->load(['asset.assetModel.category', 'asset.location', 'checkedOutByUser', 'checkedInByUser']);
         return view('pdf.return-form', compact('checkout'));
     }
+
+    public function downloadBeritaAcara(\App\Models\BeritaAcara $beritaAcara)
+    {
+        $beritaAcara->load(['asset.assetModel.category', 'createdBy']);
+        return view('pdf.berita-acara-form', compact('beritaAcara'));
+    }
 }
