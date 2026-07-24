@@ -59,6 +59,37 @@
             </tr>
         </table>
 
+        @php
+            $date = $beritaAcara->letter_date ? \Carbon\Carbon::parse($beritaAcara->letter_date) : \Carbon\Carbon::now();
+            $days = [
+                'Sunday' => 'Minggu',
+                'Monday' => 'Senin',
+                'Tuesday' => 'Selasa',
+                'Wednesday' => 'Rabu',
+                'Thursday' => 'Kamis',
+                'Friday' => "Jum'at",
+                'Saturday' => 'Sabtu',
+            ];
+            $months = [
+                'January' => 'Januari',
+                'February' => 'Februari',
+                'March' => 'Maret',
+                'April' => 'April',
+                'May' => 'Mei',
+                'June' => 'Juni',
+                'July' => 'Juli',
+                'August' => 'Agustus',
+                'September' => 'September',
+                'October' => 'Oktober',
+                'November' => 'November',
+                'December' => 'Desember',
+            ];
+            $dayName = $days[$date->format('l')] ?? $date->format('l');
+            $monthName = $months[$date->format('F')] ?? $date->format('F');
+            $dayNum = $date->format('d');
+            $yearNum = $date->format('Y');
+        @endphp
+
         <table class="meta-table">
             <tr>
                 <td style="width: 12%;"><strong>Nomor</strong></td>
@@ -68,15 +99,12 @@
             <tr>
                 <td><strong>Tanggal</strong></td>
                 <td>:</td>
-                <td>{{ $beritaAcara->letter_date ? $beritaAcara->letter_date->translatedFormat('d/M/Y') : date('d/M/Y') }}</td>
+                <td>{{ $dayNum }}/{{ substr($monthName, 0, 3) }}/{{ $yearNum }}</td>
             </tr>
         </table>
 
         <div style="margin-bottom: 12px; font-size: 11.5px;">
-            Pada hari ini, <strong>{{ $beritaAcara->letter_date ? $beritaAcara->letter_date->translatedFormat('l') : 'Senin' }}</strong>, 
-            tanggal <strong>{{ $beritaAcara->letter_date ? $beritaAcara->letter_date->format('d') : date('d') }}</strong>, 
-            bulan <strong>{{ $beritaAcara->letter_date ? $beritaAcara->letter_date->translatedFormat('F') : date('F') }}</strong>, 
-            tahun <strong>{{ $beritaAcara->letter_date ? $beritaAcara->letter_date->format('Y') : date('Y') }}</strong>, yang bertanda tangan dibawah ini:
+            Pada hari ini, {{ $dayName }}, tanggal {{ $dayNum }}, bulan {{ $monthName }}, tahun {{ $yearNum }}, yang bertanda tangan dibawah ini:
         </div>
 
         <table class="party-table">

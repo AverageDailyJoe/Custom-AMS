@@ -63,8 +63,39 @@
 
         <div class="doc-title">FORM SERAH TERIMA PERANGKAT IT</div>
 
+        @php
+            $date = $checkout->checked_out_at ? \Carbon\Carbon::parse($checkout->checked_out_at) : \Carbon\Carbon::now();
+            $days = [
+                'Sunday' => 'Minggu',
+                'Monday' => 'Senin',
+                'Tuesday' => 'Selasa',
+                'Wednesday' => 'Rabu',
+                'Thursday' => 'Kamis',
+                'Friday' => "Jum'at",
+                'Saturday' => 'Sabtu',
+            ];
+            $months = [
+                'January' => 'Januari',
+                'February' => 'Februari',
+                'March' => 'Maret',
+                'April' => 'April',
+                'May' => 'Mei',
+                'June' => 'Juni',
+                'July' => 'Juli',
+                'August' => 'Agustus',
+                'September' => 'September',
+                'October' => 'Oktober',
+                'November' => 'November',
+                'December' => 'Desember',
+            ];
+            $dayName = $days[$date->format('l')] ?? $date->format('l');
+            $monthName = $months[$date->format('F')] ?? $date->format('F');
+            $dayNum = $date->format('d');
+            $yearNum = $date->format('Y');
+        @endphp
+
         <div style="margin-bottom: 8px; font-size: 11px;">
-            Pada hari ini tanggal <strong>{{ $checkout->checked_out_at ? $checkout->checked_out_at->translatedFormat('d F Y') : date('d F Y') }}</strong>, yang bertandatangan di bawah ini:
+            Pada hari ini, {{ $dayName }}, tanggal {{ $dayNum }}, bulan {{ $monthName }}, tahun {{ $yearNum }}, yang bertanda tangan di bawah ini:
         </div>
 
         <table class="info-table">
