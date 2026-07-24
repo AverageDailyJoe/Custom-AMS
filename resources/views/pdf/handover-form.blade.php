@@ -52,7 +52,7 @@
         <table class="header-table">
             <tr>
                 <td style="width: 20%;">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="logo-img">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
                 </td>
                 <td style="width: 80%; text-align: left; padding-left: 15px;">
                     <div class="company-title">PT GONDOWANGI TRADISIONAL KOSMETIKA</div>

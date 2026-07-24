@@ -51,7 +51,7 @@
         <table class="header-table">
             <tr>
                 <td style="width: 25%;">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="logo-img">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
                 </td>
                 <td style="width: 75%; text-align: center; padding-right: 25%;">
                     <div class="doc-title">BERITA ACARA</div>
