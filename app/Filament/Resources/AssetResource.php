@@ -298,6 +298,45 @@ class AssetResource extends Resource
                     ->form([
                         Forms\Components\Textarea::make('notes')
                             ->label('Catatan Pengembalian (Checkin)'),
+
+                        Forms\Components\Section::make('Pengecekan Kondisi Komponen & Aksesoris')
+                            ->description('Pilih kondisi (Baik/Rusak) dan isi keterangan untuk masing-masing komponen saat pengembalian')
+                            ->collapsible()
+                            ->schema([
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.layar_status')->label('1. Layar')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.layar_notes')->label('Ket. Layar')->default('Normal')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.keyboard_status')->label('2. Keyboard')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.keyboard_notes')->label('Ket. Keyboard')->default('Normal')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.ram_status')->label('3. RAM / Memory')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.ram_notes')->label('Ket. RAM')->default('Normal')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.ssd_status')->label('4. SSD / Storage')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.ssd_notes')->label('Ket. Storage')->default('Normal')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.trackpad_status')->label('5. Trackpad / Mouse')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.trackpad_notes')->label('Ket. Trackpad')->default('Normal')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.baterai_status')->label('6. Baterai')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.baterai_notes')->label('Ket. Baterai')->default('Berfungsi baik')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.hardware_status')->label('7. Hardware & CPU')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.hardware_notes')->label('Ket. Hardware')->default('Normal')->columnSpan(2),
+                                ]),
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Select::make('component_checklist.charger_status')->label('8. Charger / Power')->options(['baik' => 'Baik', 'rusak' => 'Rusak'])->default('baik')->required(),
+                                    Forms\Components\TextInput::make('component_checklist.charger_notes')->label('Ket. Charger')->default('Lengkap dengan kabel power')->columnSpan(2),
+                                ]),
+                            ]),
+
                         Forms\Components\FileUpload::make('checkin_attachments')
                             ->label('Lampiran / Bukti Pengembalian (Bisa Banyak Foto / PDF)')
                             ->directory('checkin-attachments')
@@ -312,7 +351,9 @@ class AssetResource extends Resource
                     ->action(function (Asset $record, array $data) {
                         $record->checkin(
                             $data['notes'] ?? null,
-                            $data['checkin_attachments'] ?? null
+                            $data['checkin_attachments'] ?? null,
+                            'in_stock',
+                            $data['component_checklist'] ?? null
                         );
 
                         Notification::make()

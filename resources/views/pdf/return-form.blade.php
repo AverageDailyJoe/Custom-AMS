@@ -94,6 +94,9 @@
         </table>
 
         <div style="font-weight: bold; font-size: 11px; margin: 10px 0 5px;">TABEL PENGECEKAN KONDISI FISIK & KOMPONEN SAAT PENGEMBALIAN:</div>
+        @php
+            $chk = $checkout->component_checklist ?? [];
+        @endphp
         <table class="check-table">
             <thead>
                 <tr>
@@ -108,58 +111,58 @@
                 <tr>
                     <td>1</td>
                     <td class="text-left">Layar / Display</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">Diterima kondisi baik</td>
+                    <td>{{ ($chk['layar_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['layar_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['layar_notes'] ?? 'Normal' }}</td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td class="text-left">Keyboard</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">Diterima kondisi baik</td>
+                    <td>{{ ($chk['keyboard_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['keyboard_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['keyboard_notes'] ?? 'Normal' }}</td>
                 </tr>
                 <tr>
                     <td>3</td>
                     <td class="text-left">RAM / Memory</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">{{ $checkout->asset->ram ?? 'Baik' }}</td>
+                    <td>{{ ($chk['ram_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['ram_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['ram_notes'] ?? ($checkout->asset->ram ?? 'Normal') }}</td>
                 </tr>
                 <tr>
                     <td>4</td>
                     <td class="text-left">SSD / Storage</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">SSD: {{ $checkout->asset->storage_ssd ?? '-' }} | HDD: {{ $checkout->asset->storage_hdd ?? '-' }}</td>
+                    <td>{{ ($chk['ssd_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['ssd_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['ssd_notes'] ?? ('SSD: ' . ($checkout->asset->storage_ssd ?? '-') . ' | HDD: ' . ($checkout->asset->storage_hdd ?? '-')) }}</td>
                 </tr>
                 <tr>
                     <td>5</td>
-                    <td class="text-left">Trackpad</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">Diterima kondisi baik</td>
+                    <td class="text-left">Trackpad / Mouse</td>
+                    <td>{{ ($chk['trackpad_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['trackpad_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['trackpad_notes'] ?? 'Normal' }}</td>
                 </tr>
                 <tr>
                     <td>6</td>
                     <td class="text-left">Baterai</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">Berfungsi normal</td>
+                    <td>{{ ($chk['baterai_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['baterai_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['baterai_notes'] ?? 'Berfungsi baik' }}</td>
                 </tr>
                 <tr>
                     <td>7</td>
-                    <td class="text-left">Hardware</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">{{ $checkout->asset->processor ?? 'Normal' }}</td>
+                    <td class="text-left">Hardware & CPU</td>
+                    <td>{{ ($chk['hardware_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['hardware_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['hardware_notes'] ?? ($checkout->asset->processor ?? 'Normal') }}</td>
                 </tr>
                 <tr>
                     <td>8</td>
                     <td class="text-left">Charger / Power Brick</td>
-                    <td>✔</td>
-                    <td>-</td>
-                    <td class="text-left">Lengkap dengan kabel power</td>
+                    <td>{{ ($chk['charger_status'] ?? 'baik') === 'baik' ? '✔' : '-' }}</td>
+                    <td>{{ ($chk['charger_status'] ?? 'baik') === 'rusak' ? '✔' : '-' }}</td>
+                    <td class="text-left">{{ $chk['charger_notes'] ?? 'Lengkap dengan kabel power' }}</td>
                 </tr>
             </tbody>
         </table>

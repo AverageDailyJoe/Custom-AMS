@@ -113,7 +113,7 @@ class Asset extends Model
     /**
      * Check in the asset's currently active checkout.
      */
-    public function checkin(?string $notes = null, $attachments = null, string $newStatus = 'in_stock'): ?Checkout
+    public function checkin(?string $notes = null, $attachments = null, string $newStatus = 'in_stock', ?array $componentChecklist = null): ?Checkout
     {
         $adminId = Auth::id() ?: 1;
         $checkout = $this->currentCheckout()->first();
@@ -126,6 +126,7 @@ class Asset extends Model
                 'checkin_notes' => $notes,
                 'checkin_attachments' => $attachmentsArray,
                 'checkin_attachment' => is_array($attachments) ? ($attachments[0] ?? null) : $attachments,
+                'component_checklist' => $componentChecklist,
             ]);
         }
 

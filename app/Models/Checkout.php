@@ -22,6 +22,7 @@ class Checkout extends Model
         'checkin_attachment',
         'checkout_attachments',
         'checkin_attachments',
+        'component_checklist',
     ];
 
     public function getHolderNameAttribute(): string
@@ -38,6 +39,7 @@ class Checkout extends Model
         'checked_in_at' => 'datetime',
         'checkout_attachments' => 'array',
         'checkin_attachments' => 'array',
+        'component_checklist' => 'array',
     ];
 
     public function asset(): BelongsTo
