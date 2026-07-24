@@ -59,6 +59,19 @@ class CheckoutResource extends Resource
                     ),
             ])
             ->actions([
+                Tables\Actions\Action::make('pdf_handover')
+                    ->label('Form Serah Terima (PDF)')
+                    ->icon('heroicon-o-document-text')
+                    ->color('warning')
+                    ->url(fn ($record) => route('checkouts.pdf-handover', $record))
+                    ->openUrlInNewTab(),
+                Tables\Actions\Action::make('pdf_return')
+                    ->label('Form Pengembalian (PDF)')
+                    ->icon('heroicon-o-arrow-left-on-rectangle')
+                    ->color('danger')
+                    ->visible(fn ($record) => $record->checked_in_at !== null)
+                    ->url(fn ($record) => route('checkouts.pdf-return', $record))
+                    ->openUrlInNewTab(),
                 Tables\Actions\Action::make('view_attachments')
                     ->label('Lihat Lampiran')
                     ->icon('heroicon-o-paper-clip')
