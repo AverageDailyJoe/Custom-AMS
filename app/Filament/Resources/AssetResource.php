@@ -199,13 +199,22 @@ class AssetResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('asset_tag')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('assetModel.name')
-                    ->label('Model')
-                    ->formatStateUsing(fn ($record) => "{$record->assetModel->manufacturer} {$record->assetModel->name}")
+                Tables\Columns\TextColumn::make('asset_tag')
+                    ->label('ID Inventaris')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('assetModel.category.name')->label('Category'),
+                Tables\Columns\TextColumn::make('serial')
+                    ->label('Serial Number')
+                    ->searchable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('assetModel.name')
+                    ->label('Model')
+                    ->formatStateUsing(fn ($record) => "{$record->assetModel?->manufacturer} {$record->assetModel?->name}")
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('assetModel.category.name')
+                    ->label('Category')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
@@ -214,11 +223,21 @@ class AssetResource extends Resource
                         'in_repair' => 'danger',
                         'archived' => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('location.name')->label('Location'),
+                Tables\Columns\TextColumn::make('location.name')
+                    ->label('Location')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('holder_name')
                     ->label('Checked out to')
                     ->searchable(['primary_user', 'secondary_user'])
                     ->placeholder('-'),
+                Tables\Columns\TextColumn::make('department')
+                    ->label('Departemen')
+                    ->searchable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('room')
+                    ->label('Ruangan')
+                    ->searchable()
+                    ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')->options([
