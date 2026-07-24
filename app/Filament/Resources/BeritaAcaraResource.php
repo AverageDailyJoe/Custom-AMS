@@ -56,16 +56,26 @@ class BeritaAcaraResource extends Resource
                             ->live()
                             ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
                                 if ($state === 'kehilangan') {
+                                    $set('title', 'Berita Acara Kehilangan Asset IT');
                                     $set('description_points', "1. Bahwa PIHAK KEDUA telah mengalami kehilangan 1 (satu) unit laptop/perangkat pribadi yang digunakan untuk mendukung pekerjaan sehari-hari.\n2. Bahwa sebagai bentuk kepedulian dan empati perusahaan atas kejadian tersebut, perusahaan memutuskan untuk memberikan 1 (satu) unit laptop pengganti terhadap PIHAK KEDUA.\n3. Bahwa pemberian laptop pengganti ini bersifat bantuan dari perusahaan dan bukan merupakan kewajiban ganti rugi atas kehilangan tersebut.\n4. Bahwa PIHAK PERTAMA selaku perwakilan perusahaan telah menyerahkan unit laptop pengganti kepada PIHAK KEDUA, dan PIHAK KEDUA telah menerima unit tersebut.");
                                 } elseif ($state === 'kerusakan_sparepart') {
+                                    $set('title', 'Berita Acara Perbaikan / Spare Part Asset IT');
                                     $set('description_points', "1. Bahwa PIHAK KEDUA melaporkan adanya indikasi kerusakan/penurunan performa pada unit aset IT.\n2. Bahwa PIHAK PERTAMA telah melakukan pemeriksaan teknis dan mengkonfirmasi perbaikan/penggantian komponen spare part.\n3. Bahwa unit aset telah selesai diperbaiki dan siap digunakan kembali untuk mendukung operasional perusahaan.");
                                 } elseif ($state === 'transfer_asset') {
+                                    $set('title', 'Berita Acara Mutasi / Transfer Asset IT');
                                     $set('description_points', "1. Bahwa PIHAK PERTAMA telah menyerahkan unit aset IT dari lokasi/divisi asal kepada PIHAK KEDUA.\n2. Bahwa PIHAK KEDUA telah menerima unit tersebut dan bertanggung jawab atas penggunaan unit di lokasi/departemen baru.\n3. Bahwa seluruh data dan hak akses telah disesuaikan sesuai prosedur IT perusahaan.");
                                 } elseif ($state === 'penggantian_unit') {
+                                    $set('title', 'Berita Acara Penyerahan Unit Asset Baru/Pengganti');
                                     $set('description_points', "1. Bahwa dilakukan penyerahan unit pengganti/baru untuk mendukung pekerjaan PIHAK KEDUA.\n2. Bahwa PIHAK KEDUA telah menerima unit pengganti dalam kondisi baik dan siap pakai.\n3. Bahwa unit lama telah dikembalikan penuh ke pihak IT.");
                                 }
                             }),
                     ]),
+
+                    Forms\Components\TextInput::make('title')
+                        ->label('Judul / Hal Berita Acara')
+                        ->default('Berita Acara IT')
+                        ->placeholder('Misal: Berita Acara Perbaikan Laptop')
+                        ->columnSpanFull(),
 
                     Forms\Components\Select::make('asset_id')
                         ->label('Pilih Unit Asset IT')

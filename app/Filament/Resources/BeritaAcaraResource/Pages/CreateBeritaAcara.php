@@ -13,6 +13,9 @@ class CreateBeritaAcara extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['created_by'] = Auth::id();
+        if (empty($data['title'])) {
+            $data['title'] = 'Berita Acara IT';
+        }
         return $data;
     }
 }
