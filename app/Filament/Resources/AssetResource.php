@@ -340,4 +340,14 @@ class AssetResource extends Resource
             'edit' => Pages\EditAsset::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->with([
+                'assetModel.category',
+                'location',
+                'checkouts',
+            ]);
+    }
 }
