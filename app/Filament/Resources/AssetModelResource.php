@@ -26,8 +26,7 @@ class AssetModelResource extends Resource
             Forms\Components\Select::make('category_id')
                 ->relationship('category', 'name')
                 ->required()
-                ->searchable()
-                ->preload(),
+                ->searchable(),
             Forms\Components\TextInput::make('name')->required()->maxLength(255),
             Forms\Components\TextInput::make('manufacturer')->maxLength(255),
             Forms\Components\TextInput::make('model_number')->maxLength(255),
