@@ -23,4 +23,10 @@ class HandoverFormController extends Controller
         $beritaAcara->load(['asset.assetModel.category', 'createdBy']);
         return view('pdf.berita-acara-form', compact('beritaAcara'));
     }
+
+    public function downloadPengajuanAset(\App\Models\PengajuanAset $pengajuanAset)
+    {
+        $pengajuanAset->load(['createdBy']);
+        return view('pdf.pengajuan-aset-form', compact('pengajuanAset'));
+    }
 }
