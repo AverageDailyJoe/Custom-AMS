@@ -81,7 +81,6 @@ class BeritaAcaraResource extends Resource
                         ->label('Pilih Unit Asset IT')
                         ->relationship('asset', 'asset_tag')
                         ->searchable()
-                        ->preload()
                         ->live()
                         ->afterStateUpdated(function (Set $set, ?string $state) {
                             if ($state) {
@@ -246,5 +245,11 @@ class BeritaAcaraResource extends Resource
             'create' => Pages\CreateBeritaAcara::route('/create'),
             'edit' => Pages\EditBeritaAcara::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['asset']);
     }
 }

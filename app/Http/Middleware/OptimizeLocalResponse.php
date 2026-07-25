@@ -10,6 +10,11 @@ class OptimizeLocalResponse
 {
     public function handle(Request $request, Closure $next): Response
     {
+        if (app()->isLocal()) {
+            @ini_set('max_execution_time', '120');
+            @ini_set('memory_limit', '512M');
+        }
+
         $response = $next($request);
 
         // Prevent Windows PHP Built-in Server Keep-Alive socket hangs
