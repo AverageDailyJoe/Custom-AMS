@@ -1,12 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\HandoverFormController;
 
 Route::get('/', function () {
     return redirect('/admin');
 });
+
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/checkouts/{checkout}/pdf-handover', [HandoverFormController::class, 'downloadHandover'])->name('checkouts.pdf-handover');
