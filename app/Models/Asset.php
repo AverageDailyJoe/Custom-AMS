@@ -42,6 +42,27 @@ class Asset extends Model
         'attachments' => 'array',
     ];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (Asset $asset) {
+            if ($asset->isDirty('status') && $asset->status === 'disposed') {
+                $asset->primary_user = null;
+                $asset->secondary_user = null;
+            }
+        });
+
+        static::saved(function (Asset $asset) {
+            if ($asset->status === 'disposed') {
+                $asset->checkouts()->whereNull('checked_in_at')->update([
+                    'checked_in_at' => now(),
+                    'checkin_notes' => 'Automatic checkin due to IT Asset Disposal',
+                ]);
+            }
+        });
+    }
+
     public function assetModel(): BelongsTo
     {
         return $this->belongsTo(AssetModel::class);
@@ -80,6 +101,10 @@ class Asset extends Model
 
     public function getHolderNameAttribute(): string
     {
+        if ($this->status === 'disposed') {
+            return '-';
+        }
+
         if (!empty($this->primary_user)) {
             return !empty($this->secondary_user) ? "{$this->primary_user} ({$this->secondary_user})" : $this->primary_user;
         }

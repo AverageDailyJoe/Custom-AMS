@@ -40,6 +40,8 @@ class DisposeAset extends Model
 
             if (in_array($disposeAset->status, $disposedStatuses)) {
                 $asset->status = 'disposed';
+                $asset->primary_user = null;
+                $asset->secondary_user = null;
                 $asset->save();
 
                 // Close any active checkouts
