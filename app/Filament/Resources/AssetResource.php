@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AssetResource\Pages;
 use App\Filament\Resources\AssetResource\RelationManagers\CheckoutsRelationManager;
+use App\Filament\Resources\AssetResource\RelationManagers\TicketsRelationManager;
 use App\Models\Asset;
 use App\Models\User;
 use Filament\Forms;
@@ -397,6 +398,7 @@ class AssetResource extends Resource
     {
         return [
             CheckoutsRelationManager::class,
+            TicketsRelationManager::class,
         ];
     }
 

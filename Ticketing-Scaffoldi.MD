@@ -127,8 +127,8 @@ System alur kerja berbasis jadwal (**Scheduled-Driven IT Ticketing**):
   - [x] Add route `admin/tickets/{ticket}/pdf` and controller method `downloadTicket`
   - [x] Format: PT Gondowangi Official Work Order / IT Service Form layout (Solid Black Borders `#000`)
 
-- [ ] **Task 5: Asset Maintenance History Integration**
-  - [ ] Add relation manager / tab `Riwayat Service & Tiket` in `AssetResource.php`
+- [x] **Task 5: Asset Maintenance History Integration**
+  - [x] Add relation manager / tab `Riwayat Tiket IT & Maintenance` in `AssetResource.php` (`TicketsRelationManager.php`)
 
 ---
 
