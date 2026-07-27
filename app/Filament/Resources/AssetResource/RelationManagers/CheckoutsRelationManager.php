@@ -17,7 +17,14 @@ class CheckoutsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('holder_name')->label('Pengguna (Utama / Pendamping)')->searchable(),
+                Tables\Columns\TextColumn::make('holder_name')
+                    ->label('Pengguna (Utama / Pendamping)')
+                    ->searchable(query: function ($query, string $search) {
+                        return $query->where(function ($q) use ($search) {
+                            $q->where('primary_user', 'ilike', "%{$search}%")
+                              ->orWhere('secondary_user', 'ilike', "%{$search}%");
+                        });
+                    }),
                 Tables\Columns\TextColumn::make('checked_out_at')->label('Tanggal Checkout')->dateTime()->sortable(),
                 Tables\Columns\TextColumn::make('checked_in_at')->label('Tanggal Checkin')->dateTime()->placeholder('Sedang Digunakan'),
                 Tables\Columns\TextColumn::make('checkedOutByUser.name')
@@ -26,7 +33,7 @@ class CheckoutsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('attachments_info')
                     ->label('Lampiran / Bukti')
                     ->getStateUsing(function ($record) {
-                        $count = count($record->getAllAttachments());
+                        $count = $record->getAllAttachmentsCount();
                         return $count > 0 ? "{$count} Berkas / Foto" : '-';
                     })
                     ->url(function ($record) {
@@ -35,7 +42,7 @@ class CheckoutsRelationManager extends RelationManager
                     })
                     ->openUrlInNewTab()
                     ->icon('heroicon-o-paper-clip')
-                    ->color(fn ($record) => count($record->getAllAttachments()) > 0 ? 'primary' : 'gray'),
+                    ->color(fn ($record) => $record->getAllAttachmentsCount() > 0 ? 'primary' : 'gray'),
                 Tables\Columns\TextColumn::make('checkout_notes')->label('Catatan')->limit(40),
             ])
             ->defaultSort('checked_out_at', 'desc')

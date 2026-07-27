@@ -225,7 +225,15 @@ class AssetResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('holder_name')
                     ->label('Checked out to')
-                    ->searchable(['primary_user', 'secondary_user'])
+                    ->searchable(query: function ($query, string $search) {
+                        return $query->whereHas('checkouts', function ($q) use ($search) {
+                            $q->whereNull('checked_in_at')
+                              ->where(function ($sub) use ($search) {
+                                  $sub->where('primary_user', 'ilike', "%{$search}%")
+                                      ->orWhere('secondary_user', 'ilike', "%{$search}%");
+                              });
+                        });
+                    })
                     ->placeholder('-'),
                 Tables\Columns\TextColumn::make('department')
                     ->label('Departemen')
@@ -386,6 +394,7 @@ class AssetResource extends Resource
                 'assetModel.category',
                 'location',
                 'checkouts',
+                'currentCheckout',
             ]);
     }
 }

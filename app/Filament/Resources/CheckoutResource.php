@@ -27,7 +27,14 @@ class CheckoutResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('asset.asset_tag')->label('ID Asset')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('holder_name')->label('Checked out to (Pengguna)')->searchable(),
+                Tables\Columns\TextColumn::make('holder_name')
+                    ->label('Checked out to (Pengguna)')
+                    ->searchable(query: function ($query, string $search) {
+                        return $query->where(function ($q) use ($search) {
+                            $q->where('primary_user', 'ilike', "%{$search}%")
+                              ->orWhere('secondary_user', 'ilike', "%{$search}%");
+                        });
+                    }),
                 Tables\Columns\TextColumn::make('checked_out_at')->label('Tanggal Checkout')->dateTime()->sortable(),
                 Tables\Columns\TextColumn::make('checked_in_at')->label('Tanggal Checkin')->dateTime()->sortable()->placeholder('Sedang Digunakan'),
                 Tables\Columns\TextColumn::make('checkedOutByUser.name')
@@ -96,10 +103,9 @@ class CheckoutResource extends Resource
     {
         return parent::getEloquentQuery()
             ->with([
-                'asset',
-                'user',
-                'checkedOutByUser',
-                'checkedInByUser',
+                'asset:id,asset_tag',
+                'checkedOutByUser:id,name',
+                'checkedInByUser:id,name',
             ]);
     }
 }
