@@ -23,11 +23,30 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $middleware = [
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            AuthenticateSession::class,
+            ShareErrorsFromSession::class,
+            SubstituteBindings::class,
+            DisableBladeIconComponents::class,
+            DispatchServingFilamentEvent::class,
+        ];
+
+        if (!app()->environment(['local', 'testing'])) {
+            $middleware = array_merge($middleware, [PreventRequestForgery::class]);
+        }
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('AMS')
+            ->brandLogo(fn () => asset('images/logo.png'))
+            ->brandLogoHeight('2.5rem')
+            ->favicon(fn () => asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -41,17 +60,7 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
-            ->middleware([
-                EncryptCookies::class,
-                AddQueuedCookiesToResponse::class,
-                StartSession::class,
-                AuthenticateSession::class,
-                ShareErrorsFromSession::class,
-                PreventRequestForgery::class,
-                SubstituteBindings::class,
-                DisableBladeIconComponents::class,
-                DispatchServingFilamentEvent::class,
-            ])
+            ->middleware($middleware)
             ->authMiddleware([
                 Authenticate::class,
             ]);
