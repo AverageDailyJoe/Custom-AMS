@@ -39,14 +39,25 @@ class RecentAssetActivityWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('checked_in_at')
                     ->label('Status Aktivitas')
                     ->badge()
-                    ->color(fn ($record) => $record->checked_in_at ? 'success' : 'warning')
-                    ->formatStateUsing(fn ($record) => $record->checked_in_at ? 'Checkin Kembali' : 'Checkout ke User'),
+                    ->color(function ($record) {
+                        if ($record->asset?->status === 'disposed') {
+                            return 'danger';
+                        }
+                        return $record->checked_in_at ? 'success' : 'warning';
+                    })
+                    ->formatStateUsing(function ($record) {
+                        if ($record->asset?->status === 'disposed') {
+                            return 'Aset Disposed';
+                        }
+                        return $record->checked_in_at ? 'Checkin Kembali' : 'Checkout ke User';
+                    }),
 
                 Tables\Columns\TextColumn::make('checkout_notes')
                     ->label('Catatan')
                     ->limit(30)
                     ->placeholder('-'),
             ])
+            ->recordClasses(fn ($record) => $record->asset?->status === 'disposed' ? 'opacity-60 line-through' : null)
             ->actions([
                 Tables\Actions\Action::make('pdf_handover')
                     ->label('Form Serah Terima')
