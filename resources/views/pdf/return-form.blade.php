@@ -21,10 +21,10 @@
         
         .check-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         .check-table th, .check-table td { border: 1px solid #4b5563; padding: 5px 8px; font-size: 11px; text-align: center; }
-        .check-table th { background: #fee2e2; font-weight: bold; color: #991b1b; }
+        .check-table th { background: #f3f4f6; font-weight: bold; color: #111827; }
         .text-left { text-align: left !important; }
         
-        .terms-box { font-size: 10.5px; text-align: justify; margin-bottom: 20px; border: 1px solid #fca5a5; padding: 10px 15px; background: #fff5f5; border-radius: 4px; }
+        .terms-box { font-size: 10.5px; text-align: justify; margin-bottom: 20px; border: 1px solid #d1d5db; padding: 10px 15px; background: #fafafa; border-radius: 4px; }
         .terms-box p { margin: 0 0 6px; }
 
         .sig-table { width: 100%; border-collapse: collapse; margin-top: 25px; border: none; }
@@ -32,8 +32,8 @@
         .sig-space { height: 65px; }
         
         .no-print { margin-bottom: 15px; text-align: right; }
-        .btn-print { background: #991b1b; color: white; border: none; padding: 8px 18px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
-        .btn-print:hover { background: #7f1d1d; }
+        .btn-print { background: #111827; color: white; border: none; padding: 8px 18px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .btn-print:hover { background: #1f2937; }
         
         @media print {
             .no-print { display: none; }
