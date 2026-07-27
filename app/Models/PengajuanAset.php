@@ -13,6 +13,7 @@ class PengajuanAset extends Model
         'title',
         'requester_name',
         'requester_department',
+        'area',
         'item_type',
         'quantity',
         'priority',

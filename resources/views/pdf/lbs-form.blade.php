@@ -72,7 +72,7 @@
             <tr>
                 <td class="meta-label-left"><strong>Area</strong></td>
                 <td class="meta-colon">:</td>
-                <td class="meta-value-left border-bottom">{{ $pengajuanAset->requester_department }} - Head Office</td>
+                <td class="meta-value-left border-bottom">{{ $pengajuanAset->area ?? ($pengajuanAset->requester_department . ' - Head Office') }}</td>
                 <td class="meta-label-right"><strong>Period</strong></td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-right border-bottom">{{ $period }}</td>
@@ -110,22 +110,22 @@
                 </tr>
                 <tr>
                     <td class="text-center font-bold">5</td>
-                    <td>FOTOCOPY & CETAKAN</td>
+                    <td>PERBAIKAN & PEMELIHARAAN</td>
                     <td class="text-right">-</td>
                 </tr>
                 <tr>
                     <td class="text-center font-bold">6</td>
-                    <td>EXPEDISI</td>
+                    <td>PERJALANAN DINAS & PERWAKILAN</td>
                     <td class="text-right">-</td>
                 </tr>
                 <tr>
                     <td class="text-center font-bold">7</td>
-                    <td>MATERIAL PROMOSI</td>
+                    <td>SEWA</td>
                     <td class="text-right">-</td>
                 </tr>
                 <tr>
                     <td class="text-center font-bold">8</td>
-                    <td>SPONSORSHIP</td>
+                    <td>ONGKOS ANGKUT</td>
                     <td class="text-right">-</td>
                 </tr>
                 <tr>
@@ -148,13 +148,13 @@
                 <tr>
                     <td class="text-center"></td>
                     <td style="padding-left: 20px;">
-                        1. <strong>{{ $pengajuanAset->title }}</strong>
+                        1. <strong>{{ $pengajuanAset->title }}</strong> ({{ $qty }} Unit{{ $unitCost > 0 && $qty > 1 ? ' @ Rp ' . number_format($unitCost, 0, ',', '.') : '' }})
                         @if($pengajuanAset->specification_requested)
                             <br><small style="color: #374151;">Spec: {{ $pengajuanAset->specification_requested }}</small>
                         @endif
                     </td>
                     <td class="text-right font-bold">
-                        {{ $pengajuanAset->estimated_cost ? number_format($pengajuanAset->estimated_cost, 0, ',', '.') : '-' }}
+                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '-' }}
                     </td>
                 </tr>
 
@@ -171,13 +171,13 @@
                 <tr>
                     <td colspan="2" class="text-right font-bold">GRAND TOTAL</td>
                     <td class="text-right font-bold">
-                        {{ $pengajuanAset->estimated_cost ? number_format($pengajuanAset->estimated_cost, 0, ',', '.') : '0' }}
+                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '0' }}
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-right font-bold">UANG MUKA EX PPB NO : {{ $pengajuanAset->request_number }}</td>
                     <td class="text-right font-bold">
-                        {{ $pengajuanAset->estimated_cost ? number_format($pengajuanAset->estimated_cost, 0, ',', '.') : '0' }}
+                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '0' }}
                     </td>
                 </tr>
                 <tr>

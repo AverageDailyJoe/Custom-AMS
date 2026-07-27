@@ -54,7 +54,7 @@ class PengajuanAsetResource extends Resource
                             ->required(),
                     ]),
 
-                    Forms\Components\Grid::make(2)->schema([
+                    Forms\Components\Grid::make(3)->schema([
                         Forms\Components\TextInput::make('requester_name')
                             ->label('Nama Pemohon')
                             ->default(fn () => Auth::user()?->name ?? '')
@@ -62,8 +62,13 @@ class PengajuanAsetResource extends Resource
 
                         Forms\Components\TextInput::make('requester_department')
                             ->label('Departemen Pemohon')
-                            ->placeholder('Misal: Digital Marketing / Finance')
+                            ->placeholder('Misal: Digital Marketing / Finance / IT')
                             ->required(),
+
+                        Forms\Components\TextInput::make('area')
+                            ->label('Area Lokasi')
+                            ->placeholder('Misal: HQ / Head Office, Factory Jababeka')
+                            ->default('HQ / Head Office'),
                     ]),
                 ]),
 
@@ -95,7 +100,8 @@ class PengajuanAsetResource extends Resource
                             ->label('Jumlah Unit')
                             ->numeric()
                             ->default(1)
-                            ->required(),
+                            ->required()
+                            ->live(),
 
                         Forms\Components\Select::make('priority')
                             ->label('Tingkat Prioritas')
@@ -111,10 +117,12 @@ class PengajuanAsetResource extends Resource
 
                     Forms\Components\Grid::make(3)->schema([
                         Forms\Components\TextInput::make('estimated_cost')
-                            ->label('Estimasi Biaya (Per Unit / Total)')
+                            ->label('Estimasi Biaya Per Unit (Rp)')
+                            ->helperText(fn (Forms\Get $get) => 'Total Biaya: Rp ' . number_format(((float) $get('estimated_cost')) * ((int) ($get('quantity') ?? 1)), 0, ',', '.'))
                             ->numeric()
                             ->prefix('Rp')
-                            ->placeholder('0'),
+                            ->placeholder('0')
+                            ->live(),
 
                         Forms\Components\TextInput::make('approver_name')
                             ->label('Nama Atasan (Mengetahui)')
@@ -128,10 +136,10 @@ class PengajuanAsetResource extends Resource
 
             Forms\Components\Section::make('Spesifikasi Teknis & Alasan Pengajuan')
                 ->schema([
-                    Forms\Components\Textarea::make('specification_requested')
-                        ->label('Spesifikasi Teknis Yang Diharapkan')
-                        ->placeholder('Misal: Intel Core i5 Gen 12+, RAM 16GB, SSD 512GB, Layar 14 inch')
-                        ->rows(3),
+                    Forms\Components\TextInput::make('specification_requested')
+                        ->label('Spesifikasi Teknis Yang Diminta / Dibutuhkan')
+                        ->placeholder('Misal: Intel Core i7, RAM 16GB, SSD 512GB, Windows 11 Pro')
+                        ->columnSpanFull(),
 
                     Forms\Components\Textarea::make('reason')
                         ->label('Alasan & Keperluan Pengajuan Aset Baru')
@@ -145,6 +153,11 @@ class PengajuanAsetResource extends Resource
                         ->multiple()
                         ->reorderable()
                         ->appendFiles()
+                        ->openable()
+                        ->downloadable()
+                        ->previewable()
+                        ->image()
+                        ->imagePreviewHeight('250')
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'application/pdf'])
                         ->maxSize(10240),
                 ]),

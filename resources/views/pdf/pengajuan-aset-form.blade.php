@@ -70,7 +70,7 @@
             <tr>
                 <td class="meta-label-left">Nomor</td>
                 <td class="meta-colon">:</td>
-                <td class="meta-value-left border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
+                <td class="meta-value-left border-bottom"><strong></strong></td>
                 <td class="meta-gap"></td>
                 <td class="meta-label-right">Jabatan</td>
                 <td class="meta-colon">:</td>
@@ -83,7 +83,7 @@
                 <td class="meta-gap"></td>
                 <td class="meta-label-right">Area</td>
                 <td class="meta-colon">:</td>
-                <td class="meta-value-right border-bottom">HQ / Head Office</td>
+                <td class="meta-value-right border-bottom">{{ $pengajuanAset->area ?? '' }}</td>
             </tr>
             <tr>
                 <td class="meta-label-left">Nama</td>
@@ -95,6 +95,12 @@
                 <td class="meta-value-right" style="border-bottom: none;"></td>
             </tr>
         </table>
+
+        @php
+            $unitCost = (float) ($pengajuanAset->estimated_cost ?? 0);
+            $qty = (int) ($pengajuanAset->quantity ?? 1);
+            $totalCost = $unitCost * $qty;
+        @endphp
 
         <table class="ppb-table">
             <thead>
@@ -112,14 +118,14 @@
                     <td>
                         <div class="font-bold">{{ $pengajuanAset->title }}</div>
                         <div style="font-size: 10px; color: #374151; margin-top: 3px;">
-                            <strong>Jenis Item:</strong> {{ $pengajuanAset->item_type }} ({{ $pengajuanAset->quantity }} Unit)<br>
+                            <strong>Jenis Item:</strong> {{ $pengajuanAset->item_type }} ({{ $pengajuanAset->quantity }} Unit{{ $unitCost > 0 && $qty > 1 ? ' @ Rp ' . number_format($unitCost, 0, ',', '.') : '' }})<br>
                             @if($pengajuanAset->specification_requested)
                                 <strong>Spesifikasi:</strong> {{ $pengajuanAset->specification_requested }}
                             @endif
                         </div>
                     </td>
                     <td class="text-right font-bold">
-                        {{ $pengajuanAset->estimated_cost ? 'Rp ' . number_format($pengajuanAset->estimated_cost, 0, ',', '.') : '-' }}
+                        {{ $totalCost > 0 ? 'Rp ' . number_format($totalCost, 0, ',', '.') : '-' }}
                     </td>
                     <td>
                         <div style="font-size: 10.5px;">{{ $pengajuanAset->reason }}</div>
@@ -142,7 +148,7 @@
                         J U M L A H
                     </td>
                     <td class="text-right font-bold" style="font-size: 12px;">
-                        {{ $pengajuanAset->estimated_cost ? 'Rp ' . number_format($pengajuanAset->estimated_cost, 0, ',', '.') : 'Rp 0' }}
+                        {{ $totalCost > 0 ? 'Rp ' . number_format($totalCost, 0, ',', '.') : 'Rp 0' }}
                     </td>
                     <td></td>
                 </tr>
