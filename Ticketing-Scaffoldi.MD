@@ -91,18 +91,18 @@ System alur kerja berbasis jadwal (**Scheduled-Driven IT Ticketing**):
 
 ## 📝 TODO CHECKLIST / IMPLEMENTATION PLAN
 
-- [ ] **Task 1: Migration & Models**
-  - [ ] Create `2025_01_01_000017_create_tickets_table.php`
-  - [ ] Create `2025_01_01_000018_create_asset_maintenance_logs_table.php`
-  - [ ] Create `app/Models/Ticket.php`
-  - [ ] Create `app/Models/AssetMaintenanceLog.php`
-  - [ ] Run `php artisan migrate`
+- [x] **Task 1: Migration & Models**
+  - [x] Create `2025_01_01_000017_create_tickets_table.php`
+  - [x] Create `2025_01_01_000018_create_asset_maintenance_logs_table.php`
+  - [x] Create `app/Models/Ticket.php`
+  - [x] Create `app/Models/AssetMaintenanceLog.php`
+  - [x] Run `php artisan migrate`
 
-- [ ] **Task 2: Eloquent Model Relationships**
-  - [ ] Update `app/Models/Asset.php` (`hasMany` tickets & maintenanceLogs)
-  - [ ] Update `app/Models/PengajuanAset.php` (`belongsTo` ticket)
-  - [ ] Update `app/Models/DisposeAset.php` (`belongsTo` ticket)
-  - [ ] Update `app/Models/BeritaAcara.php` (`belongsTo` ticket)
+- [x] **Task 2: Eloquent Model Relationships**
+  - [x] Update `app/Models/Asset.php` (`hasMany` tickets & maintenanceLogs)
+  - [x] Update `app/Models/PengajuanAset.php` (`belongsTo` ticket)
+  - [x] Update `app/Models/DisposeAset.php` (`belongsTo` ticket)
+  - [x] Update `app/Models/BeritaAcara.php` (`belongsTo` ticket)
 
 - [ ] **Task 3: Filament Resource - `TicketResource`**
   - [ ] Create `app/Filament/Resources/TicketResource.php`

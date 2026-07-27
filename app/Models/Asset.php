@@ -63,6 +63,16 @@ class Asset extends Model
         return $this->hasOne(Checkout::class)->whereNull('checked_in_at')->latestOfMany('checked_out_at');
     }
 
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class)->latest('scheduled_date');
+    }
+
+    public function maintenanceLogs(): HasMany
+    {
+        return $this->hasMany(AssetMaintenanceLog::class)->latest('performed_at');
+    }
+
     public function isCheckedOut(): bool
     {
         return $this->status === 'checked_out' || !empty($this->primary_user);
@@ -74,7 +84,7 @@ class Asset extends Model
             return !empty($this->secondary_user) ? "{$this->primary_user} ({$this->secondary_user})" : $this->primary_user;
         }
 
-        $activeCheckout = $this->currentCheckout;
+        $activeCheckout = $this->relationLoaded('currentCheckout') ? $this->currentCheckout : $this->currentCheckout()->first();
         if ($activeCheckout) {
             return $activeCheckout->holder_name;
         }
@@ -119,7 +129,7 @@ class Asset extends Model
         $checkout = $this->currentCheckout()->first();
         $attachmentsArray = is_array($attachments) ? $attachments : ($attachments ? [$attachments] : null);
 
-        if ($checkout) {
+        if ($checkout instanceof Model && method_exists($checkout, 'update')) {
             $checkout->update([
                 'checked_in_at' => now(),
                 'checked_in_by' => $adminId,
