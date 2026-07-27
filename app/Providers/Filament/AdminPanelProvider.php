@@ -59,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 \App\Filament\Widgets\StatsOverviewWidget::class,
                 \App\Filament\Widgets\TicketChartWidget::class,
+                \App\Filament\Widgets\DailyTicketChartWidget::class,
                 \App\Filament\Widgets\LatestTicketsWidget::class,
                 \App\Filament\Widgets\RecentAssetActivityWidget::class,
             ])
