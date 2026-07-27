@@ -319,7 +319,7 @@ class AssetResource extends Resource
                     ->label('Checkin')
                     ->icon('heroicon-o-arrow-left-circle')
                     ->color('success')
-                    ->visible(fn (Asset $record) => $record->status === 'checked_out' || !empty($record->primary_user))
+                    ->visible(fn (Asset $record) => $record->status !== 'disposed' && ($record->status === 'checked_out' || !empty($record->primary_user)))
                     ->form([
                         Forms\Components\Textarea::make('notes')
                             ->label('Catatan Pengembalian (Checkin)'),

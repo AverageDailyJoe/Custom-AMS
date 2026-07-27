@@ -41,6 +41,12 @@ class DisposeAset extends Model
             if (in_array($disposeAset->status, $disposedStatuses)) {
                 $asset->status = 'disposed';
                 $asset->save();
+
+                // Close any active checkouts
+                $asset->checkouts()->whereNull('checked_in_at')->update([
+                    'checked_in_at' => now(),
+                    'checkin_notes' => "Automatic checkin due to IT Asset Disposal ({$disposeAset->disposal_number})",
+                ]);
             } elseif ($disposeAset->status === 'pending' && $asset->status === 'disposed') {
                 // Revert to in_stock if disposal is rolled back to pending
                 $asset->status = 'in_stock';
