@@ -11,13 +11,14 @@
         .header-title { text-align: center; font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0 0 4px; text-transform: uppercase; line-height: 1.3; }
         .header-sub { text-align: center; font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0 0 15px; text-transform: uppercase; line-height: 1.3; letter-spacing: 0.5px; }
 
-        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px; line-height: 1.2; }
-        .meta-table td { padding: 2px 4px; vertical-align: bottom; border: none; }
-        .meta-label-left { width: 9%; }
-        .meta-colon { width: 2%; text-align: center; }
-        .meta-value-left { width: 39%; }
-        .meta-label-right { width: 10%; padding-left: 40px !important; }
-        .meta-value-right { width: 38%; }
+        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11.5px; line-height: 1.25; }
+        .meta-table td { padding: 2px 2px; vertical-align: bottom; border: none; }
+        .meta-label-left { width: 55px; font-weight: bold; }
+        .meta-colon { width: 10px; font-weight: bold; text-align: center; }
+        .meta-value-left { width: 330px; padding-left: 4px; border-bottom: 1px solid #000; }
+        .meta-gap { width: 50px; }
+        .meta-label-right { width: 55px; font-weight: bold; }
+        .meta-value-right { width: 220px; padding-left: 4px; border-bottom: 1px solid #000; }
         .border-bottom { border-bottom: 1px solid #000 !important; }
 
         .ppb-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
@@ -27,10 +28,10 @@
         .text-right { text-align: right !important; }
         .font-bold { font-weight: bold; }
         
-        .sig-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .sig-table th, .sig-table td { border: 1px solid #000; padding: 6px 4px; font-size: 10.5px; text-align: center; }
-        .sig-table th { background: #f3f4f6; font-weight: bold; }
-        .sig-space { height: 55px; }
+        .sig-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .sig-table th, .sig-table td { border: 1px solid #000; padding: 4px 2px; font-size: 10px; text-align: center; }
+        .sig-table th { background: #f3f4f6; font-weight: bold; text-transform: uppercase; }
+        .sig-space { height: 50px; }
 
         .no-print { margin-bottom: 15px; text-align: right; }
         .btn-print { background: #111827; color: white; border: none; padding: 8px 18px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
@@ -62,32 +63,36 @@
             $monthName = $months[$date->format('F')] ?? $date->format('F');
             $dayNum = $date->format('d');
             $yearNum = $date->format('Y');
+            $formattedDate = $date->format('d/m/Y');
         @endphp
 
         <table class="meta-table">
             <tr>
-                <td class="meta-label-left"><strong>Nomor</strong></td>
+                <td class="meta-label-left">Nomor</td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-left border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
-                <td class="meta-label-right"><strong>Jabatan</strong></td>
+                <td class="meta-gap"></td>
+                <td class="meta-label-right">Jabatan</td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-right border-bottom">{{ $pengajuanAset->requester_department }}</td>
             </tr>
             <tr>
-                <td class="meta-label-left"><strong>Tanggal</strong></td>
+                <td class="meta-label-left">Tanggal</td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-left border-bottom">{{ $dayNum }} {{ $monthName }} {{ $yearNum }}</td>
-                <td class="meta-label-right"><strong>Area</strong></td>
+                <td class="meta-gap"></td>
+                <td class="meta-label-right">Area</td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-right border-bottom">HQ / Head Office</td>
             </tr>
             <tr>
-                <td class="meta-label-left"><strong>Nama</strong></td>
+                <td class="meta-label-left">Nama</td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-left border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
+                <td class="meta-gap"></td>
                 <td class="meta-label-right"></td>
                 <td class="meta-colon"></td>
-                <td class="meta-value-right"></td>
+                <td class="meta-value-right" style="border-bottom: none;"></td>
             </tr>
         </table>
 
@@ -147,40 +152,33 @@
         <table class="sig-table">
             <thead>
                 <tr>
-                    <th style="width: 25%;">DIBUAT</th>
-                    <th style="width: 25%;">DIPERIKSA</th>
-                    <th style="width: 25%;">DISETUJUI</th>
-                    <th style="width: 25%;">MENGETAHUI</th>
+                    <th style="width: 14.28%;">DIBUAT</th>
+                    <th style="width: 14.28%;">DIPERIKSA</th>
+                    <th colspan="4" style="width: 57.12%;">DISETUJUI</th>
+                    <th style="width: 14.28%;">DIPERIKSA</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>
+                    <td style="vertical-align: bottom; padding-bottom: 4px;">
                         <div class="sig-space"></div>
-                        <div class="font-bold"><u>{{ $pengajuanAset->requester_name }}</u></div>
-                        <div style="font-size: 9.5px; margin-top: 2px;">Pemohon ({{ $pengajuanAset->requester_department }})</div>
+                        <div class="font-bold" style="font-size: 9.5px;"><u>{{ $pengajuanAset->requester_name }}</u></div>
                     </td>
-                    <td>
-                        <div class="sig-space"></div>
-                        <div class="font-bold"><u>IT Manager / SPV</u></div>
-                        <div style="font-size: 9.5px; margin-top: 2px;">Information & Technology</div>
-                    </td>
-                    <td>
-                        <div class="sig-space"></div>
-                        <div class="font-bold"><u>{{ $pengajuanAset->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></div>
-                        <div style="font-size: 9.5px; margin-top: 2px;">{{ $pengajuanAset->approver_title ?? 'GM Finance & Operations' }}</div>
-                    </td>
-                    <td>
-                        <div class="sig-space"></div>
-                        <div class="font-bold"><u>( ..................................... )</u></div>
-                        <div style="font-size: 9.5px; margin-top: 2px;">Management / Director</div>
-                    </td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
                 </tr>
                 <tr>
-                    <td>Tgl. .........................</td>
-                    <td>Tgl. .........................</td>
-                    <td>Tgl. .........................</td>
-                    <td>Tgl. .........................</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td>Tgl. {{ $formattedDate }}</td>
                 </tr>
             </tbody>
         </table>
