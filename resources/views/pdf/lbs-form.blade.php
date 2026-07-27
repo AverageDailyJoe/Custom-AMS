@@ -12,8 +12,13 @@
         .header-title { font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0 0 4px; text-transform: uppercase; line-height: 1.3; }
         .header-sub { font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0; text-transform: uppercase; line-height: 1.3; letter-spacing: 0.5px; }
 
-        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px; }
-        .meta-table td { padding: 3px 4px; vertical-align: middle; border: none; }
+        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px; line-height: 1.2; }
+        .meta-table td { padding: 2px 4px; vertical-align: bottom; border: none; }
+        .meta-label-left { width: 9%; }
+        .meta-colon { width: 2%; text-align: center; }
+        .meta-value-left { width: 39%; }
+        .meta-label-right { width: 10%; padding-left: 40px !important; }
+        .meta-value-right { width: 38%; }
         .border-bottom { border-bottom: 1px solid #000 !important; }
 
         .lbs-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
@@ -57,20 +62,20 @@
 
         <table class="meta-table">
             <tr>
-                <td style="width: 8%;"><strong>Nama</strong></td>
-                <td style="width: 2%;">:</td>
-                <td style="width: 45%;" class="border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
-                <td style="width: 10%;"><strong>Nomor</strong></td>
-                <td style="width: 2%;">:</td>
-                <td style="width: 33%;" class="border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
+                <td class="meta-label-left"><strong>Nama</strong></td>
+                <td class="meta-colon">:</td>
+                <td class="meta-value-left border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
+                <td class="meta-label-right"><strong>Nomor</strong></td>
+                <td class="meta-colon">:</td>
+                <td class="meta-value-right border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
             </tr>
             <tr>
-                <td><strong>Area</strong></td>
-                <td>:</td>
-                <td class="border-bottom">{{ $pengajuanAset->requester_department }} - Head Office</td>
-                <td><strong>Period</strong></td>
-                <td>:</td>
-                <td class="border-bottom">{{ $period }}</td>
+                <td class="meta-label-left"><strong>Area</strong></td>
+                <td class="meta-colon">:</td>
+                <td class="meta-value-left border-bottom">{{ $pengajuanAset->requester_department }} - Head Office</td>
+                <td class="meta-label-right"><strong>Period</strong></td>
+                <td class="meta-colon">:</td>
+                <td class="meta-value-right border-bottom">{{ $period }}</td>
             </tr>
         </table>
 
