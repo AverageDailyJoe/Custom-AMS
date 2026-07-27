@@ -35,4 +35,10 @@ class HandoverFormController extends Controller
         $pengajuanAset->load(['createdBy']);
         return view('pdf.lbs-form', compact('pengajuanAset'));
     }
+
+    public function downloadDisposal(\App\Models\DisposeAset $disposeAset)
+    {
+        $disposeAset->load(['asset.assetModel.category', 'createdBy']);
+        return view('pdf.disposal-form', compact('disposeAset'));
+    }
 }
