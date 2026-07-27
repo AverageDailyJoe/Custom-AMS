@@ -21,6 +21,8 @@ class PengajuanAsetResource extends Resource
 
     protected static ?string $modelLabel = 'Pengajuan Aset Baru';
 
+    protected static ?string $pluralModelLabel = 'Pengajuan Aset Baru';
+
     protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form

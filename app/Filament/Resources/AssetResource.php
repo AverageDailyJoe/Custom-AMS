@@ -19,6 +19,12 @@ class AssetResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
+    protected static ?string $navigationLabel = 'Assets';
+
+    protected static ?string $modelLabel = 'Asset';
+
+    protected static ?string $pluralModelLabel = 'Assets';
+
     public static function form(Form $form): Form
     {
         return $form->schema([

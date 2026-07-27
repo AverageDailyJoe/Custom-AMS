@@ -24,6 +24,8 @@ class BeritaAcaraResource extends Resource
 
     protected static ?string $modelLabel = 'Berita Acara IT';
 
+    protected static ?string $pluralModelLabel = 'Berita Acara IT';
+
     protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
@@ -250,6 +252,6 @@ class BeritaAcaraResource extends Resource
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getEloquentQuery()
-            ->with(['asset']);
+            ->with(['asset:id,asset_tag']);
     }
 }
