@@ -104,30 +104,28 @@ System alur kerja berbasis jadwal (**Scheduled-Driven IT Ticketing**):
   - [x] Update `app/Models/DisposeAset.php` (`belongsTo` ticket)
   - [x] Update `app/Models/BeritaAcara.php` (`belongsTo` ticket)
 
-- [ ] **Task 3: Filament Resource - `TicketResource`**
-  - [ ] Create `app/Filament/Resources/TicketResource.php`
-  - [ ] Navigation Label: `IT Service Tickets / Jadwal`
-  - [ ] Navigation Icon: `heroicon-o-ticket` or `heroicon-o-calendar-days`
-  - [ ] Navigation Sort: `4` (Placed prominently under Assets/Asset History)
-  - [ ] Form Schema:
-    - [ ] Section 1: Identitas Pelapor & Lokasi
-    - [ ] Section 2: Pemilihan Asset IT (AMS Autocomplete)
-    - [ ] Section 3: Kendala & Kategori
-    - [ ] Section 4: Penjadwalan IT (`scheduled_date`, `time_slot`, `assigned_to`, `status`)
-    - [ ] Section 5: Solusi & Integrasi PPB/Disposal/Berita Acara
-  - [ ] Table View & Custom Badges:
-    - [ ] Status & Priority Badges
-    - [ ] Filter by Schedule Date & Status
-  - [ ] Header / Table Actions:
-    - [ ] Action **`Reschedule`** (Modal rubah tanggal & alasan)
-    - [ ] Action **`Buat PPB / LBS`** (Quick create Pengajuan Aset dari Tiket)
-    - [ ] Action **`Buat Disposal`** (Quick create Disposal dari Tiket)
-    - [ ] Action **`Cetak Tiket / Work Order`** (PDF)
+- [x] **Task 3: Filament Resource - `TicketResource`**
+  - [x] Create `app/Filament/Resources/TicketResource.php`
+  - [x] Navigation Label: `IT Service Tickets`
+  - [x] Navigation Icon: `heroicon-o-ticket`
+  - [x] Navigation Sort: `4` (Placed prominently right after Assets/Asset History)
+  - [x] Form Schema:
+    - [x] Section 1: Identitas Pelapor & Lokasi
+    - [x] Section 2: Pemilihan Asset IT (AMS Autocomplete)
+    - [x] Section 3: Kendala & Kategori
+    - [x] Section 4: Penjadwalan IT (`scheduled_date`, `time_slot`, `assigned_to`, `status`)
+    - [x] Section 5: Solusi & Catatan IT
+  - [x] Table View & Custom Badges:
+    - [x] Status & Priority Badges
+    - [x] Filter by Schedule Date (Hari Ini) & Status
+  - [x] Header / Table Actions:
+    - [x] Action **`Ubah Jadwal (Reschedule)`** (Modal rubah tanggal & alasan)
+    - [x] Action **`Cetak Work Order (PDF)`**
 
-- [ ] **Task 4: Printable PDF Form (`ticket-form.blade.php`)**
-  - [ ] Create PDF Template `resources/views/pdf/ticket-form.blade.php`
-  - [ ] Add route `admin/tickets/{ticket}/pdf` and controller method `downloadTicket`
-  - [ ] Format: PT Gondowangi Official Work Order / IT Service Form layout (Solid Black Borders `#000`)
+- [x] **Task 4: Printable PDF Form (`ticket-form.blade.php`)**
+  - [x] Create PDF Template `resources/views/pdf/ticket-form.blade.php`
+  - [x] Add route `admin/tickets/{ticket}/pdf` and controller method `downloadTicket`
+  - [x] Format: PT Gondowangi Official Work Order / IT Service Form layout (Solid Black Borders `#000`)
 
 - [ ] **Task 5: Asset Maintenance History Integration**
   - [ ] Add relation manager / tab `Riwayat Service & Tiket` in `AssetResource.php`

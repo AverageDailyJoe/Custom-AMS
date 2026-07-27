@@ -26,7 +26,7 @@ class DisposeAsetResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Dispose Aset IT';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -58,7 +58,7 @@ class DisposeAsetResource extends Resource
                     ]),
 
                     Forms\Components\Select::make('asset_id')
-                        ->label('Pilih Unit Asset IT Yang Rusak')
+                        ->label('Pilih Unit Asset IT Yang Akan Diajukan Disposal')
                         ->relationship('asset', 'asset_tag')
                         ->searchable()
                         ->live()

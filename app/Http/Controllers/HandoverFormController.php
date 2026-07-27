@@ -41,4 +41,10 @@ class HandoverFormController extends Controller
         $disposeAset->load(['asset.assetModel.category', 'createdBy']);
         return view('pdf.disposal-form', compact('disposeAset'));
     }
+
+    public function downloadTicket(\App\Models\Ticket $ticket)
+    {
+        $ticket->load(['location', 'asset.assetModel.category', 'assignedToUser', 'createdBy']);
+        return view('pdf.ticket-form', compact('ticket'));
+    }
 }

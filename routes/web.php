@@ -19,4 +19,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/pengajuan-asets/{pengajuanAset}/pdf-lbs', [HandoverFormController::class, 'downloadLBS'])->name('pengajuan-asets.pdf-lbs');
     Route::get('/admin/pengajuan-asets/{pengajuanAset}/pdf', [HandoverFormController::class, 'downloadPengajuanAset'])->name('pengajuan-asets.pdf');
     Route::get('/admin/dispose-asets/{disposeAset}/pdf', [HandoverFormController::class, 'downloadDisposal'])->name('dispose-asets.pdf');
+    Route::get('/admin/tickets/{ticket}/pdf', [HandoverFormController::class, 'downloadTicket'])->name('tickets.pdf');
 });
