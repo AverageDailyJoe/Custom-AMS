@@ -12,9 +12,15 @@ class CheckoutResource extends Resource
 {
     protected static ?string $model = Checkout::class;
 
-    protected static ?string $navigationLabel = 'Checkout history';
+    protected static ?string $navigationLabel = 'Asset History';
+
+    protected static ?string $modelLabel = 'Asset History';
+
+    protected static ?string $pluralModelLabel = 'Asset History';
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
+
+    protected static ?int $navigationSort = 3;
 
     // Read-only: history is created via the Checkout/Checkin actions on AssetResource, not here.
     public static function canCreate(): bool
@@ -26,7 +32,21 @@ class CheckoutResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('asset.asset_tag')->label('ID Asset')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('asset.asset_tag')
+                    ->label('ID Asset')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('asset_unit_name')
+                    ->label('Nama Unit / Perangkat')
+                    ->getStateUsing(fn ($record) => $record->asset ? "{$record->asset->assetModel?->manufacturer} {$record->asset->assetModel?->name}" : '-')
+                    ->searchable(query: function ($query, string $search) {
+                        return $query->whereHas('asset.assetModel', function ($q) use ($search) {
+                            $q->where('name', 'ilike', "%{$search}%")
+                              ->orWhere('manufacturer', 'ilike', "%{$search}%");
+                        });
+                    }),
+
                 Tables\Columns\TextColumn::make('holder_name')
                     ->label('Checked out to (Pengguna)')
                     ->searchable(query: function ($query, string $search) {
@@ -35,14 +55,26 @@ class CheckoutResource extends Resource
                               ->orWhere('secondary_user', 'ilike', "%{$search}%");
                         });
                     }),
-                Tables\Columns\TextColumn::make('checked_out_at')->label('Tanggal Checkout')->dateTime()->sortable(),
-                Tables\Columns\TextColumn::make('checked_in_at')->label('Tanggal Checkin')->dateTime()->sortable()->placeholder('Sedang Digunakan'),
+
+                Tables\Columns\TextColumn::make('checked_out_at')
+                    ->label('Tanggal Checkout')
+                    ->dateTime('d M Y H:i')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('checked_in_at')
+                    ->label('Tanggal Checkin')
+                    ->dateTime('d M Y H:i')
+                    ->sortable()
+                    ->placeholder('Sedang Digunakan'),
+
                 Tables\Columns\TextColumn::make('checkedOutByUser.name')
                     ->label('Checked out by')
                     ->getStateUsing(fn ($record) => $record->checkedOutByUser?->name ?? 'Admin'),
+
                 Tables\Columns\TextColumn::make('checkedInByUser.name')
                     ->label('Checked in by')
                     ->getStateUsing(fn ($record) => $record->checked_in_at ? ($record->checkedInByUser?->name ?? 'Admin') : '-'),
+
                 Tables\Columns\TextColumn::make('attachments_info')
                     ->label('Lampiran / Bukti')
                     ->getStateUsing(function ($record) {
@@ -59,7 +91,10 @@ class CheckoutResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('active')
-                    ->label('Still checked out')
+                    ->label('Status Penggunaan')
+                    ->placeholder('Semua Riwayat')
+                    ->trueLabel('Sedang Digunakan (Active)')
+                    ->falseLabel('Sudah Dikembalikan (Checked in)')
                     ->queries(
                         true: fn ($query) => $query->whereNull('checked_in_at'),
                         false: fn ($query) => $query->whereNotNull('checked_in_at'),
@@ -84,7 +119,7 @@ class CheckoutResource extends Resource
                     ->icon('heroicon-o-paper-clip')
                     ->color('primary')
                     ->visible(fn ($record) => count($record->getAllAttachments()) > 0)
-                    ->modalHeading('Lampiran & Dokumentasi Serah Terima')
+                    ->modalHeading('Lampiran & Dokumentasi Serah Terima / Pengembalian')
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Tutup')
                     ->modalContent(fn ($record) => view('filament.components.attachments-modal', ['files' => $record->getAllAttachments()])),
@@ -103,7 +138,7 @@ class CheckoutResource extends Resource
     {
         return parent::getEloquentQuery()
             ->with([
-                'asset:id,asset_tag',
+                'asset.assetModel',
                 'checkedOutByUser:id,name',
                 'checkedInByUser:id,name',
             ]);

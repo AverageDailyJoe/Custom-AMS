@@ -299,7 +299,6 @@ class AssetResource extends Resource
                     ->icon('heroicon-o-arrow-left-circle')
                     ->color('success')
                     ->visible(fn (Asset $record) => $record->status === 'checked_out' || !empty($record->primary_user))
-                    ->requiresConfirmation()
                     ->form([
                         Forms\Components\Textarea::make('notes')
                             ->label('Catatan Pengembalian (Checkin)'),
