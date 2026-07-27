@@ -41,12 +41,14 @@ class AssetResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->manufacturer} {$record->name}")
                         ->required()
                         ->searchable()
+                        ->preload()
                         ->createOptionForm([
                             Forms\Components\Select::make('category_id')
                                 ->label('Kategori')
                                 ->relationship('category', 'name')
                                 ->required()
                                 ->searchable()
+                                ->preload()
                                 ->createOptionForm([
                                     Forms\Components\TextInput::make('name')
                                         ->label('Nama Kategori')
@@ -84,6 +86,7 @@ class AssetResource extends Resource
                         ->label('Lokasi Utama')
                         ->relationship('location', 'name')
                         ->searchable()
+                        ->preload()
                         ->createOptionForm([
                             Forms\Components\TextInput::make('name')
                                 ->label('Nama Lokasi')
