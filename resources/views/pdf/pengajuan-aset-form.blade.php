@@ -3,38 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FORM PENGAJUAN ASET IT BARU - {{ $pengajuanAset->request_number }}</title>
+    <title>PERMOHONAN PENGELUARAN BIAYA (PPB) - {{ $pengajuanAset->request_number }}</title>
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #111827; margin: 0; padding: 15px; background: #fff; line-height: 1.4; }
-        .container { max-width: 800px; margin: 0 auto; border: 1px solid #9ca3af; padding: 25px; border-radius: 4px; }
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 11.5px; color: #000; margin: 0; padding: 15px; background: #fff; line-height: 1.3; }
+        .container { max-width: 800px; margin: 0 auto; border: 1.5px solid #000; padding: 20px; }
         
-        .header-table { width: 100%; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; border-collapse: collapse; }
-        .header-table td { border: none; vertical-align: middle; }
-        .logo-img { height: 50px; width: auto; }
-        .doc-title { font-size: 17px; font-weight: bold; text-align: center; text-transform: uppercase; margin: 0; }
-        .company-sub { font-size: 11px; font-weight: bold; text-align: center; color: #374151; margin-top: 2px; }
+        .header-title { text-align: center; font-weight: bold; font-size: 16px; margin: 0 0 4px; text-transform: uppercase; }
+        .header-sub { text-align: center; font-weight: bold; font-size: 14px; margin: 0 0 15px; letter-spacing: 1px; }
 
-        .meta-table { width: 100%; margin-bottom: 15px; border-collapse: collapse; font-size: 11.5px; }
-        .meta-table td { border: none; padding: 3px 0; }
+        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px; }
+        .meta-table td { padding: 3px 4px; vertical-align: middle; border: none; }
+        .border-bottom { border-bottom: 1px solid #000 !important; }
 
-        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .info-table th, .info-table td { border: 1px solid #4b5563; padding: 6px 10px; font-size: 11px; text-align: left; }
-        .info-table th { background: #f3f4f6; width: 30%; font-weight: bold; color: #1f2937; }
-
-        .detail-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        .detail-table th, .detail-table td { border: 1px solid #000; padding: 6px 10px; font-size: 11px; text-align: center; }
-        .detail-table th { background: #e5e7eb; font-weight: bold; text-transform: uppercase; }
-
-        .box-section { border: 1px solid #d1d5db; background: #fafafa; padding: 10px 12px; border-radius: 4px; margin-bottom: 15px; font-size: 11.5px; }
-        .box-title { font-weight: bold; margin-bottom: 5px; color: #1f2937; text-transform: uppercase; }
-
-        .sig-table { width: 100%; border-collapse: collapse; margin-top: 35px; border: none; }
-        .sig-table td { border: none; text-align: center; vertical-align: top; width: 33.33%; padding: 0; font-size: 11.5px; }
-        .sig-space { height: 65px; }
+        .ppb-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .ppb-table th, .ppb-table td { border: 1px solid #000; padding: 5px 8px; font-size: 11px; vertical-align: top; }
+        .ppb-table th { background: #f3f4f6; font-weight: bold; text-align: center; text-transform: uppercase; }
+        .text-center { text-align: center !important; }
+        .text-right { text-align: right !important; }
+        .font-bold { font-weight: bold; }
         
+        .sig-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .sig-table th, .sig-table td { border: 1px solid #000; padding: 6px 4px; font-size: 10.5px; text-align: center; }
+        .sig-table th { background: #f3f4f6; font-weight: bold; }
+        .sig-space { height: 55px; }
+
         .no-print { margin-bottom: 15px; text-align: right; }
-        .btn-print { background: #2563eb; color: white; border: none; padding: 8px 18px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
-        .btn-print:hover { background: #1d4ed8; }
+        .btn-print { background: #111827; color: white; border: none; padding: 8px 18px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .btn-print:hover { background: #1f2937; }
         
         @media print {
             .no-print { display: none; }
@@ -46,47 +41,19 @@
 <body>
     <div class="container">
         <div class="no-print">
-            <button onclick="window.print()" class="btn-print">🖨️ CETAK / DOWNLOAD PENGAJUAN (PDF)</button>
+            <button onclick="window.print()" class="btn-print">🖨️ CETAK / DOWNLOAD PPB (PDF)</button>
         </div>
 
-        <table class="header-table">
-            <tr>
-                <td style="width: 25%;">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
-                </td>
-                <td style="width: 75%; text-align: center; padding-right: 25%;">
-                    <div class="doc-title">FORM PENGAJUAN ASET IT BARU</div>
-                    <div class="company-sub">PT GONDOWANGI TRADISIONAL KOSMETIKA</div>
-                </td>
-            </tr>
-        </table>
+        <div class="header-title">PT. Gondowangi Tradisional Kosmetika</div>
+        <div class="header-sub">PERMOHONAN PENGELUARAN BIAYA ( P P B )</div>
 
         @php
             $date = $pengajuanAset->request_date ? \Carbon\Carbon::parse($pengajuanAset->request_date) : \Carbon\Carbon::now();
-            $days = [
-                'Sunday' => 'Minggu',
-                'Monday' => 'Senin',
-                'Tuesday' => 'Selasa',
-                'Wednesday' => 'Rabu',
-                'Thursday' => 'Kamis',
-                'Friday' => "Jum'at",
-                'Saturday' => 'Sabtu',
-            ];
             $months = [
-                'January' => 'Januari',
-                'February' => 'Februari',
-                'March' => 'Maret',
-                'April' => 'April',
-                'May' => 'Mei',
-                'June' => 'Juni',
-                'July' => 'Juli',
-                'August' => 'Agustus',
-                'September' => 'September',
-                'October' => 'Oktober',
-                'November' => 'November',
-                'December' => 'Desember',
+                'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April',
+                'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus',
+                'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember',
             ];
-            $dayName = $days[$date->format('l')] ?? $date->format('l');
             $monthName = $months[$date->format('F')] ?? $date->format('F');
             $dayNum = $date->format('d');
             $yearNum = $date->format('Y');
@@ -94,94 +61,123 @@
 
         <table class="meta-table">
             <tr>
-                <td style="width: 15%;"><strong>No. Pengajuan</strong></td>
+                <td style="width: 8%;"><strong>Nomor</strong></td>
                 <td style="width: 2%;">:</td>
-                <td>{{ $pengajuanAset->request_number }}</td>
+                <td style="width: 40%;" class="border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
+                <td style="width: 10%;"><strong>Jabatan</strong></td>
+                <td style="width: 2%;">:</td>
+                <td style="width: 38%;" class="border-bottom">{{ $pengajuanAset->requester_department }}</td>
             </tr>
             <tr>
                 <td><strong>Tanggal</strong></td>
                 <td>:</td>
-                <td>{{ $dayNum }}/{{ substr($monthName, 0, 3) }}/{{ $yearNum }}</td>
+                <td class="border-bottom">{{ $dayNum }} {{ $monthName }} {{ $yearNum }}</td>
+                <td><strong>Area</strong></td>
+                <td>:</td>
+                <td class="border-bottom">HQ / Head Office</td>
             </tr>
             <tr>
+                <td><strong>Nama</strong></td>
+                <td>:</td>
+                <td class="border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
                 <td><strong>Prioritas</strong></td>
                 <td>:</td>
-                <td><span style="text-transform: uppercase; font-weight: bold; color: #2563eb;">{{ $pengajuanAset->priority }}</span></td>
-            </tr>
-            <tr>
-                <td><strong>Status</strong></td>
-                <td>:</td>
-                <td><span style="text-transform: uppercase; font-weight: bold; color: #059669;">{{ $pengajuanAset->status }}</span></td>
+                <td class="border-bottom"><span style="text-transform: uppercase; font-weight: bold;">{{ $pengajuanAset->priority }}</span> ({{ strtoupper($pengajuanAset->status) }})</td>
             </tr>
         </table>
 
-        <div style="margin-bottom: 12px; font-size: 11.5px;">
-            Pada hari ini, {{ $dayName }}, tanggal {{ $dayNum }}, bulan {{ $monthName }}, tahun {{ $yearNum }}, mengajukan permohonan pengadaan aset IT baru sebagai berikut:
-        </div>
-
-        <table class="info-table">
-            <tr>
-                <th>NAMA PEMOHON</th>
-                <td><strong>{{ $pengajuanAset->requester_name }}</strong></td>
-            </tr>
-            <tr>
-                <th>DEPARTEMEN / DIVISI</th>
-                <td>{{ $pengajuanAset->requester_department }}</td>
-            </tr>
-            <tr>
-                <th>JUDUL PENGAJUAN</th>
-                <td><strong>{{ $pengajuanAset->title }}</strong></td>
-            </tr>
-        </table>
-
-        <div style="font-weight: bold; font-size: 11.5px; margin: 15px 0 5px;">RINCIAN BARANG YANG DIAJUKAN:</div>
-        <table class="detail-table">
+        <table class="ppb-table">
             <thead>
                 <tr>
-                    <th>JENIS BARANG / PERANGKAT</th>
-                    <th>JUMLAH</th>
-                    <th>PRIORITAS</th>
-                    <th>ESTIMASI BIAYA (PER UNIT / TOTAL)</th>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 50%;">Uraian</th>
+                    <th style="width: 20%;">Jumlah</th>
+                    <th style="width: 25%;">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Main Item Row -->
                 <tr>
-                    <td><strong>{{ $pengajuanAset->item_type }}</strong></td>
-                    <td>{{ $pengajuanAset->quantity }} Unit</td>
-                    <td><span style="text-transform: uppercase;">{{ $pengajuanAset->priority }}</span></td>
-                    <td>{{ $pengajuanAset->estimated_cost ? 'Rp ' . number_format($pengajuanAset->estimated_cost, 0, ',', '.') : '-' }}</td>
+                    <td class="text-center font-bold">1</td>
+                    <td>
+                        <div class="font-bold">{{ $pengajuanAset->title }}</div>
+                        <div style="font-size: 10px; color: #374151; margin-top: 3px;">
+                            <strong>Jenis Item:</strong> {{ $pengajuanAset->item_type }} ({{ $pengajuanAset->quantity }} Unit)<br>
+                            @if($pengajuanAset->specification_requested)
+                                <strong>Spesifikasi:</strong> {{ $pengajuanAset->specification_requested }}
+                            @endif
+                        </div>
+                    </td>
+                    <td class="text-right font-bold">
+                        {{ $pengajuanAset->estimated_cost ? 'Rp ' . number_format($pengajuanAset->estimated_cost, 0, ',', '.') : '-' }}
+                    </td>
+                    <td>
+                        <div style="font-size: 10.5px;">{{ $pengajuanAset->reason }}</div>
+                    </td>
+                </tr>
+
+                <!-- Empty Grid Rows matching official Excel PPB layout -->
+                @for ($i = 2; $i <= 10; $i++)
+                <tr>
+                    <td class="text-center" style="height: 22px;"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @endfor
+
+                <!-- Total Row -->
+                <tr>
+                    <td colspan="2" class="text-center font-bold" style="font-size: 12px; letter-spacing: 2px;">
+                        J U M L A H
+                    </td>
+                    <td class="text-right font-bold" style="font-size: 12px;">
+                        {{ $pengajuanAset->estimated_cost ? 'Rp ' . number_format($pengajuanAset->estimated_cost, 0, ',', '.') : 'Rp 0' }}
+                    </td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
 
-        <div class="box-section">
-            <div class="box-title">SPESIFIKASI TEKNIS YANG DIHARAPKAN:</div>
-            <div>{!! nl2br(e($pengajuanAset->specification_requested ?? 'Sesuai standar operasional spesifikasi IT perusahaan.')) !!}</div>
-        </div>
-
-        <div class="box-section">
-            <div class="box-title">ALASAN & KEPERLUAN PENGAJUAN:</div>
-            <div>{!! nl2br(e($pengajuanAset->reason)) !!}</div>
-        </div>
-
         <table class="sig-table">
-            <tr>
-                <td>
-                    <p>PEMOHON,<br>&nbsp;</p>
-                    <div class="sig-space"></div>
-                    <p><strong><u>{{ $pengajuanAset->requester_name }}</u></strong><br><small>{{ $pengajuanAset->requester_department }}</small></p>
-                </td>
-                <td>
-                    <p>MENGETAHUI,<br><strong>ATASAN / SPV</strong></p>
-                    <div class="sig-space"></div>
-                    <p><strong><u>{{ $pengajuanAset->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></strong><br><small>{{ $pengajuanAset->approver_title ?? 'GM Finance & Operations' }}</small></p>
-                </td>
-                <td>
-                    <p>DISETUJUI,<br><strong>IT MANAGER / MANAGEMENT</strong></p>
-                    <div class="sig-space"></div>
-                    <p><strong><u>( ..................................... )</u></strong><br><small>IT Department</small></p>
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">DIBUAT</th>
+                    <th style="width: 25%;">DIPERIKSA</th>
+                    <th style="width: 25%;">DISETUJUI</th>
+                    <th style="width: 25%;">MENGETAHUI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="sig-space"></div>
+                        <div class="font-bold"><u>{{ $pengajuanAset->requester_name }}</u></div>
+                        <div style="font-size: 9.5px; margin-top: 2px;">Pemohon ({{ $pengajuanAset->requester_department }})</div>
+                    </td>
+                    <td>
+                        <div class="sig-space"></div>
+                        <div class="font-bold"><u>IT Manager / SPV</u></div>
+                        <div style="font-size: 9.5px; margin-top: 2px;">Information & Technology</div>
+                    </td>
+                    <td>
+                        <div class="sig-space"></div>
+                        <div class="font-bold"><u>{{ $pengajuanAset->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></div>
+                        <div style="font-size: 9.5px; margin-top: 2px;">{{ $pengajuanAset->approver_title ?? 'GM Finance & Operations' }}</div>
+                    </td>
+                    <td>
+                        <div class="sig-space"></div>
+                        <div class="font-bold"><u>( ..................................... )</u></div>
+                        <div style="font-size: 9.5px; margin-top: 2px;">Management / Director</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tgl. .........................</td>
+                    <td>Tgl. .........................</td>
+                    <td>Tgl. .........................</td>
+                    <td>Tgl. .........................</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </body>
