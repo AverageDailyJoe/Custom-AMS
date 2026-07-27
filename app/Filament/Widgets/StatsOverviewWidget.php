@@ -27,6 +27,11 @@ class StatsOverviewWidget extends BaseWidget
         $pendingPartTickets = Ticket::where('status', 'pending_sparepart')->count();
         $rescheduledTickets = Ticket::where('status', 'rescheduled')->count();
 
+        $overdueTickets = Ticket::whereNotIn('status', ['resolved', 'closed', 'pending_sparepart'])
+            ->whereNotNull('due_date')
+            ->whereDate('due_date', '<', now()->startOfDay())
+            ->count();
+
         return [
             Stat::make('Total Asset IT', $totalAssets)
                 ->description("{$inStockAssets} Tersedia | {$checkedOutAssets} Digunakan | {$disposedAssets} Disposed")
@@ -43,6 +48,11 @@ class StatsOverviewWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('warning'),
 
+            Stat::make('Melebihi SLA (Overdue)', $overdueTickets)
+                ->description($overdueTickets > 0 ? "{$overdueTickets} Tiket Melebihi SLA" : 'Semua Tiket Sesuai Target SLA')
+                ->descriptionIcon('heroicon-m-exclamation-triangle')
+                ->color($overdueTickets > 0 ? 'danger' : 'success'),
+
             Stat::make('Tiket Selesai (Resolved)', $resolvedTickets)
                 ->description('Pengerjaan Selesai Ditangani IT')
                 ->descriptionIcon('heroicon-m-check-circle')
@@ -51,11 +61,6 @@ class StatsOverviewWidget extends BaseWidget
             Stat::make('Menunggu Part (PPB/LBS)', $pendingPartTickets)
                 ->description('Dalam Pengadaan Sparepart')
                 ->descriptionIcon('heroicon-m-shopping-cart')
-                ->color('danger'),
-
-            Stat::make('Total Disposal Aset', DisposeAset::count())
-                ->description('Pengajuan Aset Rusak / Pemusnahan')
-                ->descriptionIcon('heroicon-m-trash')
                 ->color('danger'),
         ];
     }

@@ -115,15 +115,34 @@ class TicketResource extends Resource
                             ->required(),
 
                         Forms\Components\Select::make('priority')
-                            ->label('Prioritas')
+                            ->label('Prioritas (SLA)')
                             ->options([
-                                'low' => 'Low (Rendah / Normal)',
-                                'medium' => 'Medium (Sedang)',
-                                'high' => 'High (Tinggi / Penting)',
-                                'critical' => 'Critical / Emergency (Mendesak)',
+                                'low' => 'Low (Rendah / SLA 3 Hari Kerja)',
+                                'medium' => 'Medium (Sedang / SLA 2 Hari Kerja)',
+                                'high' => 'High (Tinggi / SLA 1 Hari Kerja)',
+                                'critical' => 'Critical / Emergency (SLA Hari Ini)',
                             ])
                             ->default('medium')
-                            ->required(),
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                                $schedDate = $get('scheduled_date') ? \Carbon\Carbon::parse($get('scheduled_date')) : \Carbon\Carbon::now();
+                                $days = match ($state) {
+                                    'critical' => 0,
+                                    'high' => 1,
+                                    'medium' => 2,
+                                    'low' => 3,
+                                    default => 2,
+                                };
+                                $dueDate = $schedDate->copy();
+                                while ($days > 0) {
+                                    $dueDate->addDay();
+                                    if (!$dueDate->isWeekend()) {
+                                        $days--;
+                                    }
+                                }
+                                $set('due_date', $dueDate->format('Y-m-d'));
+                            }),
                     ]),
 
                     Forms\Components\TextInput::make('subject')
@@ -141,7 +160,29 @@ class TicketResource extends Resource
                         Forms\Components\DatePicker::make('scheduled_date')
                             ->label('Tanggal Rencana Pengerjaan IT')
                             ->default(now())
-                            ->required(),
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                                if ($state) {
+                                    $priority = $get('priority') ?? 'medium';
+                                    $schedDate = \Carbon\Carbon::parse($state);
+                                    $days = match ($priority) {
+                                        'critical' => 0,
+                                        'high' => 1,
+                                        'medium' => 2,
+                                        'low' => 3,
+                                        default => 2,
+                                    };
+                                    $dueDate = $schedDate->copy();
+                                    while ($days > 0) {
+                                        $dueDate->addDay();
+                                        if (!$dueDate->isWeekend()) {
+                                            $days--;
+                                        }
+                                    }
+                                    $set('due_date', $dueDate->format('Y-m-d'));
+                                }
+                            }),
 
                         Forms\Components\Select::make('scheduled_time_slot')
                             ->label('Waktu / Jam Pengerjaan')
@@ -156,7 +197,8 @@ class TicketResource extends Resource
                             ->required(),
 
                         Forms\Components\DatePicker::make('due_date')
-                            ->label('Target Selesai / SLA'),
+                            ->label('Target Selesai / SLA')
+                            ->default(now()->addDays(2)),
                     ]),
 
                     Forms\Components\Select::make('assigned_to')
