@@ -23,7 +23,7 @@
 
         .ppb-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         .ppb-table th, .ppb-table td { border: 1px solid #000; padding: 5px 8px; font-size: 11px; vertical-align: top; }
-        .ppb-table th { background: #f3f4f6; font-weight: bold; text-align: center; text-transform: uppercase; }
+        .ppb-table th { background: #fff; font-weight: bold; text-align: center; text-transform: uppercase; }
         .text-center { text-align: center !important; }
         .text-right { text-align: right !important; }
         .font-bold { font-weight: bold; }
@@ -88,7 +88,7 @@
             <tr>
                 <td class="meta-label-left">Nama</td>
                 <td class="meta-colon">:</td>
-                <td class="meta-value-left border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
+                <td class="meta-value-left border-bottom">{{ $pengajuanAset->requester_name }}</td>
                 <td class="meta-gap"></td>
                 <td class="meta-label-right"></td>
                 <td class="meta-colon"></td>
@@ -117,7 +117,7 @@
                     <td class="text-center font-bold">1</td>
                     <td>
                         <div class="font-bold">{{ $pengajuanAset->title }}</div>
-                        <div style="font-size: 10px; color: #374151; margin-top: 3px;">
+                        <div style="font-size: 10px; color: #000000; margin-top: 3px;">
                             <strong>Jenis Item:</strong> {{ $pengajuanAset->item_type }} ({{ $pengajuanAset->quantity }} Unit{{ $unitCost > 0 && $qty > 1 ? ' @ Rp ' . number_format($unitCost, 0, ',', '.') : '' }})<br>
                             @if($pengajuanAset->specification_requested)
                                 <strong>Spesifikasi:</strong> {{ $pengajuanAset->specification_requested }}

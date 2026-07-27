@@ -64,7 +64,7 @@
             <tr>
                 <td class="meta-label-left"><strong>Nama</strong></td>
                 <td class="meta-colon">:</td>
-                <td class="meta-value-left border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
+                <td class="meta-value-left border-bottom">{{ $pengajuanAset->requester_name }}</td>
                 <td class="meta-label-right"><strong>Nomor</strong></td>
                 <td class="meta-colon">:</td>
                 <td class="meta-value-right border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
