@@ -9,8 +9,8 @@
         .container { max-width: 800px; margin: 0 auto; border: 1.5px solid #000; padding: 20px; }
         
         .header-box { border: 2px double #000; padding: 8px; text-align: center; margin-bottom: 15px; }
-        .header-title { font-weight: bold; font-size: 16px; margin: 0 0 3px; text-transform: uppercase; }
-        .header-sub { font-weight: bold; font-size: 13.5px; margin: 0; letter-spacing: 1px; }
+        .header-title { font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0 0 4px; text-transform: uppercase; line-height: 1.3; }
+        .header-sub { font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0; text-transform: uppercase; line-height: 1.3; letter-spacing: 0.5px; }
 
         .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px; }
         .meta-table td { padding: 3px 4px; vertical-align: middle; border: none; }
@@ -46,7 +46,7 @@
         </div>
 
         <div class="header-box">
-            <div class="header-title">PT. Gondowangi Tradisional Kosmetika</div>
+            <div class="header-title">PT. GONDOWANGI TRADISIONAL KOSMETIKA</div>
             <div class="header-sub">LAPORAN BIAYA SETTLEMENT ( L B S )</div>
         </div>
 

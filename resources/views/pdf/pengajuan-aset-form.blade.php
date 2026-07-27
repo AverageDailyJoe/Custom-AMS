@@ -8,8 +8,8 @@
         body { font-family: Arial, Helvetica, sans-serif; font-size: 11.5px; color: #000; margin: 0; padding: 15px; background: #fff; line-height: 1.3; }
         .container { max-width: 800px; margin: 0 auto; border: 1.5px solid #000; padding: 20px; }
         
-        .header-title { text-align: center; font-weight: bold; font-size: 16px; margin: 0 0 4px; text-transform: uppercase; }
-        .header-sub { text-align: center; font-weight: bold; font-size: 14px; margin: 0 0 15px; letter-spacing: 1px; }
+        .header-title { text-align: center; font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0 0 4px; text-transform: uppercase; line-height: 1.3; }
+        .header-sub { text-align: center; font-weight: bold; font-size: 15px; font-family: Arial, Helvetica, sans-serif; margin: 0 0 15px; text-transform: uppercase; line-height: 1.3; letter-spacing: 0.5px; }
 
         .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px; }
         .meta-table td { padding: 3px 4px; vertical-align: middle; border: none; }
@@ -44,7 +44,7 @@
             <button onclick="window.print()" class="btn-print">🖨️ CETAK / DOWNLOAD PPB (PDF)</button>
         </div>
 
-        <div class="header-title">PT. Gondowangi Tradisional Kosmetika</div>
+        <div class="header-title">PT. GONDOWANGI TRADISIONAL KOSMETIKA</div>
         <div class="header-sub">PERMOHONAN PENGELUARAN BIAYA ( P P B )</div>
 
         @php
@@ -80,9 +80,6 @@
                 <td><strong>Nama</strong></td>
                 <td>:</td>
                 <td class="border-bottom"><strong>{{ $pengajuanAset->requester_name }}</strong></td>
-                <td><strong>Prioritas</strong></td>
-                <td>:</td>
-                <td class="border-bottom"><span style="text-transform: uppercase; font-weight: bold;">{{ $pengajuanAset->priority }}</span> ({{ strtoupper($pengajuanAset->status) }})</td>
             </tr>
         </table>
 
