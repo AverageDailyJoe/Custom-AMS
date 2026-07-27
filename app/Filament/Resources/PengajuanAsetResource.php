@@ -209,11 +209,17 @@ class PengajuanAsetResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
-                Tables\Actions\Action::make('pdf_pengajuan')
-                    ->label('Cetak PDF')
-                    ->icon('heroicon-o-printer')
-                    ->color('success')
-                    ->url(fn ($record) => route('pengajuan-asets.pdf', $record))
+                Tables\Actions\Action::make('pdf_ppb')
+                    ->label('Cetak PPB')
+                    ->icon('heroicon-o-document-text')
+                    ->color('warning')
+                    ->url(fn ($record) => route('pengajuan-asets.pdf-ppb', $record))
+                    ->openUrlInNewTab(),
+                Tables\Actions\Action::make('pdf_lbs')
+                    ->label('Cetak LBS')
+                    ->icon('heroicon-o-clipboard-document-check')
+                    ->color('info')
+                    ->url(fn ($record) => route('pengajuan-asets.pdf-lbs', $record))
                     ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

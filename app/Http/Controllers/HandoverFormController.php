@@ -29,4 +29,10 @@ class HandoverFormController extends Controller
         $pengajuanAset->load(['createdBy']);
         return view('pdf.pengajuan-aset-form', compact('pengajuanAset'));
     }
+
+    public function downloadLBS(\App\Models\PengajuanAset $pengajuanAset)
+    {
+        $pengajuanAset->load(['createdBy']);
+        return view('pdf.lbs-form', compact('pengajuanAset'));
+    }
 }
