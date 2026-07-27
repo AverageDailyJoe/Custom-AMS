@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Asset;
 
 class DisposeAset extends Model
 {
@@ -24,6 +25,29 @@ class DisposeAset extends Model
         'attachments',
         'created_by',
     ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (DisposeAset $disposeAset) {
+            if (!$disposeAset->asset_id) return;
+
+            $asset = Asset::find($disposeAset->asset_id);
+            if (!$asset) return;
+
+            $disposedStatuses = ['approved', 'transferred_to_ga', 'completed'];
+
+            if (in_array($disposeAset->status, $disposedStatuses)) {
+                $asset->status = 'disposed';
+                $asset->save();
+            } elseif ($disposeAset->status === 'pending' && $asset->status === 'disposed') {
+                // Revert to in_stock if disposal is rolled back to pending
+                $asset->status = 'in_stock';
+                $asset->save();
+            }
+        });
+    }
 
     protected $casts = [
         'disposal_date' => 'date',

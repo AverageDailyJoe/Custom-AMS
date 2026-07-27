@@ -153,8 +153,9 @@ class AssetResource extends Resource
                             'checked_out' => 'Checked out (Digunakan)',
                             'in_repair' => 'In repair (Perbaikan)',
                             'archived' => 'Archived (Diarsipkan)',
+                            'disposed' => 'Disposed (Dibuang / Penghapusan)',
                         ])
-                        ->disabled(fn (?Asset $record) => $record?->isCheckedOut() ?? false)
+                        ->disabled(fn (?Asset $record) => ($record?->isCheckedOut() ?? false) || ($record?->status === 'disposed'))
                         ->required(),
                     Forms\Components\Select::make('condition')
                         ->label('Kondisi Asset')
@@ -228,6 +229,8 @@ class AssetResource extends Resource
                         'checked_out' => 'warning',
                         'in_repair' => 'danger',
                         'archived' => 'gray',
+                        'disposed' => 'danger',
+                        default => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('location.name')
                     ->label('Location')
@@ -253,18 +256,27 @@ class AssetResource extends Resource
                     ->searchable()
                     ->toggleable(),
             ])
+            ->recordClasses(fn (Asset $record) => $record->status === 'disposed' ? 'opacity-50 line-through' : null)
             ->filters([
                 Tables\Filters\SelectFilter::make('status')->options([
                     'in_stock' => 'In stock',
                     'checked_out' => 'Checked out',
                     'in_repair' => 'In repair',
                     'archived' => 'Archived',
+                    'disposed' => 'Disposed',
                 ]),
                 Tables\Filters\SelectFilter::make('location_id')
                     ->relationship('location', 'name')
                     ->label('Location'),
             ])
             ->actions([
+                Tables\Actions\Action::make('view_disposal')
+                    ->label('Lihat Disposal')
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->visible(fn (Asset $record) => $record->status === 'disposed')
+                    ->url(fn (Asset $record) => route('filament.admin.resources.dispose-asets.index') . '?tableSearch=' . $record->asset_tag)
+                    ->openUrlInNewTab(),
                 Tables\Actions\Action::make('checkout')
                     ->label('Checkout')
                     ->icon('heroicon-o-arrow-right-circle')
@@ -374,8 +386,10 @@ class AssetResource extends Resource
                             ->success()
                             ->send();
                     }),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn (Asset $record) => $record->status !== 'disposed'),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn (Asset $record) => $record->status !== 'disposed'),
             ]);
     }
 
