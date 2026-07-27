@@ -30,6 +30,12 @@ class TicketsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('scheduled_time_slot')
                     ->label('Waktu'),
 
+                Tables\Columns\TextColumn::make('due_date')
+                    ->label('Target Selesai (SLA)')
+                    ->date('d M Y')
+                    ->sortable()
+                    ->placeholder('-'),
+
                 Tables\Columns\TextColumn::make('reporter_name')
                     ->label('Pelapor / User')
                     ->searchable(),

@@ -228,6 +228,12 @@ class TicketResource extends Resource
                     ->label('Waktu')
                     ->toggleable(),
 
+                Tables\Columns\TextColumn::make('due_date')
+                    ->label('Target Selesai (SLA)')
+                    ->date('d M Y')
+                    ->sortable()
+                    ->placeholder('-'),
+
                 Tables\Columns\TextColumn::make('reporter_name')
                     ->label('Pelapor')
                     ->searchable(),
