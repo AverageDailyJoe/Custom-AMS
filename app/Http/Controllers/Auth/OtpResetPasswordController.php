@@ -39,8 +39,8 @@ class OtpResetPasswordController extends Controller
 
     public function showResetForm()
     {
-        if (!session()->has('reset_email')) {
-            return redirect()->route('password.request');
+        if (!session()->has('reset_email') && !session()->has('reset_success_modal')) {
+            return redirect()->route('password.request')->with('error', 'Sesi reset password kadaluarsa.');
         }
 
         return view('auth.reset-password-otp');

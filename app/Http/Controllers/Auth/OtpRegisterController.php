@@ -43,7 +43,7 @@ class OtpRegisterController extends Controller
 
     public function showVerifyForm()
     {
-        if (!session()->has('register_data')) {
+        if (!session()->has('register_data') && !session()->has('success_modal')) {
             return redirect()->route('register')->with('error', 'Sesi registrasi berakhir. Silakan isi form kembali.');
         }
 
