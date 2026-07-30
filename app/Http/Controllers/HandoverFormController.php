@@ -198,4 +198,34 @@ class HandoverFormController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    public function downloadSticker121(\Illuminate\Http\Request $request, ?\App\Models\Asset $asset = null)
+    {
+        $slotNumber = (int) $request->input('slot', 1);
+        if ($slotNumber < 1 || $slotNumber > 10) {
+            $slotNumber = 1;
+        }
+
+        $mappedSlots = [];
+
+        if ($asset) {
+            $asset->load(['assetModel.category', 'location']);
+            $mappedSlots[$slotNumber] = $asset;
+        } elseif ($request->filled('asset_ids')) {
+            $assetIds = is_array($request->asset_ids) ? $request->asset_ids : explode(',', $request->input('asset_ids'));
+            $assets = \App\Models\Asset::with(['assetModel.category', 'location'])
+                ->whereIn('id', $assetIds)
+                ->get();
+
+            $currentSlot = $slotNumber;
+            foreach ($assets as $a) {
+                if ($currentSlot > 10) break;
+                $mappedSlots[$currentSlot] = $a;
+                $currentSlot++;
+            }
+        }
+
+        return view('pdf.asset-sticker-121', compact('mappedSlots', 'slotNumber'));
+    }
 }
+

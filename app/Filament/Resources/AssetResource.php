@@ -459,12 +459,79 @@ class AssetResource extends Resource
                             ->success()
                             ->send();
                     }),
+                Tables\Actions\Action::make('print_sticker')
+                    ->label('Stiker Tag')
+                    ->icon('heroicon-o-qr-code')
+                    ->color('warning')
+                    ->modalHeading(fn (Asset $record) => "Cetak Stiker Tag: {$record->asset_tag}")
+                    ->modalDescription('Pilih posisi slot (1 s/d 10) pada kertas label Tom & Jerry 121.')
+                    ->modalSubmitActionLabel('Buka Halaman Cetak')
+                    ->form([
+                        Forms\Components\Select::make('slot')
+                            ->label('Posisi Slot Stiker (Tom & Jerry 121)')
+                            ->options([
+                                1 => 'Slot 1 (Baris 1 - Kiri)',
+                                2 => 'Slot 2 (Baris 1 - Kanan)',
+                                3 => 'Slot 3 (Baris 2 - Kiri)',
+                                4 => 'Slot 4 (Baris 2 - Kanan)',
+                                5 => 'Slot 5 (Baris 3 - Kiri)',
+                                6 => 'Slot 6 (Baris 3 - Kanan)',
+                                7 => 'Slot 7 (Baris 4 - Kiri)',
+                                8 => 'Slot 8 (Baris 4 - Kanan)',
+                                9 => 'Slot 9 (Baris 5 - Kiri)',
+                                10 => 'Slot 10 (Baris 5 - Kanan)',
+                            ])
+                            ->default(1)
+                            ->required(),
+                    ])
+                    ->action(function (Asset $record, array $data, $livewire) {
+                        $url = route('assets.sticker-121', [
+                            'asset' => $record->id,
+                            'slot' => $data['slot'] ?? 1,
+                        ]);
+                        $livewire->js("window.open('{$url}', '_blank');");
+                    }),
                 Tables\Actions\EditAction::make()
                     ->visible(fn (Asset $record) => $record->status !== 'disposed'),
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn (Asset $record) => $record->status !== 'disposed'),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('print_selected_stickers')
+                        ->label('Cetak Stiker Terpilih (121)')
+                        ->icon('heroicon-o-qr-code')
+                        ->color('warning')
+                        ->modalHeading('Cetak Stiker Aset Terpilih (Tom & Jerry 121)')
+                        ->modalDescription('Pilih posisi slot mulai (1 s/d 10) pada lembar label Tom & Jerry.')
+                        ->form([
+                            Forms\Components\Select::make('start_slot')
+                                ->label('Mulai Cetak Dari Posisi Slot')
+                                ->options([
+                                    1 => 'Slot 1 (Baris 1 - Kiri)',
+                                    2 => 'Slot 2 (Baris 1 - Kanan)',
+                                    3 => 'Slot 3 (Baris 2 - Kiri)',
+                                    4 => 'Slot 4 (Baris 2 - Kanan)',
+                                    5 => 'Slot 5 (Baris 3 - Kiri)',
+                                    6 => 'Slot 6 (Baris 3 - Kanan)',
+                                    7 => 'Slot 7 (Baris 4 - Kiri)',
+                                    8 => 'Slot 8 (Baris 4 - Kanan)',
+                                    9 => 'Slot 9 (Baris 5 - Kiri)',
+                                    10 => 'Slot 10 (Baris 5 - Kanan)',
+                                ])
+                                ->default(1)
+                                ->required(),
+                        ])
+                        ->action(function (\Illuminate\Database\Eloquent\Collection $records, array $data, $livewire) {
+                            $ids = implode(',', $records->pluck('id')->toArray());
+                            $url = route('assets.sticker-121') . '?asset_ids=' . $ids . '&slot=' . ($data['start_slot'] ?? 1);
+                            $livewire->js("window.open('{$url}', '_blank');");
+                        }),
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
+
 
     public static function getRelations(): array
     {

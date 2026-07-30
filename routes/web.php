@@ -25,8 +25,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/rekap-aset/pdf', [HandoverFormController::class, 'downloadRekapAset'])->name('rekap-aset.pdf');
     Route::get('/admin/rekap-aset/excel', [HandoverFormController::class, 'exportAsetExcel'])->name('rekap-aset.excel');
     Route::get('/admin/rekap-tiket/pdf', [HandoverFormController::class, 'downloadRekapTiket'])->name('rekap-tiket.pdf');
+    Route::get('/admin/assets/{asset?}/sticker-121', [HandoverFormController::class, 'downloadSticker121'])->name('assets.sticker-121');
 
 });
+
 
 // Storage file serving route to guarantee 200 OK preview and download
 Route::get('/storage/{path}', function ($path) {
