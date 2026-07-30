@@ -13,9 +13,8 @@
     <div class="w-full max-w-md bg-[#18181b] border border-zinc-800 rounded-2xl p-8 shadow-2xl text-center">
         <!-- Logo Header -->
         <div class="flex flex-col items-center mb-6">
-            <div class="flex items-center gap-2 mb-2">
-                <svg class="w-7 h-7 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <span class="text-xs tracking-widest font-bold text-emerald-500 uppercase">GONDOWANGI</span>
+            <div class="flex justify-center mb-4">
+                <img src="{{ asset('images/logo.png') }}" alt="Gondowangi" class="h-12">
             </div>
             <h1 class="text-2xl font-bold text-white tracking-tight">Verifikasi OTP</h1>
             <p class="text-xs text-zinc-400 mt-1">Masukkan 6-digit kode OTP yang dikirim ke email Anda</p>
@@ -31,7 +30,7 @@
                 <input type="text" name="otp" maxlength="6" autofocus required placeholder="123456" class="w-full bg-[#27272a] border border-emerald-600 text-center font-mono text-3xl tracking-[0.4em] py-3.5 rounded-xl text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
 
-            <button type="submit" class="w-full bg-[#15803d] hover:bg-[#166534] text-white font-medium py-2.5 rounded-lg text-sm transition duration-200">Verifikasi & Aktifkan Akun</button>
+            <button type="submit" class="w-full bg-[#0d630d] hover:bg-[#0a4d0a] text-white font-medium py-2.5 rounded-lg text-sm transition duration-200">Verifikasi & Aktifkan Akun</button>
         </form>
 
         <div class="mt-6 pt-4 border-t border-zinc-800">
@@ -47,7 +46,7 @@
             icon: 'success',
             background: '#18181b',
             color: '#fff',
-            confirmButtonColor: '#15803d',
+            confirmButtonColor: '#0d630d',
             confirmButtonText: 'Lanjut Sign In',
             allowOutsideClick: false
         }).then((result) => {
