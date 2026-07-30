@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HandoverFormController;
+use App\Http\Controllers\Auth\OtpRegisterController;
+use App\Http\Controllers\Auth\OtpResetPasswordController;
 
 Route::get('/', function () {
     return redirect('/admin');
@@ -37,3 +39,14 @@ Route::get('/storage/{path}', function ($path) {
     }
     return response()->file($filePath);
 })->where('path', '.*')->name('storage.file');
+
+// Routes Registrasi & OTP
+Route::get('/register', [OtpRegisterController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [OtpRegisterController::class, 'register']);
+Route::get('/register/verify-otp', [OtpRegisterController::class, 'showVerifyForm'])->name('otp.verify.show');
+Route::post('/register/verify-otp', [OtpRegisterController::class, 'verify'])->name('otp.verify');
+// Routes Reset Password & OTP
+Route::get('/forgot-password', [OtpResetPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [OtpResetPasswordController::class, 'sendResetOtp'])->name('password.email');
+Route::get('/reset-password-otp', [OtpResetPasswordController::class, 'showResetForm'])->name('password.reset.verify.show');
+Route::post('/reset-password-otp', [OtpResetPasswordController::class, 'resetPassword'])->name('password.update');
