@@ -76,8 +76,9 @@ class OtpRegisterController extends Controller
         ]);
 
         session()->forget('register_data');
-        Auth::login($user);
 
-        return redirect('/admin')->with('success', 'Selamat! Akun Anda berhasil diverifikasi dan terdaftar.');
+        // Tampilkan Modal Sukses sebelum Redirect ke Login
+        return redirect()->route('otp.verify.show')->with('success_modal', true);
     }
+
 }

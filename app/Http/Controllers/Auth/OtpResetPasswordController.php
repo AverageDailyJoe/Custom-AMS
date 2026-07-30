@@ -72,7 +72,9 @@ class OtpResetPasswordController extends Controller
 
         session()->forget('reset_email');
 
-        return redirect('/admin/login')->with('success', 'Password berhasil diperbarui. Silakan login.');
+        // Tampilkan Modal Sukses sebelum Redirect ke Login
+        return redirect()->route('password.reset.verify.show')->with('reset_success_modal', true);
     }
+
 }
 

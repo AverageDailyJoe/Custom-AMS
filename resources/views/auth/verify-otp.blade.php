@@ -1,30 +1,59 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi OTP - GTK Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
-<body class="bg-slate-900 text-slate-100 flex items-center justify-center min-h-screen p-4">
-    <div class="w-full max-w-md bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-2xl text-center">
-        <h2 class="text-xl font-bold text-sky-400 mb-2">Verifikasi Kode OTP</h2>
-        <p class="text-xs text-slate-300 mb-6">Kode OTP 6-digit telah dikirimkan ke email Anda. Masukkan kode tersebut di bawah ini:</p>
+<body class="bg-[#09090b] text-zinc-100 flex items-center justify-center min-h-screen p-4 antialiased">
+    <div class="w-full max-w-md bg-[#18181b] border border-zinc-800 rounded-2xl p-8 shadow-2xl text-center">
+        <!-- Logo Header -->
+        <div class="flex flex-col items-center mb-6">
+            <div class="flex items-center gap-2 mb-2">
+                <svg class="w-7 h-7 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span class="text-xs tracking-widest font-bold text-emerald-500 uppercase">GONDOWANGI</span>
+            </div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">Verifikasi OTP</h1>
+            <p class="text-xs text-zinc-400 mt-1">Masukkan 6-digit kode OTP yang dikirim ke email Anda</p>
+        </div>
 
         @if(session('error'))
-            <div class="bg-red-500/20 border border-red-500 text-red-300 p-3 rounded-lg text-sm mb-4">{{ session('error') }}</div>
-        @endif
-        @if(session('success'))
-            <div class="bg-emerald-500/20 border border-emerald-500 text-emerald-300 p-3 rounded-lg text-sm mb-4">{{ session('success') }}</div>
+            <div class="bg-red-950/50 border border-red-800 text-red-300 p-3 rounded-lg text-xs mb-4">{{ session('error') }}</div>
         @endif
 
-        <form action="{{ route('otp.verify') }}" method="POST" class="space-y-4">
+        <form action="{{ route('otp.verify') }}" method="POST" class="space-y-5">
             @csrf
             <div>
-                <input type="text" name="otp" maxlength="6" autofocus required placeholder="123456" class="w-full bg-slate-900 border border-sky-500 text-center font-mono text-3xl tracking-widest py-3 rounded-lg text-sky-400 focus:outline-none">
+                <input type="text" name="otp" maxlength="6" autofocus required placeholder="123456" class="w-full bg-[#27272a] border border-emerald-600 text-center font-mono text-3xl tracking-[0.4em] py-3.5 rounded-xl text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
-            <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-semibold py-2.5 rounded-lg text-sm transition">Verifikasi & Aktifkan Akun</button>
+
+            <button type="submit" class="w-full bg-[#15803d] hover:bg-[#166534] text-white font-medium py-2.5 rounded-lg text-sm transition duration-200">Verifikasi & Aktifkan Akun</button>
         </form>
+
+        <div class="mt-6 pt-4 border-t border-zinc-800">
+            <a href="{{ route('register') }}" class="text-xs text-zinc-400 hover:text-emerald-400 transition">Kembali ke Registrasi</a>
+        </div>
     </div>
+
+    @if(session('success_modal'))
+    <script>
+        Swal.fire({
+            title: 'Registrasi Berhasil!',
+            text: 'Akun Anda telah aktif. Anda akan di-redirect ke halaman Sign In.',
+            icon: 'success',
+            background: '#18181b',
+            color: '#fff',
+            confirmButtonColor: '#15803d',
+            confirmButtonText: 'Lanjut Sign In',
+            allowOutsideClick: false
+        }).then((result) => {
+            window.location.href = "/admin/login";
+        });
+    </script>
+    @endif
 </body>
 </html>
-

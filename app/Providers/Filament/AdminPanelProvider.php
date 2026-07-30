@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use Filament\View\PanelsRenderHook;
+use Filament\Support\Facades\FilamentView;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -36,7 +38,13 @@ class AdminPanelProvider extends PanelProvider
 
         if (!app()->environment(['local', 'testing'])) {
             $middleware = array_merge($middleware, [PreventRequestForgery::class]);
-        }
+        
+FilamentView::registerRenderHook(
+    PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+    fn (): string => view('auth.login-links')->render()
+);
+}
+
 
         return $panel
             ->default()
