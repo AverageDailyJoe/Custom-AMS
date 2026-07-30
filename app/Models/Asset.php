@@ -24,6 +24,7 @@ class Asset extends Model
         'storage_hdd',
         'storage_ssd',
         'vga_card',
+        'operating_system',
         'monitor_id',
         'monitor_spec',
         'status',
@@ -115,6 +116,53 @@ class Asset extends Model
         }
 
         return '-';
+    }
+
+    /**
+     * Depreciation Calculation (Straight-Line Method)
+     * Standard Global IT Lifecycle: 4 Years (25% per year) for Laptop, PC, Monitor, Printer.
+     * 5 Years (20% per year) for Server / Network Infrastructure.
+     */
+    public function getDepreciationRateAttribute(): float
+    {
+        $categoryName = strtolower($this->assetModel?->category?->name ?? '');
+
+        if (str_contains($categoryName, 'server') || str_contains($categoryName, 'network') || str_contains($categoryName, 'switch')) {
+            return 20.0; // 5 Years life cycle
+        }
+
+        return 25.0; // 4 Years life cycle (Standard Global IT Hardware)
+    }
+
+    public function getAgeInYearsAttribute(): int
+    {
+        $purchaseYear = $this->purchase_year;
+        if (!$purchaseYear && $this->purchase_date) {
+            $purchaseYear = (int) $this->purchase_date->format('Y');
+        }
+
+        if (!$purchaseYear) {
+            return 0;
+        }
+
+        $currentYear = (int) date('Y');
+        return max(0, $currentYear - (int)$purchaseYear);
+    }
+
+    public function getDepreciationPercentAttribute(): float
+    {
+        return min(100.0, $this->age_in_years * $this->depreciation_rate);
+    }
+
+    public function getCurrentBookValueAttribute(): float
+    {
+        $cost = (float) $this->purchase_cost;
+        if ($cost <= 0) {
+            return 0.0;
+        }
+
+        $percentRemaining = (100.0 - $this->depreciation_percent) / 100.0;
+        return max(0.0, round($cost * $percentRemaining, 2));
     }
 
     /**

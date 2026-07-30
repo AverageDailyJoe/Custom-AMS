@@ -48,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2.5rem')
             ->favicon(fn () => asset('images/logo.png'))
             ->colors([
-                'primary' => Color::Emerald,
+                'primary' => Color::hex('#0d630d'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -62,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\DailyTicketChartWidget::class,
                 \App\Filament\Widgets\LatestTicketsWidget::class,
                 \App\Filament\Widgets\RecentAssetActivityWidget::class,
+                \App\Filament\Widgets\MaintenanceScheduleWidget::class,
             ])
             ->middleware($middleware)
             ->authMiddleware([

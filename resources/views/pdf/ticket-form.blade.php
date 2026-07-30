@@ -97,7 +97,14 @@
             </tr>
             <tr>
                 <th>LOKASI & RUANGAN</th>
-                <td>{{ $ticket->location?->name ?? 'HEAD OFFICE' }} - {{ $ticket->room ?? 'Ruangan Kerja' }}</td>
+                <td>
+                    {{ $ticket->location?->name ?? 'HEAD OFFICE' }} - {{ $ticket->room ?? 'Ruangan Kerja' }}
+                    @if($ticket->room_notes)
+                        <div style="font-size: 10px; color: #047857; margin-top: 2px;">
+                            <strong>Catatan Lokasi Pengerjaan:</strong> {{ $ticket->room_notes }}
+                        </div>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th>UNIT ASSET IT (AMS)</th>

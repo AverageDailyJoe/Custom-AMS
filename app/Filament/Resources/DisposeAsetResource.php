@@ -59,8 +59,31 @@ class DisposeAsetResource extends Resource
 
                     Forms\Components\Select::make('asset_id')
                         ->label('Pilih Unit Asset IT Yang Akan Diajukan Disposal')
-                        ->relationship('asset', 'asset_tag')
                         ->searchable()
+                        ->getSearchResultsUsing(function (string $search): array {
+                            return Asset::query()
+                                ->with('assetModel')
+                                ->where('asset_tag', 'ILIKE', "%{$search}%")
+                                ->orWhere('serial', 'ILIKE', "%{$search}%")
+                                ->orWhere('primary_user', 'ILIKE', "%{$search}%")
+                                ->orWhereHas('assetModel', function ($q) use ($search) {
+                                    $q->where('name', 'ILIKE', "%{$search}%")
+                                      ->orWhere('manufacturer', 'ILIKE', "%{$search}%");
+                                })
+                                ->limit(50)
+                                ->get()
+                                ->mapWithKeys(function ($asset) {
+                                    $bookVal = $asset->purchase_cost > 0 ? " [Nilai Buku Sisa: Rp " . number_format($asset->current_book_value, 0, ',', '.') . "]" : '';
+                                    return [$asset->id => "{$asset->asset_tag} - {$asset->assetModel?->manufacturer} {$asset->assetModel?->name}{$bookVal}"];
+                                })
+                                ->toArray();
+                        })
+                        ->getOptionLabelUsing(function ($value): ?string {
+                            $asset = Asset::with('assetModel')->find($value);
+                            if (!$asset) return null;
+                            $bookVal = $asset->purchase_cost > 0 ? " [Nilai Buku Sisa: Rp " . number_format($asset->current_book_value, 0, ',', '.') . "]" : '';
+                            return "{$asset->asset_tag} - {$asset->assetModel?->manufacturer} {$asset->assetModel?->name}{$bookVal}";
+                        })
                         ->live()
                         ->afterStateUpdated(function (Set $set, ?string $state) {
                             if ($state) {
@@ -137,6 +160,11 @@ class DisposeAsetResource extends Resource
                         ->label('Foto Asset & Bukti Kerusakan (Wajib Upload Foto Fisik Unit)')
                         ->directory('disposal-attachments')
                         ->multiple()
+                        ->image()
+                        ->imagePreviewHeight('250')
+                        ->openable()
+                        ->downloadable()
+                        ->previewable()
                         ->reorderable()
                         ->appendFiles()
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'application/pdf'])

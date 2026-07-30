@@ -89,7 +89,9 @@ class PengajuanAsetResource extends Resource
                                 'Monitor' => 'Monitor Display',
                                 'Printer' => 'Printer / Scanner',
                                 'Smartphone' => 'Handphone / Smartphone',
-                                'Aksesoris IT' => 'Aksesoris IT (Keyboard/Mouse/RAM/SSD)',
+                                'Komponen Utama' => 'Sparepart & Komponen Utama (RAM / SSD / HDD / Mobo)',
+                                'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Headset / Adapter)',
+                                'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi',
                                 'Software' => 'Software / Lisensi Aplikasi',
                                 'Lainnya' => 'Lain-lain',
                             ])

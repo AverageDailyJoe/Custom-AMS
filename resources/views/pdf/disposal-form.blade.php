@@ -113,7 +113,8 @@
                         <div class="font-bold">{{ $disposeAset->asset_name }}</div>
                         <div style="font-size: 10px; color: #374151; margin-top: 2px;">
                             <strong>Serial Number:</strong> {{ $disposeAset->asset?->serial ?? '-' }}<br>
-                            <strong>Kategori:</strong> {{ $disposeAset->asset?->assetModel?->category?->name ?? 'Aset IT' }}
+                            <strong>Kategori:</strong> {{ $disposeAset->asset?->assetModel?->category?->name ?? 'Aset IT' }}<br>
+                            <strong>Nilai Buku Sisa:</strong> {{ ($disposeAset->asset?->purchase_cost > 0) ? 'Rp ' . number_format($disposeAset->asset->current_book_value, 0, ',', '.') : 'Rp 0' }}
                         </div>
                     </td>
                     <td>

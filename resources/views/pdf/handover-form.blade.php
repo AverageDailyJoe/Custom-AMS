@@ -56,7 +56,7 @@
                 </td>
                 <td style="width: 80%; text-align: left; padding-left: 15px;">
                     <div class="company-title">PT GONDOWANGI TRADISIONAL KOSMETIKA</div>
-                    <div class="company-sub">DEPARTEMEN INFORMATION & TECHNOLOGY (IT)</div>
+                    <div class="company-sub"></div>
                 </td>
             </tr>
         </table>
@@ -101,7 +101,7 @@
         <table class="info-table">
             <tr>
                 <th>PIHAK PERTAMA (PENGAWAS IT)</th>
-                <td><strong>{{ $checkout->checkedOutByUser?->name ?? 'IT Staff' }}</strong> (Departemen Information & Technology)</td>
+                <td><strong>{{ $checkout->checkedOutByUser?->name ?? 'IT Staff' }}</strong> </td>
             </tr>
             <tr>
                 <th>PIHAK KEDUA (PENGGUNA UTAMA)</th>
@@ -209,19 +209,19 @@
         <table class="sig-table">
             <tr>
                 <td>
-                    <p>Diserahkan Oleh,<br><strong>PIHAK PERTAMA (IT)</strong></p>
+                    <p>Diserahkan Oleh,<br><strong>PIHAK PERTAMA</strong></p>
                     <div class="sig-space"></div>
-                    <p><u>( {{ $checkout->checkedOutByUser?->name ?? 'IT Staff' }} )</u><br><small>Information Technology</small></p>
+                    <p><u>( {{ $checkout->checkedOutByUser?->name ?? '' }} )</u><br><small>STAFF IT</small></p>
                 </td>
                 <td>
-                    <p>Diterima Oleh,<br><strong>PIHAK KEDUA (PENGGUNA)</strong></p>
+                    <p>Diterima Oleh,<br><strong>PIHAK KEDUA</strong></p>
                     <div class="sig-space"></div>
                     <p><u>( {{ $checkout->primary_user ?? 'Pengguna Unit' }} )</u><br><small>{{ $checkout->asset->department ?? 'User' }}</small></p>
                 </td>
                 <td>
                     <p>Mengetahui,<br><strong>ATASAN / SPV</strong></p>
                     <div class="sig-space"></div>
-                    <p><u>( ..................................... )</u><br><small>Manager / SPV</small></p>
+                    <p><u>( ..................................... )</u><br><small></small></p>
                 </td>
             </tr>
         </table>

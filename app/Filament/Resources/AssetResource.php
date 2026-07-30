@@ -133,6 +133,9 @@ class AssetResource extends Resource
                     Forms\Components\TextInput::make('vga_card')
                         ->label('VGA Card')
                         ->placeholder('Contoh: NVIDIA GeForce GT 610'),
+                    Forms\Components\TextInput::make('operating_system')
+                        ->label('Operating System (OS)')
+                        ->placeholder('Contoh: Windows 11 Pro, Windows 10 Home, Ubuntu 22.04'),
                 ])->columns(3),
 
             Forms\Components\Section::make('Informasi Monitor')
@@ -184,6 +187,30 @@ class AssetResource extends Resource
                         ->label('Keterangan / Catatan')
                         ->columnSpanFull(),
                 ])->columns(3),
+
+            Forms\Components\Section::make('Analisis Depresiasi & Nilai Buku Sisa (Finance)')
+                ->description('Penyusutan otomatis metode garis lurus (Straight-Line) berbasis standar akuntansi masa manfaat IT 4 Tahun (25%/tahun).')
+                ->icon('heroicon-o-calculator')
+                ->schema([
+                    Forms\Components\Placeholder::make('depreciation_rate_display')
+                        ->label('Tarif Depresiasi Tahunan')
+                        ->content(fn (?Asset $record) => $record ? "{$record->depreciation_rate}% / tahun (Masa Manfaat " . (int)(100 / $record->depreciation_rate) . " Tahun)" : '25% / tahun'),
+
+                    Forms\Components\Placeholder::make('age_display')
+                        ->label('Umur Terpakai Unit')
+                        ->content(fn (?Asset $record) => $record ? "{$record->age_in_years} Tahun" : '-'),
+
+                    Forms\Components\Placeholder::make('deprec_percent_display')
+                        ->label('Total Penyusutan Terakumulasi')
+                        ->content(fn (?Asset $record) => $record ? "{$record->depreciation_percent}%" : '-'),
+
+                    Forms\Components\Placeholder::make('book_value_display')
+                        ->label('Estimasi Nilai Buku Sisa (Rp)')
+                        ->content(fn (?Asset $record) => $record && $record->purchase_cost > 0 
+                            ? 'Rp ' . number_format($record->current_book_value, 0, ',', '.')
+                            : 'Rp 0 (Belum diisi harga beli)')
+                        ->columnSpanFull(),
+                ])->columns(3)->visible(fn ($operation) => $operation === 'edit' || $operation === 'view'),
             Forms\Components\Section::make('Dokumen Fisik & Manual Attachment')
                 ->description('Upload dokumen fisik pendukung (Invoice, Manual Book, Kartu Garansi, Nota Pembelian) untuk mencegah hilang / rusaknya arsip fisik.')
                 ->icon('heroicon-o-paper-clip')
@@ -256,6 +283,17 @@ class AssetResource extends Resource
                     ->label('Ruangan')
                     ->searchable()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('operating_system')
+                    ->label('OS')
+                    ->searchable()
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('current_book_value')
+                    ->label('Nilai Buku Sisa (Rp)')
+                    ->money('IDR')
+                    ->placeholder('Rp 0')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordClasses(fn (Asset $record) => $record->status === 'disposed' ? 'opacity-50 line-through' : null)
             ->filters([
@@ -271,6 +309,40 @@ class AssetResource extends Resource
                     ->label('Location'),
             ])
             ->actions([
+                Tables\Actions\Action::make('schedule_maintenance')
+                    ->label('Jadwalkan Maintenance')
+                    ->icon('heroicon-o-wrench-screwdriver')
+                    ->color('warning')
+                    ->visible(fn (Asset $record) => $record->status !== 'disposed')
+                    ->requiresConfirmation()
+                    ->modalHeading(fn (Asset $record) => "Jadwalkan Maintenance Rutin Berkala: {$record->asset_tag}?")
+                    ->modalDescription('Sistem akan otomatis menerbitkan Tiket IT Service berjadwal untuk unit aset ini.')
+                    ->action(function (Asset $record) {
+                        $ticket = \App\Models\Ticket::create([
+                            'ticket_number' => \App\Models\Ticket::generateTicketNumber(),
+                            'reporter_name' => $record->holder_name !== '-' ? $record->holder_name : 'Tim IT Maintenance',
+                            'reporter_department' => $record->department ?? 'IT Operations',
+                            'contact_number' => 'Ext IT',
+                            'location_id' => $record->location_id,
+                            'room' => $record->room ?? 'Ruangan Pengerjaan',
+                            'asset_id' => $record->id,
+                            'asset_tag' => $record->asset_tag,
+                            'asset_name' => "{$record->assetModel?->manufacturer} {$record->assetModel?->name}",
+                            'category' => 'scheduled_service',
+                            'subject' => "Preventive Maintenance Rutin Berkala - {$record->asset_tag}",
+                            'description' => "Jadwal maintenance rutin berkala IT untuk unit {$record->asset_tag} ({$record->assetModel?->name}). Pengerjaan meliputi: Pembersihan fisik/debu, pengecekan komponen, backup data, dan update OS/antivirus.",
+                            'scheduled_date' => now(),
+                            'scheduled_time_slot' => '10:00 - 12:00',
+                            'priority' => 'medium',
+                            'status' => 'scheduled',
+                            'assigned_to' => \Illuminate\Support\Facades\Auth::id() ?: 1,
+                        ]);
+
+                        Notification::make()
+                            ->title("Tiket Maintenance {$ticket->ticket_number} Berhasil Diterbitkan")
+                            ->success()
+                            ->send();
+                    }),
                 Tables\Actions\Action::make('view_disposal')
                     ->label('Lihat Disposal')
                     ->icon('heroicon-o-trash')

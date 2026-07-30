@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AssetResource\RelationManagers;
 
+use App\Models\Ticket;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -10,7 +11,7 @@ class TicketsRelationManager extends RelationManager
 {
     protected static string $relationship = 'tickets';
 
-    protected static ?string $title = 'Riwayat Tiket IT & Maintenance';
+    protected static ?string $title = 'Riwayat Tiket IT, Perbaikan & Maintenance';
 
     public function table(Table $table): Table
     {
@@ -20,30 +21,27 @@ class TicketsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('ticket_number')
                     ->label('No. Tiket')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('scheduled_date')
                     ->label('Tgl Jadwal')
                     ->date('d M Y')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('scheduled_time_slot')
-                    ->label('Waktu'),
-
-                Tables\Columns\TextColumn::make('due_date')
-                    ->label('Target Selesai (SLA)')
-                    ->date('d M Y')
-                    ->sortable()
-                    ->placeholder('-'),
-
                 Tables\Columns\TextColumn::make('reporter_name')
                     ->label('Pelapor / User')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('subject')
-                    ->label('Kendala')
+                    ->label('Kendala Dilaporkan')
                     ->searchable()
-                    ->limit(30),
+                    ->limit(35),
+
+                Tables\Columns\TextColumn::make('resolution_notes')
+                    ->label('Solusi IT / Pengerjaan')
+                    ->limit(40)
+                    ->placeholder('Masih Proses / Pending'),
 
                 Tables\Columns\TextColumn::make('assignedToUser.name')
                     ->label('Teknisi IT')
@@ -84,6 +82,15 @@ class TicketsRelationManager extends RelationManager
             ->defaultSort('scheduled_date', 'desc')
             ->headerActions([])
             ->actions([
+                Tables\Actions\Action::make('view_ticket_detail')
+                    ->label('Detail Solusi IT')
+                    ->icon('heroicon-o-information-circle')
+                    ->color('primary')
+                    ->modalHeading(fn ($record) => "Rincian Tiket & Perbaikan: {$record->ticket_number}")
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Tutup')
+                    ->modalContent(fn ($record) => view('filament.components.ticket-detail-modal', ['ticket' => $record])),
+
                 Tables\Actions\Action::make('pdf_ticket')
                     ->label('Cetak Work Order (PDF)')
                     ->icon('heroicon-o-printer')

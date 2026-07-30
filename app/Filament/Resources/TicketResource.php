@@ -63,26 +63,72 @@ class TicketResource extends Resource
                             ->preload(),
 
                         Forms\Components\TextInput::make('room')
-                            ->label('Ruangan / Detail Lokasi')
-                            ->placeholder('Contoh: RUANG KELAPA GADING, GUDANG FACTORY'),
+                            ->label('Ruangan Utama (Dari Asset)')
+                            ->placeholder('Contoh: RUANG HCD, GUDANG FACTORY'),
                     ]),
+
+                    Forms\Components\TextInput::make('room_notes')
+                        ->label('Catatan Lokasi Sementara / Pengerjaan Khusus (Jika Sedang Rapat / Berada di Tempat Lain)')
+                        ->placeholder('Misal: User sedang rapat di Ruang Direksi Lt 2 / Sedang di Pabrik Cikarang Line 3')
+                        ->columnSpanFull(),
                 ]),
 
             Forms\Components\Section::make('Perangkat / Asset IT Yang Bermasalah (AMS)')
                 ->description('Pilih unit aset yang dilaporkan jika kendala terkait perangkat inventaris terdaftar')
                 ->schema([
                     Forms\Components\Select::make('asset_id')
-                        ->label('Pilih Unit Asset IT (Cari Tag / Serial)')
-                        ->relationship('asset', 'asset_tag')
+                        ->label('Pilih Unit Asset IT (Cari Tag / Serial / Model / User)')
+                        ->placeholder('Ketik ID Inventaris (Contoh: GTK-02-03-21), Model, atau Nama User...')
                         ->searchable()
-                        ->preload()
+                        ->getSearchResultsUsing(function (string $search): array {
+                            return Asset::query()
+                                ->with(['assetModel', 'location'])
+                                ->where('asset_tag', 'ILIKE', "%{$search}%")
+                                ->orWhere('serial', 'ILIKE', "%{$search}%")
+                                ->orWhere('primary_user', 'ILIKE', "%{$search}%")
+                                ->orWhereHas('assetModel', function ($q) use ($search) {
+                                    $q->where('name', 'ILIKE', "%{$search}%")
+                                      ->orWhere('manufacturer', 'ILIKE', "%{$search}%");
+                                })
+                                ->limit(50)
+                                ->get()
+                                ->mapWithKeys(function ($asset) {
+                                    $user = $asset->holder_name !== '-' ? " (User: {$asset->holder_name})" : '';
+                                    $model = $asset->assetModel ? " - {$asset->assetModel->manufacturer} {$asset->assetModel->name}" : '';
+                                    $statusBadge = " [{$asset->status}]";
+                                    return [$asset->id => "{$asset->asset_tag}{$model}{$user}{$statusBadge}"];
+                                })
+                                ->toArray();
+                        })
+                        ->getOptionLabelUsing(function ($value): ?string {
+                            $asset = Asset::with(['assetModel', 'location'])->find($value);
+                            if (!$asset) return null;
+                            $user = $asset->holder_name !== '-' ? " (User: {$asset->holder_name})" : '';
+                            $model = $asset->assetModel ? " - {$asset->assetModel->manufacturer} {$asset->assetModel->name}" : '';
+                            $statusBadge = " [{$asset->status}]";
+                            return "{$asset->asset_tag}{$model}{$user}{$statusBadge}";
+                        })
                         ->live()
                         ->afterStateUpdated(function (Set $set, ?string $state) {
                             if ($state) {
-                                $asset = Asset::find($state);
+                                $asset = Asset::with(['assetModel', 'location'])->find($state);
                                 if ($asset) {
                                     $set('asset_tag', $asset->asset_tag);
                                     $set('asset_name', "{$asset->assetModel?->manufacturer} {$asset->assetModel?->name}");
+                                    
+                                    // Smart Auto-Fill Data Pelapor & Lokasi
+                                    if ($asset->holder_name !== '-') {
+                                        $set('reporter_name', $asset->holder_name);
+                                    }
+                                    if (!empty($asset->department)) {
+                                        $set('reporter_department', $asset->department);
+                                    }
+                                    if (!empty($asset->location_id)) {
+                                        $set('location_id', $asset->location_id);
+                                    }
+                                    if (!empty($asset->room)) {
+                                        $set('room', $asset->room);
+                                    }
                                 }
                             }
                         })
@@ -244,6 +290,11 @@ class TicketResource extends Resource
                         ->label('Upload Foto / Tangkapan Layar Kendala')
                         ->directory('ticket-attachments')
                         ->multiple()
+                        ->image()
+                        ->imagePreviewHeight('250')
+                        ->openable()
+                        ->downloadable()
+                        ->previewable()
                         ->reorderable()
                         ->appendFiles()
                         ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'application/pdf'])

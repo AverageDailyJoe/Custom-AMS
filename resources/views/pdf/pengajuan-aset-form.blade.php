@@ -179,12 +179,12 @@
                 </tr>
                 <tr>
                     <td>Tgl. {{ $formattedDate }}</td>
-                    <td>Tgl. {{ $formattedDate }}</td>
-                    <td>Tgl. {{ $formattedDate }}</td>
-                    <td>Tgl. {{ $formattedDate }}</td>
-                    <td>Tgl. {{ $formattedDate }}</td>
-                    <td>Tgl. {{ $formattedDate }}</td>
-                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

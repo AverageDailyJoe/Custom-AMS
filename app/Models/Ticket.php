@@ -15,6 +15,7 @@ class Ticket extends Model
         'contact_number',
         'location_id',
         'room',
+        'room_notes',
         'asset_id',
         'asset_tag',
         'asset_name',

@@ -20,4 +20,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/pengajuan-asets/{pengajuanAset}/pdf', [HandoverFormController::class, 'downloadPengajuanAset'])->name('pengajuan-asets.pdf');
     Route::get('/admin/dispose-asets/{disposeAset}/pdf', [HandoverFormController::class, 'downloadDisposal'])->name('dispose-asets.pdf');
     Route::get('/admin/tickets/{ticket}/pdf', [HandoverFormController::class, 'downloadTicket'])->name('tickets.pdf');
+    Route::get('/admin/rekap-aset/pdf', [HandoverFormController::class, 'downloadRekapAset'])->name('rekap-aset.pdf');
+    Route::get('/admin/rekap-aset/excel', [HandoverFormController::class, 'exportAsetExcel'])->name('rekap-aset.excel');
+    Route::get('/admin/rekap-tiket/pdf', [HandoverFormController::class, 'downloadRekapTiket'])->name('rekap-tiket.pdf');
+
 });
+
+// Storage file serving route to guarantee 200 OK preview and download
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        $filePath = storage_path('app/' . $path);
+    }
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*')->name('storage.file');

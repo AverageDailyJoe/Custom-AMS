@@ -86,4 +86,9 @@ class Checkout extends Model
 
         return array_values(array_unique(array_filter($files)));
     }
+
+    public function getAllAttachmentsCount(): int
+    {
+        return count($this->getAllAttachments());
+    }
 }
