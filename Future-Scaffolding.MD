@@ -97,3 +97,32 @@ Berdasarkan urgensi operasional di lapangan (*Head Office, Cikarang, Surabaya, &
 ## 📝 Catatan Diskusi & Status Implementasi
 - 📌 **Status Current Phase**: Phase 1 IT Service Tickets & Printed Form Layout Complete.
 - 📌 **Next Discussion Phase**: Review dan konfirmasi eksekusi **Priority 1 (1-Click Audit Rekapitulasi Laporan)** & **Priority 2 (Kalkulator Depresiasi Aset)**.
+
+---
+
+## 📅 Update Roadmap & Refinement (30 Juli 2026 GMT +7)
+
+Berdasarkan penyesuaian kebutuhan operasional IT dan efisiensi anggaran, berikut adalah keputusan refinement fitur:
+
+### 1. 🏷️ Cetak Stiker Tag Aset (QR Code - Focus: Label Tom & Jerry No. 121)
+- **Fokus Utama**: Mengingat anggaran IT terbatas, fitur cetak stiker difokuskan pada lembar kertas stiker label **Tom & Jerry No. 121** (atau ukuran standar yang ekonomis) menggunakan printer standar kantor (EPSON / CANON / HP).
+- **Elemen Stiker**: Asset Tag (`GTK-XX-XX`), QR Code unik untuk verifikasi cepat, Nama Model Unit, dan Identitas PT Gondowangi.
+
+### 2. 🔑 Manajemen Lisensi Software (Software Licenses Tracker)
+- **Cakupan Software**: Pencatatan lisensi perangkat lunak perusahaan secara terpusat, tidak terbatas pada Microsoft 365, tetapi mencakup:
+  - **Microsoft 365 & Windows OEM**
+  - **Desain & Media**: Adobe Creative Cloud (Photoshop, Illustrator, Premiere), Canva Pro, CorelDRAW.
+  - **Aplikasi Lainnya**: Antivirus, CAD, Utility & Tools IT.
+- **Metrik Tracking**: Jumlah *seats* terpakai vs kuota, tanggal kadaluarsa (*expiration alert*), kunci lisensi (*product key*), dan penugasan lisensi ke unit aset/karyawan.
+
+### 3. 🧩 Sparepart Inventory Tracker (Fokus Komponen Hardware Unit)
+- **Fokus Scope**: Terbatas pada komponen hardware/sparepart pengganti internal (tidak mencakup barang konsumsi umum):
+  - **Storage**: SSD (M.2 NVMe, SATA) & Harddisk.
+  - **Memory**: RAM (DDR3 / DDR4 / DDR5).
+  - **Body Parts**: Casing Laptop, Engsel Replacement.
+  - **Power & Board**: Baterai Laptop, Baterai CMOS, Adaptor Charger.
+- **Fitur Integrasi**: Pencatatan stok masuk/keluar & link penggunaan sparepart pada Tiket Perbaikan IT.
+
+### 🚫 Non-Scope Clarification:
+- **Digital Signature**: **Tidak dibutuhkan** (penandatanganan fisik pada cetakan dokumen Berita Acara PDF yang ada saat ini sudah memenuhi standar operasional & audit).
+
