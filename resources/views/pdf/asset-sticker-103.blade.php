@@ -6,8 +6,8 @@
     <title>Cetak Stiker Label Tag Aset - Tom & Jerry 103</title>
     <style>
         @page {
-            size: A4 portrait;
-            margin: 8mm 6mm;
+            size: 219mm 165mm;
+            margin: 0;
         }
 
         * {
@@ -56,12 +56,14 @@
         }
 
         .sheet-container {
-            width: 200mm; /* Adjusted container width for 3 cols of 64mm + gaps */
+            width: 219mm;
+            height: 165mm;
             background: white;
-            padding: 4mm 3mm;
-            border: 1px dashed #cbd5e1;
+            padding: 15.5mm 11.5mm; /* Physical margin kalibrasi */
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
+            margin-bottom: 20px;
         }
 
         /* 3 Columns x 4 Rows Grid for Tom & Jerry 103 */
@@ -179,9 +181,8 @@
             .sheet-container {
                 border: none;
                 box-shadow: none;
-                margin-top: 0;
-                padding: 0;
-                width: 100%;
+                margin: 0 !important;
+                page-break-after: always;
             }
 
             .sticker-card {
@@ -214,7 +215,7 @@
     @endphp
 
     @for ($page = 0; $page < $totalPages; $page++)
-        <div class="sheet-container" style="{{ $page > 0 ? 'page-break-before: always; margin-top: 20px;' : '' }}">
+        <div class="sheet-container">
             <div class="grid-103">
                 @for ($i = 1; $i <= 12; $i++)
                     @php $slotNum = ($page * 12) + $i; @endphp
