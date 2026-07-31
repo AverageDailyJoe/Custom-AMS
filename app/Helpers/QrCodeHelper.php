@@ -21,6 +21,7 @@ class QrCodeHelper
             'addQuietzone'    => true,
             'quietzoneSize'   => 1,
             'svgAddXmlHeader' => false,
+            'outputBase64'    => false,
         ]);
 
         $qrcode = new QRCode($options);
