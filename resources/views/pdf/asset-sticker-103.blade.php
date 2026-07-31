@@ -21,7 +21,8 @@
             background-color: #f4f6f8;
             padding: 15px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         .no-print-bar {
@@ -172,6 +173,7 @@
             body {
                 background: white;
                 padding: 0;
+                display: block;
             }
 
             .sheet-container {
