@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/rekap-aset/pdf', [HandoverFormController::class, 'downloadRekapAset'])->name('rekap-aset.pdf');
     Route::get('/admin/rekap-aset/excel', [HandoverFormController::class, 'exportAsetExcel'])->name('rekap-aset.excel');
     Route::get('/admin/rekap-tiket/pdf', [HandoverFormController::class, 'downloadRekapTiket'])->name('rekap-tiket.pdf');
-    Route::get('/admin/assets/{asset?}/sticker-121', [HandoverFormController::class, 'downloadSticker121'])->name('assets.sticker-121');
+    Route::get('/admin/assets/{asset?}/sticker-103', [HandoverFormController::class, 'downloadSticker103'])->name('assets.sticker-103');
 
 });
 

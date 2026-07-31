@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Stiker Label Tag Aset - Tom & Jerry 121</title>
+    <title>Cetak Stiker Label Tag Aset - Tom & Jerry 103</title>
     <style>
         @page {
             size: A4 portrait;
@@ -55,7 +55,7 @@
         }
 
         .sheet-container {
-            width: 162mm;
+            width: 200mm; /* Adjusted container width for 3 cols of 64mm + gaps */
             background: white;
             padding: 4mm 3mm;
             border: 1px dashed #cbd5e1;
@@ -63,21 +63,21 @@
             margin-top: 50px;
         }
 
-        /* 2 Columns x 5 Rows Grid for Tom & Jerry 121 */
-        .grid-121 {
+        /* 3 Columns x 4 Rows Grid for Tom & Jerry 103 */
+        .grid-103 {
             display: grid;
-            grid-template-columns: 76mm 76mm;
-            grid-template-rows: repeat(5, 38mm);
-            column-gap: 4mm;
-            row-gap: 2.5mm;
+            grid-template-columns: 64mm 64mm 64mm;
+            grid-template-rows: repeat(4, 32mm);
+            column-gap: 2mm;
+            row-gap: 2mm;
         }
 
         .sticker-card {
-            width: 76mm;
-            height: 38mm;
+            width: 64mm;
+            height: 32mm;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
-            padding: 3mm 4mm;
+            padding: 2mm 3mm;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -88,21 +88,21 @@
         }
 
         .sticker-blank {
-            width: 76mm;
-            height: 38mm;
+            width: 64mm;
+            height: 32mm;
             border: 1px dashed #e2e8f0;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #cbd5e1;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             background: #fafafa;
         }
 
         .company-header {
-            font-size: 9px;
+            font-size: 7px;
             font-weight: 800;
             letter-spacing: 0.5px;
             color: #0f172a;
@@ -117,13 +117,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 1.5mm;
+            margin-top: 1mm;
             margin-bottom: 1mm;
         }
 
         .qr-code-box {
-            width: 17mm;
-            height: 17mm;
+            width: 14mm;
+            height: 14mm;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -134,9 +134,8 @@
             height: 100%;
         }
 
-        /* Asset Tag placed directly underneath QR Code as requested */
         .asset-tag-label {
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 900;
             color: #000000;
             margin-top: 1mm;
@@ -147,7 +146,7 @@
         .asset-info {
             width: 100%;
             text-align: center;
-            font-size: 8px;
+            font-size: 7px;
             color: #334155;
             line-height: 1.25;
             white-space: nowrap;
@@ -161,7 +160,7 @@
         }
 
         .asset-location {
-            font-size: 7.5px;
+            font-size: 6px;
             color: #64748b;
         }
 
@@ -199,8 +198,8 @@
 
     <div class="no-print-bar">
         <div>
-            <strong>🖨️ Cetak Stiker Tag Aset (Tom & Jerry No. 121)</strong>
-            <span style="font-size: 12px; color: #94a3b8; margin-left: 10px;">Format: 76mm x 38mm (2 Kolom x 5 Baris)</span>
+            <strong>🖨️ Cetak Stiker Tag Aset (Tom & Jerry No. 103)</strong>
+            <span style="font-size: 12px; color: #94a3b8; margin-left: 10px;">Format: 64mm x 32mm (3 Kolom x 4 Baris)</span>
         </div>
         <div>
             <button class="btn-print" onclick="window.print()">Print / Simpan PDF</button>
@@ -208,8 +207,8 @@
     </div>
 
     <div class="sheet-container">
-        <div class="grid-121">
-            @for ($slotNum = 1; $slotNum <= 10; $slotNum++)
+        <div class="grid-103">
+            @for ($slotNum = 1; $slotNum <= 12; $slotNum++)
                 @if (isset($mappedSlots[$slotNum]) && $mappedSlots[$slotNum])
                     @php $asset = $mappedSlots[$slotNum]; @endphp
                     <div class="sticker-card">
@@ -217,9 +216,8 @@
                         
                         <div class="qr-section">
                             <div class="qr-code-box">
-                                {!! \App\Helpers\QrCodeHelper::generateSvg($asset->asset_tag, 90) !!}
+                                {!! \App\Helpers\QrCodeHelper::generateSvg($asset->asset_tag, 70) !!}
                             </div>
-                            <!-- ID Inventaris / Tag TEPAT DI BAWAH QR CODE -->
                             <div class="asset-tag-label">{{ $asset->asset_tag }}</div>
                         </div>
 

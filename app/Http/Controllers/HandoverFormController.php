@@ -199,10 +199,10 @@ class HandoverFormController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
-    public function downloadSticker121(\Illuminate\Http\Request $request, ?\App\Models\Asset $asset = null)
+    public function downloadSticker103(\Illuminate\Http\Request $request, ?\App\Models\Asset $asset = null)
     {
         $slotNumber = (int) $request->input('slot', 1);
-        if ($slotNumber < 1 || $slotNumber > 10) {
+        if ($slotNumber < 1 || $slotNumber > 12) {
             $slotNumber = 1;
         }
 
@@ -219,13 +219,13 @@ class HandoverFormController extends Controller
 
             $currentSlot = $slotNumber;
             foreach ($assets as $a) {
-                if ($currentSlot > 10) break;
+                if ($currentSlot > 12) break;
                 $mappedSlots[$currentSlot] = $a;
                 $currentSlot++;
             }
         }
 
-        return view('pdf.asset-sticker-121', compact('mappedSlots', 'slotNumber'));
+        return view('pdf.asset-sticker-103', compact('mappedSlots', 'slotNumber'));
     }
 }
 
