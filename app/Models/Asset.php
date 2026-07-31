@@ -35,6 +35,7 @@ class Asset extends Model
         'warranty',
         'notes',
         'attachments',
+        'qr_token',
     ];
 
     protected $casts = [
@@ -46,6 +47,12 @@ class Asset extends Model
     protected static function boot(): void
     {
         parent::boot();
+
+        static::creating(function (Asset $asset) {
+            if (empty($asset->qr_token)) {
+                $asset->qr_token = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
 
         static::saving(function (Asset $asset) {
             if ($asset->isDirty('status') && $asset->status === 'disposed') {

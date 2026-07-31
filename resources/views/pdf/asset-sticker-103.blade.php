@@ -216,7 +216,7 @@
                         
                         <div class="qr-section">
                             <div class="qr-code-box">
-                                {!! \App\Helpers\QrCodeHelper::generateSvg($asset->asset_tag, 70) !!}
+                                {!! \App\Helpers\QrCodeHelper::generateSvg(route('asset.verify', $asset->qr_token), 70) !!}
                             </div>
                             <div class="asset-tag-label">{{ $asset->asset_tag }}</div>
                         </div>

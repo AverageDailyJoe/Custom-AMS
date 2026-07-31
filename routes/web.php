@@ -13,6 +13,8 @@ Route::get('/login', function () {
     return redirect('/admin/login');
 })->name('login');
 
+Route::get('/verify/{token}', [\App\Http\Controllers\AssetVerificationController::class, 'show'])->name('asset.verify');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/checkouts/{checkout}/pdf-handover', [HandoverFormController::class, 'downloadHandover'])->name('checkouts.pdf-handover');
     Route::get('/admin/checkouts/{checkout}/pdf-return', [HandoverFormController::class, 'downloadReturn'])->name('checkouts.pdf-return');
