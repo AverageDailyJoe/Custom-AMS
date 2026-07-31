@@ -1,0 +1,40 @@
+{
+  "project_name": "Gondowangi IT Asset Management System (Custom AMS)",
+  "tech_stack": {
+    "framework": "Laravel 13",
+    "admin_panel": "Filament v3",
+    "pdf_generator": "barryvdh/laravel-dompdf",
+    "qr_generator": "chillerlan/php-qrcode (v6)"
+  },
+  "branch_strategy": {
+    "current_active_branch": "main",
+    "merged_branches": ["tj-103"]
+  },
+  "completed_features": [
+    "Sistem Login & Autentikasi dengan OTP (Register & Reset Password).",
+    "Manajemen Aset IT Lengkap (CRUD, Kategori, Model, Lokasi).",
+    "Sistem Ticketing IT (Maintenance & Perbaikan).",
+    "Sistem Checkout / Checkin (Peminjaman Aset ke Karyawan).",
+    "Generate Dokumen PDF (Berita Acara, Handover, Tiket, Pengajuan, Disposal).",
+    "Bulk Print Stiker Barcode Label Tom & Jerry 103 (Format: 3x4 kolom, ukuran kustom 219mm x 165mm).",
+    "Sistem Anti-Tampering QR Code (Menggunakan `qr_token` UUID untuk validasi scan publik).",
+    "Halaman Verifikasi Aset Publik (Tanpa login, mobile-friendly via Tailwind)."
+  ],
+  "pending_features_roadmap": [
+    {
+      "feature": "Software License Tracker",
+      "status": "Not Started",
+      "notes": "Melacak kuota lisensi software (Windows, Adobe, dll) dan di-assign ke aset/user."
+    },
+    {
+      "feature": "Sparepart Inventory Tracker",
+      "status": "Not Started",
+      "notes": "Manajemen stok sparepart IT. Auto-deduct saat menyelesaikan tiket perbaikan."
+    }
+  ],
+  "ongoing_issues": {
+    "issue": "Kalibrasi Margin Printer Stiker T&J 103",
+    "context": "File: `resources/views/pdf/asset-sticker-103.blade.php`. CSS `@page` diset ke 219mm x 165mm. Margin `.sheet-container` saat ini `padding: 15.5mm 11.5mm;`. Perlu ditinkering/kalibrasi fisik dengan printer Epson setelah ganti laptop."
+  },
+  "notes": "Laptop sebelumnya (Lenovo T480 i5 Gen 8) di-nuke dan diberikan ke Top Level Management. Context ini disimpan untuk memandu agen AI di sesi berikutnya di device yang baru."
+}
