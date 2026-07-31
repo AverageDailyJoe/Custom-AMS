@@ -206,37 +206,45 @@
         </div>
     </div>
 
-    <div class="sheet-container">
-        <div class="grid-103">
-            @for ($slotNum = 1; $slotNum <= 12; $slotNum++)
-                @if (isset($mappedSlots[$slotNum]) && $mappedSlots[$slotNum])
-                    @php $asset = $mappedSlots[$slotNum]; @endphp
-                    <div class="sticker-card">
-                        <div class="company-header">PT GONDOWANGI KOSMETIKA</div>
-                        
-                        <div class="qr-section">
-                            <div class="qr-code-box">
-                                {!! \App\Helpers\QrCodeHelper::generateSvg(route('asset.verify', $asset->qr_token), 70) !!}
-                            </div>
-                            <div class="asset-tag-label">{{ $asset->asset_tag }}</div>
-                        </div>
+    @php
+        $maxSlot = !empty($mappedSlots) ? max(array_keys($mappedSlots)) : 12;
+        $totalPages = max(1, ceil($maxSlot / 12));
+    @endphp
 
-                        <div class="asset-info">
-                            <div class="asset-model">{{ Str::limit(($asset->assetModel?->manufacturer ? $asset->assetModel->manufacturer . ' ' : '') . ($asset->assetModel?->name ?? 'Aset IT'), 30) }}</div>
-                            <div class="asset-location">
-                                {{ $asset->location?->name ?? 'HQ' }} 
-                                @if($asset->department) | {{ $asset->department }} @endif
+    @for ($page = 0; $page < $totalPages; $page++)
+        <div class="sheet-container" style="{{ $page > 0 ? 'page-break-before: always; margin-top: 20px;' : '' }}">
+            <div class="grid-103">
+                @for ($i = 1; $i <= 12; $i++)
+                    @php $slotNum = ($page * 12) + $i; @endphp
+                    @if (isset($mappedSlots[$slotNum]) && $mappedSlots[$slotNum])
+                        @php $asset = $mappedSlots[$slotNum]; @endphp
+                        <div class="sticker-card">
+                            <div class="company-header">PT GONDOWANGI KOSMETIKA</div>
+                            
+                            <div class="qr-section">
+                                <div class="qr-code-box">
+                                    {!! \App\Helpers\QrCodeHelper::generateSvg(route('asset.verify', $asset->qr_token), 70) !!}
+                                </div>
+                                <div class="asset-tag-label">{{ $asset->asset_tag }}</div>
+                            </div>
+
+                            <div class="asset-info">
+                                <div class="asset-model">{{ Str::limit(($asset->assetModel?->manufacturer ? $asset->assetModel->manufacturer . ' ' : '') . ($asset->assetModel?->name ?? 'Aset IT'), 30) }}</div>
+                                <div class="asset-location">
+                                    {{ $asset->location?->name ?? 'HQ' }} 
+                                    @if($asset->department) | {{ $asset->department }} @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @else
-                    <div class="sticker-blank">
-                        Slot {{ $slotNum }} (Kosong)
-                    </div>
-                @endif
-            @endfor
+                    @else
+                        <div class="sticker-blank">
+                            Slot {{ $i }} (Kosong)
+                        </div>
+                    @endif
+                @endfor
+            </div>
         </div>
-    </div>
+    @endfor
 
 </body>
 </html>

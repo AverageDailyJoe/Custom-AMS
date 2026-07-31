@@ -219,7 +219,6 @@ class HandoverFormController extends Controller
 
             $currentSlot = $slotNumber;
             foreach ($assets as $a) {
-                if ($currentSlot > 12) break;
                 $mappedSlots[$currentSlot] = $a;
                 $currentSlot++;
             }
