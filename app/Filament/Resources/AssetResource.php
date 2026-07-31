@@ -528,7 +528,7 @@ class AssetResource extends Resource
                         ])
                         ->action(function (\Illuminate\Database\Eloquent\Collection $records, array $data, $livewire) {
                             $ids = implode(',', $records->pluck('id')->toArray());
-                            $url = route('assets.sticker-103') . '?asset_ids=' . $ids . '&slot=' . ($data['start_slot'] ?? 1);
+                            $url = route('assets.sticker-103.bulk') . '?asset_ids=' . $ids . '&slot=' . ($data['start_slot'] ?? 1);
                             $livewire->js("window.open('{$url}', '_blank');");
                         }),
                     Tables\Actions\DeleteBulkAction::make(),
