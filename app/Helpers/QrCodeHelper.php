@@ -16,10 +16,11 @@ class QrCodeHelper
     public static function generateSvg(string $text, int $size = 110): string
     {
         $options = new QROptions([
-            'outputType'    => QRCode::OUTPUT_MARKUP_SVG,
-            'eccLevel'      => QRCode::ECC_L, // Low error correction for less dense QR
-            'addQuietzone'  => true,
-            'quietzoneSize' => 1,
+            'outputInterface' => \chillerlan\QRCode\Output\QRMarkupSVG::class,
+            'eccLevel'        => \chillerlan\QRCode\Common\EccLevel::L, // Low error correction for less dense QR
+            'addQuietzone'    => true,
+            'quietzoneSize'   => 1,
+            'svgAddXmlHeader' => false,
         ]);
 
         $qrcode = new QRCode($options);
