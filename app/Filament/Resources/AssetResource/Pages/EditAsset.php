@@ -54,11 +54,11 @@ class EditAsset extends EditRecord
                         ->send();
                 }),
             Actions\Action::make('print_sticker')
-                ->label('Cetak Stiker Tag (121)')
+                ->label('Cetak Stiker Tag (103)')
                 ->icon('heroicon-o-qr-code')
                 ->color('warning')
-                ->modalHeading('Pilih Posisi Slot Stiker (Tom & Jerry 121)')
-                ->modalDescription('Pilih nomor slot (1 s/d 10) pada lembar label Tom & Jerry tempat stiker unit ini akan dicetak.')
+                ->modalHeading('Pilih Posisi Slot Stiker (Tom & Jerry 103)')
+                ->modalDescription('Pilih nomor slot (1 s/d 12) pada lembar label Tom & Jerry tempat stiker unit ini akan dicetak.')
                 ->modalSubmitActionLabel('Buka Halaman Cetak')
                 ->modalCancelActionLabel('Batal')
                 ->form([
@@ -66,21 +66,23 @@ class EditAsset extends EditRecord
                         ->label('Posisi Slot Stiker Pada Lembar Label')
                         ->options([
                             1 => 'Slot 1 (Baris 1 - Kiri)',
-                            2 => 'Slot 2 (Baris 1 - Kanan)',
-                            3 => 'Slot 3 (Baris 2 - Kiri)',
-                            4 => 'Slot 4 (Baris 2 - Kanan)',
-                            5 => 'Slot 5 (Baris 3 - Kiri)',
-                            6 => 'Slot 6 (Baris 3 - Kanan)',
-                            7 => 'Slot 7 (Baris 4 - Kiri)',
-                            8 => 'Slot 8 (Baris 4 - Kanan)',
-                            9 => 'Slot 9 (Baris 5 - Kiri)',
-                            10 => 'Slot 10 (Baris 5 - Kanan)',
+                            2 => 'Slot 2 (Baris 1 - Tengah)',
+                            3 => 'Slot 3 (Baris 1 - Kanan)',
+                            4 => 'Slot 4 (Baris 2 - Kiri)',
+                            5 => 'Slot 5 (Baris 2 - Tengah)',
+                            6 => 'Slot 6 (Baris 2 - Kanan)',
+                            7 => 'Slot 7 (Baris 3 - Kiri)',
+                            8 => 'Slot 8 (Baris 3 - Tengah)',
+                            9 => 'Slot 9 (Baris 3 - Kanan)',
+                            10 => 'Slot 10 (Baris 4 - Kiri)',
+                            11 => 'Slot 11 (Baris 4 - Tengah)',
+                            12 => 'Slot 12 (Baris 4 - Kanan)',
                         ])
                         ->default(1)
                         ->required(),
                 ])
                 ->action(function (array $data) {
-                    $url = route('assets.sticker-121', [
+                    $url = route('assets.sticker-103', [
                         'asset' => $this->getRecord()->id,
                         'slot' => $data['slot'] ?? 1,
                     ]);
