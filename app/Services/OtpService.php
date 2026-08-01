@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Cache;
 class OtpService
 {
     /**
-     * Cooldown time in seconds between OTP requests for the same email (2 minutes)
+     * Cooldown time in seconds between OTP requests for the same email (120 minutes / 2 hours)
      */
-    public const COOLDOWN_SECONDS = 120;
+    public const COOLDOWN_SECONDS = 7200;
 
     /**
      * Check if an OTP can be sent to the given email address.
-     * Enforces a 2-minute cooldown per email to prevent spam.
+     * Enforces a 120-minute (2 hours) cooldown per email to prevent spam.
      */
     public static function canSendOtp(string $email, string $type = 'registration'): array
     {
@@ -25,10 +25,11 @@ class OtpService
             $remaining = static::COOLDOWN_SECONDS - $elapsed;
 
             if ($remaining > 0) {
+                $waitMinutes = ceil($remaining / 60);
                 return [
                     'can_send' => false,
                     'wait_seconds' => $remaining,
-                    'message' => "Harap tunggu {$remaining} detik sebelum meminta kode OTP baru ke email yang sama.",
+                    'message' => "Harap tunggu {$waitMinutes} menit sebelum meminta kode OTP baru ke email yang sama.",
                 ];
             }
         }
@@ -46,7 +47,7 @@ class OtpService
         $key = "otp_{$type}_" . md5($cleanEmail);
         $cooldownKey = "otp_cooldown_{$type}_" . md5($cleanEmail);
 
-        // Record cooldown timestamp (120 seconds)
+        // Record cooldown timestamp (7200 seconds / 120 minutes)
         Cache::put($cooldownKey, time(), now()->addSeconds(static::COOLDOWN_SECONDS));
 
         // Simpan ke Cache selama 300 detik (5 menit)
