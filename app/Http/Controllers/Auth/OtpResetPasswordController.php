@@ -14,11 +14,37 @@ class OtpResetPasswordController extends Controller
 {
     public function showForgotPasswordForm()
     {
+        $num1 = random_int(2, 9);
+        $num2 = random_int(1, 9);
+
+        session([
+            'reset_captcha_answer' => $num1 + $num2,
+            'reset_captcha_question' => "{$num1} + {$num2}",
+            'reset_form_time' => time(),
+        ]);
+
         return view('auth.forgot-password');
     }
 
     public function sendResetOtp(Request $request)
     {
+        // 🍯 LAYER 1: Honeypot Trap (Anti-Bot)
+        if ($request->filled('hp_website')) {
+            return redirect()->route('password.reset.verify.show')->with('success', 'Kode OTP reset password telah dikirim ke email Anda.');
+        }
+
+        // ⏱️ LAYER 2: Form Submission Speed Control (< 2.5s is automated bot script)
+        $formTime = session('reset_form_time', 0);
+        if ($formTime > 0 && (time() - $formTime) < 2) {
+            return back()->withInput()->with('error', 'Permintaan terlalu cepat. Silakan isi form dengan teliti.');
+        }
+
+        // 🧩 LAYER 5: Math Captcha Validation
+        $expectedCaptcha = session('reset_captcha_answer');
+        if ($expectedCaptcha !== null && (int) $request->input('captcha_answer') !== (int) $expectedCaptcha) {
+            return back()->withInput()->with('error', 'Jawaban verifikasi matematika salah. Silakan coba lagi.');
+        }
+
         $request->validate(['email' => 'required|email']);
         $email = strtolower(trim($request->email));
 
@@ -26,6 +52,12 @@ class OtpResetPasswordController extends Controller
 
         if (!$user) {
             return back()->with('error', 'Email tidak terdaftar di sistem GTK Portal.');
+        }
+
+        // ⏳ LAYER 4: OTP Email Cooldown Lock (2 Minutes)
+        $cooldownCheck = OtpService::canSendOtp($email, 'reset_password');
+        if (!$cooldownCheck['can_send']) {
+            return back()->withInput()->with('error', $cooldownCheck['message']);
         }
 
         session(['reset_email' => $email]);
@@ -75,6 +107,4 @@ class OtpResetPasswordController extends Controller
         // Tampilkan Modal Sukses sebelum Redirect ke Login
         return redirect()->route('password.reset.verify.show')->with('reset_success_modal', true);
     }
-
 }
-

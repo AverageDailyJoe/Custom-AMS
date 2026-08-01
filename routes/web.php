@@ -45,13 +45,15 @@ Route::get('/storage/{path}', function ($path) {
     return response()->file($filePath);
 })->where('path', '.*')->name('storage.file');
 
-// Routes Registrasi & OTP
+// Routes Registrasi & OTP dengan Protection Rate Limiting (Throttle 3x/menit)
 Route::get('/register', [OtpRegisterController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [OtpRegisterController::class, 'register']);
+Route::post('/register', [OtpRegisterController::class, 'register'])->middleware('throttle:3,1');
 Route::get('/register/verify-otp', [OtpRegisterController::class, 'showVerifyForm'])->name('otp.verify.show');
-Route::post('/register/verify-otp', [OtpRegisterController::class, 'verify'])->name('otp.verify');
-// Routes Reset Password & OTP
+Route::post('/register/verify-otp', [OtpRegisterController::class, 'verify'])->name('otp.verify')->middleware('throttle:5,1');
+
+// Routes Reset Password & OTP dengan Protection Rate Limiting (Throttle 3x/menit)
 Route::get('/forgot-password', [OtpResetPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
-Route::post('/forgot-password', [OtpResetPasswordController::class, 'sendResetOtp'])->name('password.email');
+Route::post('/forgot-password', [OtpResetPasswordController::class, 'sendResetOtp'])->name('password.email')->middleware('throttle:3,1');
 Route::get('/reset-password-otp', [OtpResetPasswordController::class, 'showResetForm'])->name('password.reset.verify.show');
-Route::post('/reset-password-otp', [OtpResetPasswordController::class, 'resetPassword'])->name('password.update');
+Route::post('/reset-password-otp', [OtpResetPasswordController::class, 'resetPassword'])->name('password.update')->middleware('throttle:5,1');
+

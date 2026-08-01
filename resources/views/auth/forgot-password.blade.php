@@ -24,9 +24,21 @@
 
         <form action="{{ route('password.email') }}" method="POST" class="space-y-4">
             @csrf
+
+            <!-- 🍯 Honeypot Trap Field (Invisible for humans, traps automated bots) -->
+            <div style="display:none !important; visibility:hidden !important; position:absolute; left:-9999px;" aria-hidden="true">
+                <input type="text" name="hp_website" tabindex="-1" autocomplete="off">
+            </div>
+
             <div>
                 <label class="block text-xs font-medium text-zinc-300 mb-1.5">Email address <span class="text-red-500">*</span></label>
-                <input type="email" name="email" placeholder="nama@gondowangi.com" required class="w-full bg-[#27272a] border border-zinc-700 text-white rounded-lg px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition">
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="nama@gondowangi.com" required class="w-full bg-[#27272a] border border-zinc-700 text-white rounded-lg px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition">
+            </div>
+
+            <!-- 🧩 Lightweight Math Captcha -->
+            <div>
+                <label class="block text-xs font-medium text-zinc-300 mb-1.5">Verifikasi Keamanan: Berapa <span class="font-bold text-emerald-400">{{ session('reset_captcha_question', '4 + 2') }}</span> = ? <span class="text-red-500">*</span></label>
+                <input type="number" name="captcha_answer" placeholder="Masukkan hasil penjumlahan" required class="w-full bg-[#27272a] border border-zinc-700 text-white rounded-lg px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition">
             </div>
 
             <button type="submit" class="w-full bg-[#0d630d] hover:bg-[#0a4d0a] text-white font-medium py-2.5 rounded-lg text-sm transition duration-200 shadow-lg shadow-emerald-950/40">Kirim Kode OTP Reset</button>
