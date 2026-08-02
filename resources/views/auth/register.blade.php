@@ -20,7 +20,7 @@
             <p class="text-xs text-zinc-400 mt-1">GTK Portal (AMS & IT Helpdesk System)</p>
         </div>
 
-        @if(session('error'))
+        @if(session('error') && !session('domain_error_modal'))
             <div class="bg-red-950/50 border border-red-800 text-red-300 p-3 rounded-lg text-xs mb-4">{{ session('error') }}</div>
         @endif
 
@@ -68,15 +68,17 @@
 
     @if(session('domain_error_modal'))
     <script>
-        Swal.fire({
-            title: 'Pemberitahuan',
-            text: '{{ session('domain_error_modal') }}',
-            icon: 'error',
-            background: '#18181b',
-            color: '#fff',
-            confirmButtonColor: '#dc2626',
-            confirmButtonText: 'Tutup',
-            allowOutsideClick: true
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Pemberitahuan',
+                text: '{!! addslashes(session('domain_error_modal')) !!}',
+                icon: 'error',
+                background: '#18181b',
+                color: '#fff',
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: 'Tutup',
+                allowOutsideClick: true
+            });
         });
     </script>
     @endif
