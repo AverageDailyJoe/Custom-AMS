@@ -37,8 +37,8 @@
             </div>
 
             <div>
-                <label class="block text-xs font-medium text-zinc-300 mb-1.5">Email Perusahaan <span class="text-xs text-emerald-400 font-normal">(@gondowangi.com / @gondowangi.co.id)</span> <span class="text-red-500">*</span></label>
-                <input type="email" name="email" value="{{ old('email') }}" placeholder="nama@gondowangi.com" required class="w-full bg-[#27272a] border border-zinc-700 text-white rounded-lg px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition">
+                <label class="block text-xs font-medium text-zinc-300 mb-1.5">Email address <span class="text-red-500">*</span></label>
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="nama@domain.com" required class="w-full bg-[#27272a] border border-zinc-700 text-white rounded-lg px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition">
             </div>
 
             <div>
