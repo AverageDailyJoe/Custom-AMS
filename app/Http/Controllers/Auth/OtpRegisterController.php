@@ -56,10 +56,10 @@ class OtpRegisterController extends Controller
         $cleanEmail = strtolower(trim($request->email));
         $emailDomain = strtolower(substr(strrchr($cleanEmail, "@"), 1));
 
-        // 🏢 Corporate Domain Restriction (Backend Silent Check - Generic Error to Prevent Info Leak)
+        // 🏢 Corporate Domain Restriction (Backend Silent Check - Error Modal Triggers)
         $allowedDomains = ['gondowangi.com', 'gondowangi.co.id'];
         if (!in_array($emailDomain, $allowedDomains, true)) {
-            return back()->withInput()->with('error', 'Alamat email tidak valid atau tidak memiliki otoritas untuk pendaftaran.');
+            return back()->withInput()->with('domain_error_modal', 'Maaf, kami belum bisa memproses akun anda.');
         }
 
         // ⏳ LAYER 4: OTP Email Cooldown Lock (120 Minutes)
