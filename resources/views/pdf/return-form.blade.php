@@ -366,7 +366,7 @@
                     <p>Dibuat Oleh,<br><strong>IT STAFF (PIHAK KEDUA)</strong></p>
                     <div class="sig-space"></div>
                     <p><u>( {{ $checkout->checkedInByUser?->name ?? ($checkout->checkedOutByUser?->name ?? 'IT Staff') }}
-                            )</u><br><small>STAFF IT</small></p>
+                            )</u><br><small></small></p>
                 </td>
                 <td>
                     <p>Diterima Oleh,<br><strong>PENGGUNA (PIHAK PERTAMA)</strong></p>
