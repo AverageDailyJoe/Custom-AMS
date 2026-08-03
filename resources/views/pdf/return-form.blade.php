@@ -372,7 +372,7 @@
                     <p>Diterima Oleh,<br><strong>PENGGUNA (PIHAK PERTAMA)</strong></p>
                     <div class="sig-space"></div>
                     <p><u>( {{ $checkout->primary_user ?? 'Pengguna Unit' }}
-                            )</u><br><small>{{ $checkout->asset->department ?? 'User' }}</small></p>
+                            )</u><br><small></small></p>
                 </td>
                 <td>
                     <p>Mengetahui,<br><strong>ATASAN / SPV</strong></p>
