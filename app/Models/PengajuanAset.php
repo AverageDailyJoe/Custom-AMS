@@ -22,6 +22,9 @@ class PengajuanAset extends Model
         'specification_requested',
         'estimated_cost',
         'items',
+        'shipping_cost',
+        'service_fee',
+        'other_fee',
         'approver_name',
         'approver_title',
         'attachments',
@@ -31,6 +34,9 @@ class PengajuanAset extends Model
     protected $casts = [
         'request_date' => 'date',
         'estimated_cost' => 'decimal:2',
+        'shipping_cost' => 'decimal:2',
+        'service_fee' => 'decimal:2',
+        'other_fee' => 'decimal:2',
         'attachments' => 'array',
         'items' => 'array',
     ];
@@ -92,13 +98,70 @@ class PengajuanAset extends Model
     }
 
     /**
-     * Get grand total estimated cost for all items.
+     * Get list of additional fee rows (Ongkir, Biaya Layanan, Fee Admin).
+     */
+    public function getAdditionalFeesList(): array
+    {
+        $fees = [];
+        $shipping = (float) ($this->shipping_cost ?? 0);
+        $service = (float) ($this->service_fee ?? 0);
+        $other = (float) ($this->other_fee ?? 0);
+
+        if ($shipping > 0) {
+            $fees[] = [
+                'title' => 'Biaya Ongkos Kirim & Asuransi Pengiriman',
+                'item_type' => 'Biaya Pengiriman',
+                'quantity' => 1,
+                'unit_cost' => $shipping,
+                'total_cost' => $shipping,
+                'specification' => 'Asuransi & Jasa Kurir Pengiriman Paket',
+            ];
+        }
+
+        if ($service > 0) {
+            $fees[] = [
+                'title' => 'Biaya Layanan & Aplikasi Platform (Tokopedia / Shopee / Merchant Fee)',
+                'item_type' => 'Biaya Layanan',
+                'quantity' => 1,
+                'unit_cost' => $service,
+                'total_cost' => $service,
+                'specification' => 'Biaya Transaksi Resmi Platform / Toko Online',
+            ];
+        }
+
+        if ($other > 0) {
+            $fees[] = [
+                'title' => 'Biaya Penanganan / Handling & Admin Fee',
+                'item_type' => 'Biaya Administrasi',
+                'quantity' => 1,
+                'unit_cost' => $other,
+                'total_cost' => $other,
+                'specification' => 'Biaya Penanganan / Administrasi Transaksi',
+            ];
+        }
+
+        return $fees;
+    }
+
+    /**
+     * Get combined list of item details + additional fee rows.
+     */
+    public function getAllRequestItemsList(): array
+    {
+        $items = $this->getItemDetailsList();
+        $fees = $this->getAdditionalFeesList();
+
+        return array_merge($items, $fees);
+    }
+
+    /**
+     * Get grand total estimated cost for all items + additional fees.
      */
     public function getGrandTotalCostAttribute(): float
     {
-        $items = $this->getItemDetailsList();
+        $allItems = $this->getAllRequestItemsList();
         $sum = 0;
-        foreach ($items as $item) {
+        foreach ($allItems as $item) {
             $sum += (float) ($item['total_cost'] ?? 0);
         }
         return $sum;

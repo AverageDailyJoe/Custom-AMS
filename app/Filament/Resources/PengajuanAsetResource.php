@@ -154,6 +154,36 @@ class PengajuanAsetResource extends Resource
                                     ->label('Spesifikasi Teknis Yang Diminta')
                                     ->placeholder('Misal: Intel Core i7, RAM 16GB, SSD 512GB, Windows 11 Pro'),
                             ]),
+                    Forms\Components\Section::make('Rincian Biaya Tambahan Transaksi (Ongkir, Biaya Layanan, Asuransi)')
+                        ->description('Catatkan biaya resmi transaksi toko online/vendor agar 100% transparan dan tercantum pada kolom nominal PPB & LBS.')
+                        ->collapsible()
+                        ->columnSpanFull()
+                        ->schema([
+                            Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\TextInput::make('shipping_cost')
+                                    ->label('Ongkos Kirim & Asuransi Pengiriman (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->default(0)
+                                    ->live(),
+
+                                Forms\Components\TextInput::make('service_fee')
+                                    ->label('Biaya Layanan & Aplikasi Platform (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->default(0)
+                                    ->live(),
+
+                                Forms\Components\TextInput::make('other_fee')
+                                    ->label('Biaya Penanganan / Handling & Admin Fee (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->default(0)
+                                    ->live(),
+                            ]),
                         ]),
                 ]),
 
@@ -203,6 +233,11 @@ class PengajuanAsetResource extends Resource
                     $specs[] = ($item['title'] ?? 'Item') . ': ' . $item['specification'];
                 }
             }
+            $shipping = (float) ($data['shipping_cost'] ?? 0);
+            $service = (float) ($data['service_fee'] ?? 0);
+            $other = (float) ($data['other_fee'] ?? 0);
+            $totalCostSum += ($shipping + $service + $other);
+
             $data['quantity'] = $totalQty > 0 ? $totalQty : 1;
             $data['estimated_cost'] = $totalCostSum;
             $data['specification_requested'] = !empty($specs) ? implode(" | ", $specs) : ($firstItem['specification'] ?? null);

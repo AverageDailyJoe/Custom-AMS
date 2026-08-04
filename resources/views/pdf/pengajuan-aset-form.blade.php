@@ -113,7 +113,7 @@
             </thead>
             <tbody>
                 @php
-                    $itemList = $pengajuanAset->getItemDetailsList();
+                    $itemList = $pengajuanAset->getAllRequestItemsList();
                     $grandTotalCost = 0;
                 @endphp
 

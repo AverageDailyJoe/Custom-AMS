@@ -153,7 +153,7 @@
 
                 <!-- Item Detail Rows under LAIN-LAIN -->
                 @php
-                    $itemList = $pengajuanAset->getItemDetailsList();
+                    $itemList = $pengajuanAset->getAllRequestItemsList();
                     $grandTotalCost = 0;
                 @endphp
 
