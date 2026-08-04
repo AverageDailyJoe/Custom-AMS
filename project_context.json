@@ -1,40 +1,89 @@
 {
-  "project_name": "Gondowangi IT Asset Management System (Custom AMS)",
-  "tech_stack": {
-    "framework": "Laravel 13",
-    "admin_panel": "Filament v3",
-    "pdf_generator": "barryvdh/laravel-dompdf",
-    "qr_generator": "chillerlan/php-qrcode (v6)"
-  },
-  "branch_strategy": {
-    "current_active_branch": "main",
-    "merged_branches": ["tj-103"]
-  },
-  "completed_features": [
-    "Sistem Login & Autentikasi dengan OTP (Register & Reset Password).",
-    "Manajemen Aset IT Lengkap (CRUD, Kategori, Model, Lokasi).",
-    "Sistem Ticketing IT (Maintenance & Perbaikan).",
-    "Sistem Checkout / Checkin (Peminjaman Aset ke Karyawan).",
-    "Generate Dokumen PDF (Berita Acara, Handover, Tiket, Pengajuan, Disposal).",
-    "Bulk Print Stiker Barcode Label Tom & Jerry 103 (Format: 3x4 kolom, ukuran kustom 219mm x 165mm).",
-    "Sistem Anti-Tampering QR Code (Menggunakan `qr_token` UUID untuk validasi scan publik).",
-    "Halaman Verifikasi Aset Publik (Tanpa login, mobile-friendly via Tailwind)."
-  ],
-  "pending_features_roadmap": [
-    {
-      "feature": "Software License Tracker",
-      "status": "Not Started",
-      "notes": "Melacak kuota lisensi software (Windows, Adobe, dll) dan di-assign ke aset/user."
+  "project_1_gtk_portal_ams": {
+    "project_name": "GTK Portal (Gondowangi IT Asset Management & Helpdesk System)",
+    "company": "PT Gondowangi Tradisional Kosmetika",
+    "repository": "https://github.com/AverageDailyJoe/Custom-AMS.git",
+    "active_branch": "main",
+    "last_commit": "af9f5d3 - UI/PDF: Remove STAFF IT label from PIHAK KEDUA signature block in return form",
+    "tech_stack": {
+      "framework": "Laravel 13",
+      "admin_panel": "Filament v3",
+      "pdf_generator": "barryvdh/laravel-dompdf",
+      "qr_generator": "chillerlan/php-qrcode (v6)",
+      "database": "PostgreSQL 14 (ams_prod)"
     },
-    {
-      "feature": "Sparepart Inventory Tracker",
-      "status": "Not Started",
-      "notes": "Manajemen stok sparepart IT. Auto-deduct saat menyelesaikan tiket perbaikan."
-    }
-  ],
-  "ongoing_issues": {
-    "issue": "Kalibrasi Margin Printer Stiker T&J 103",
-    "context": "File: `resources/views/pdf/asset-sticker-103.blade.php`. CSS `@page` diset ke 219mm x 165mm. Margin `.sheet-container` saat ini `padding: 15.5mm 11.5mm;`. Perlu ditinkering/kalibrasi fisik dengan printer Epson setelah ganti laptop."
+    "live_infrastructure": {
+      "vps_provider": "IDCloudHost Cloud VPS (SouthJKT-a)",
+      "vps_ip": "157.10.160.81",
+      "domains": [
+        "https://gtkportal.my.id/admin",
+        "http://157.10.160.81/admin"
+      ],
+      "os": "Ubuntu 22.04 LTS",
+      "web_server": "Nginx 1.18.0 + Let's Encrypt SSL",
+      "ssh_user": "admin",
+      "app_directory": "/var/www/ams-app"
+    },
+    "local_device_setup": {
+      "environment": "Termux (Android)",
+      "git_user": "AverageDailyJoe",
+      "git_email": "farhan4510@gmail.com",
+      "installed_tools": [
+        "git",
+        "php 8.5.1",
+        "composer 2.10.2",
+        "php-pgsql",
+        "postgresql-client",
+        "openssh",
+        "gh (GitHub CLI)",
+        "adminer (http://localhost:8080)"
+      ],
+      "preferred_input": "Unexpected Keyboard (Android)"
+    },
+    "completed_features": [
+      "OTP Auth System (Register & Reset Password)",
+      "IT Asset CRUD (Categories, Models, Locations)",
+      "IT Ticketing & Maintenance System",
+      "Asset Checkout/Checkin System",
+      "PDF Generation (Berita Acara, Handover, Ticket, Pengajuan, Disposal, Return)",
+      "Tom & Jerry 103 Sticker Bulk Print (219mm x 165mm)",
+      "Anti-Tampering QR Validation (`qr_token` UUID) + Mobile Public Page",
+      "Return Form PDF Signature Revision (Clean signature blocks for Pihak Pertama & Second)"
+    ],
+    "pending_roadmap": [
+      {
+        "feature": "Software License Tracker",
+        "status": "Not Started",
+        "notes": "Track license quotas (Windows, Adobe) & assign to assets/users"
+      },
+      {
+        "feature": "Sparepart Inventory Tracker",
+        "status": "Not Started",
+        "notes": "Manage IT spareparts stock & auto-deduct upon ticket resolution"
+      },
+      {
+        "feature": "T&J 103 Sticker Printer Margin Calibration",
+        "status": "Pending Physical Test",
+        "notes": "Calibrate asset-sticker-103.blade.php margins with Epson printer"
+      }
+    ]
   },
-  "notes": "Laptop sebelumnya (Lenovo T480 i5 Gen 8) di-nuke dan diberikan ke Top Level Management. Context ini disimpan untuk memandu agen AI di sesi berikutnya di device yang baru."
+  "project_2_excel_vlookup_app": {
+    "project_name": "High-Performance Excel Processing Web App (400k Rows/Day)",
+    "status": "Architecture & Design Phase",
+    "client_requirement": "Dedicated web application capable of performing VLOOKUP & data matching on 400,000 rows per day without browser/Excel crashing.",
+    "proposed_architecture": "Hybrid OLTP + OLAP Data Pipeline",
+    "tech_stack_recommendation": {
+      "storage_layer": "MySQL / PostgreSQL (Permanent Storage for master data & daily logs)",
+      "processing_engine": "DuckDB (In-Memory OLAP engine with native MySQL extension for vectorised hash-JOINs in 1-2 seconds)",
+      "backend_framework": "Laravel / Python (FastAPI / Streamlit / Polars)",
+      "frontend_dashboard": "Web Dashboard with 50-row pagination & 1-click XLSX/CSV Export"
+    },
+    "workflow": [
+      "1. User uploads daily CSV/XLSX (400,000 rows)",
+      "2. Permanent storage saved in MySQL",
+      "3. DuckDB attaches to MySQL & executes instant SQL JOIN (~1-2s execution)",
+      "4. Paginated web table results + Export result download"
+    ]
+  }
 }

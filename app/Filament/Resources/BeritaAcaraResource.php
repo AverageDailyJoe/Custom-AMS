@@ -174,7 +174,9 @@ class BeritaAcaraResource extends Resource
 
                     Forms\Components\FileUpload::make('attachments')
                         ->label('Dokumen / Lampiran Pendukung')
+                        ->disk('public')
                         ->directory('berita-acara-attachments')
+                        ->visibility('public')
                         ->multiple()
                         ->image()
                         ->imagePreviewHeight('250')

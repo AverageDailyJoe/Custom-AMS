@@ -32,7 +32,9 @@ class EditAsset extends EditRecord
                 ->form([
                     \Filament\Forms\Components\FileUpload::make('attachments')
                         ->label('Dokumen Fisik (Invoice, Manual Book, Kartu Garansi, Bukti Fisik)')
+                        ->disk('public')
                         ->directory('asset-documents')
+                        ->visibility('public')
                         ->multiple()
                         ->reorderable()
                         ->appendFiles()

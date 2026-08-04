@@ -151,7 +151,9 @@ class PengajuanAsetResource extends Resource
 
                     Forms\Components\FileUpload::make('attachments')
                         ->label('Dokumen / Lampiran Pendukung (Nota Dinas, Proposal, Penawaran Harga)')
+                        ->disk('public')
                         ->directory('pengajuan-aset-attachments')
+                        ->visibility('public')
                         ->multiple()
                         ->reorderable()
                         ->appendFiles()

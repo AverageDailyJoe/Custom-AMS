@@ -288,7 +288,9 @@ class TicketResource extends Resource
 
                     Forms\Components\FileUpload::make('attachments')
                         ->label('Upload Foto / Tangkapan Layar Kendala')
+                        ->disk('public')
                         ->directory('ticket-attachments')
+                        ->visibility('public')
                         ->multiple()
                         ->image()
                         ->imagePreviewHeight('250')

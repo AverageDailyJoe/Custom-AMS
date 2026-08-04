@@ -217,7 +217,9 @@ class AssetResource extends Resource
                 ->schema([
                     Forms\Components\FileUpload::make('attachments')
                         ->label('Upload Dokumen Fisik (Foto / PDF)')
+                        ->disk('public')
                         ->directory('asset-documents')
+                        ->visibility('public')
                         ->multiple()
                         ->reorderable()
                         ->appendFiles()
@@ -365,7 +367,9 @@ class AssetResource extends Resource
                             ->label('Catatan Checkout'),
                         Forms\Components\FileUpload::make('checkout_attachments')
                             ->label('Lampiran / Bukti Serah Terima (Bisa Banyak Foto / PDF)')
+                            ->disk('public')
                             ->directory('checkout-attachments')
+                            ->visibility('public')
                             ->multiple()
                             ->reorderable()
                             ->appendFiles()
@@ -437,7 +441,9 @@ class AssetResource extends Resource
 
                         Forms\Components\FileUpload::make('checkin_attachments')
                             ->label('Lampiran / Bukti Pengembalian (Bisa Banyak Foto / PDF)')
+                            ->disk('public')
                             ->directory('checkin-attachments')
+                            ->visibility('public')
                             ->multiple()
                             ->reorderable()
                             ->appendFiles()

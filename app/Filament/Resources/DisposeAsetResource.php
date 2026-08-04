@@ -158,7 +158,9 @@ class DisposeAsetResource extends Resource
 
                     Forms\Components\FileUpload::make('attachments')
                         ->label('Foto Asset & Bukti Kerusakan (Wajib Upload Foto Fisik Unit)')
+                        ->disk('public')
                         ->directory('disposal-attachments')
+                        ->visibility('public')
                         ->multiple()
                         ->image()
                         ->imagePreviewHeight('250')
