@@ -112,28 +112,39 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Main Item Row -->
-                <tr>
-                    <td class="text-center font-bold">1</td>
-                    <td>
-                        <div class="font-bold">{{ $pengajuanAset->title }}</div>
-                        <div style="font-size: 10px; color: #000000; margin-top: 3px;">
-                            <strong>Jenis Item:</strong> {{ $pengajuanAset->item_type }} ({{ $pengajuanAset->quantity }} Unit{{ $unitCost > 0 && $qty > 1 ? ' @ Rp ' . number_format($unitCost, 0, ',', '.') : '' }})<br>
-                            @if($pengajuanAset->specification_requested)
-                                <strong>Spesifikasi:</strong> {{ $pengajuanAset->specification_requested }}
+                @php
+                    $itemList = $pengajuanAset->getItemDetailsList();
+                    $grandTotalCost = 0;
+                @endphp
+
+                @foreach($itemList as $index => $item)
+                    @php
+                        $grandTotalCost += (float) ($item['total_cost'] ?? 0);
+                    @endphp
+                    <tr>
+                        <td class="text-center font-bold">{{ $index + 1 }}</td>
+                        <td>
+                            <div class="font-bold">{{ $item['title'] }}</div>
+                            <div style="font-size: 10px; color: #000000; margin-top: 3px;">
+                                <strong>Jenis Item:</strong> {{ $item['item_type'] }} ({{ $item['quantity'] }} Unit{{ $item['unit_cost'] > 0 && $item['quantity'] > 1 ? ' @ Rp ' . number_format($item['unit_cost'], 0, ',', '.') : '' }})<br>
+                                @if(!empty($item['specification']))
+                                    <strong>Spesifikasi:</strong> {{ $item['specification'] }}
+                                @endif
+                            </div>
+                        </td>
+                        <td class="text-right font-bold">
+                            {{ $item['total_cost'] > 0 ? 'Rp ' . number_format($item['total_cost'], 0, ',', '.') : '-' }}
+                        </td>
+                        <td>
+                            @if($index === 0)
+                                <div style="font-size: 10.5px;">{{ $pengajuanAset->reason }}</div>
                             @endif
-                        </div>
-                    </td>
-                    <td class="text-right font-bold">
-                        {{ $totalCost > 0 ? 'Rp ' . number_format($totalCost, 0, ',', '.') : '-' }}
-                    </td>
-                    <td>
-                        <div style="font-size: 10.5px;">{{ $pengajuanAset->reason }}</div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                @endforeach
 
                 <!-- Empty Grid Rows matching official Excel PPB layout -->
-                @for ($i = 2; $i <= 10; $i++)
+                @for ($i = count($itemList) + 1; $i <= 10; $i++)
                 <tr>
                     <td class="text-center" style="height: 22px;"></td>
                     <td></td>
@@ -148,7 +159,7 @@
                         J U M L A H
                     </td>
                     <td class="text-right font-bold" style="font-size: 12px;">
-                        {{ $totalCost > 0 ? 'Rp ' . number_format($totalCost, 0, ',', '.') : 'Rp 0' }}
+                        {{ $grandTotalCost > 0 ? 'Rp ' . number_format($grandTotalCost, 0, ',', '.') : 'Rp 0' }}
                     </td>
                     <td></td>
                 </tr>

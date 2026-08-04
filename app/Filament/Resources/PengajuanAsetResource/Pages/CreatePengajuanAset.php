@@ -13,6 +13,6 @@ class CreatePengajuanAset extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['created_by'] = Auth::id();
-        return $data;
+        return PengajuanAsetResource::syncLegacyColumns($data);
     }
 }

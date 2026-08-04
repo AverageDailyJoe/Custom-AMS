@@ -28,4 +28,9 @@ class EditPengajuanAset extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return PengajuanAsetResource::syncLegacyColumns($data);
+    }
 }

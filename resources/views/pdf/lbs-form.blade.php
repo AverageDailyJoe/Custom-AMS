@@ -151,22 +151,32 @@
                     <td></td>
                 </tr>
 
-                <!-- Item Detail Row under LAIN-LAIN -->
-                <tr>
-                    <td class="text-center"></td>
-                    <td style="padding-left: 20px;">
-                        1. <strong>{{ $pengajuanAset->title }}</strong> ({{ $qty }} Unit{{ $unitCost > 0 && $qty > 1 ? ' @ Rp ' . number_format($unitCost, 0, ',', '.') : '' }})
-                        @if($pengajuanAset->specification_requested)
-                            <br><small style="color: #374151;">Spec: {{ $pengajuanAset->specification_requested }}</small>
-                        @endif
-                    </td>
-                    <td class="text-right font-bold">
-                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '-' }}
-                    </td>
-                </tr>
+                <!-- Item Detail Rows under LAIN-LAIN -->
+                @php
+                    $itemList = $pengajuanAset->getItemDetailsList();
+                    $grandTotalCost = 0;
+                @endphp
+
+                @foreach($itemList as $index => $item)
+                    @php
+                        $grandTotalCost += (float) ($item['total_cost'] ?? 0);
+                    @endphp
+                    <tr>
+                        <td class="text-center"></td>
+                        <td style="padding-left: 20px;">
+                            {{ $index + 1 }}. <strong>{{ $item['title'] }}</strong> ({{ $item['quantity'] }} Unit{{ $item['unit_cost'] > 0 && $item['quantity'] > 1 ? ' @ Rp ' . number_format($item['unit_cost'], 0, ',', '.') : '' }})
+                            @if(!empty($item['specification']))
+                                <br><small style="color: #374151;">Spec: {{ $item['specification'] }}</small>
+                            @endif
+                        </td>
+                        <td class="text-right font-bold">
+                            {{ $item['total_cost'] > 0 ? number_format($item['total_cost'], 0, ',', '.') : '-' }}
+                        </td>
+                    </tr>
+                @endforeach
 
                 <!-- Extra empty rows for exact Excel spacing -->
-                @for ($i = 1; $i <= 4; $i++)
+                @for ($i = count($itemList) + 1; $i <= 4; $i++)
                 <tr>
                     <td style="height: 18px;"></td>
                     <td></td>
@@ -178,7 +188,7 @@
                 <tr>
                     <td colspan="2" class="text-right font-bold">GRAND TOTAL</td>
                     <td class="text-right font-bold">
-                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '0' }}
+                        {{ $grandTotalCost > 0 ? number_format($grandTotalCost, 0, ',', '.') : '0' }}
                     </td>
                 </tr>
                 <tr>
@@ -188,7 +198,7 @@
                 <tr>
                     <td colspan="2" class="text-right font-bold">BALANCE YANG AKAN DITRANSFER / DIKEMBALIKAN</td>
                     <td class="text-right font-bold">
-                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '0' }}
+                        {{ $grandTotalCost > 0 ? number_format($grandTotalCost, 0, ',', '.') : '0' }}
                     </td>
                 </tr>
             </tbody>

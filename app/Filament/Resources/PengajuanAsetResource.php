@@ -72,39 +72,16 @@ class PengajuanAsetResource extends Resource
                     ]),
                 ]),
 
-            Forms\Components\Section::make('Item & Rincian Pengajuan')
+            Forms\Components\Section::make('Item & Rincian Pengajuan Barang')
+                ->description('Gunakan tombol "+ Tambah Item / Varian Perangkat" di bawah jika terdapat lebih dari satu barang atau varian.')
                 ->schema([
                     Forms\Components\TextInput::make('title')
-                        ->label('Judul Pengajuan')
-                        ->placeholder('Misal: Pengajuan Laptop Baru untuk Staff Digital Marketing')
+                        ->label('Judul / Perihal Pengajuan Aset')
+                        ->placeholder('Misal: Pengajuan Laptop & Perangkat IT Baru untuk Digital Marketing')
                         ->required()
                         ->columnSpanFull(),
 
                     Forms\Components\Grid::make(3)->schema([
-                        Forms\Components\Select::make('item_type')
-                            ->label('Jenis Perangkat / Asset')
-                            ->options([
-                                'Laptop' => 'Laptop / Notebook',
-                                'PC Desktop' => 'PC Desktop Unit',
-                                'Monitor' => 'Monitor Display',
-                                'Printer' => 'Printer / Scanner',
-                                'Smartphone' => 'Handphone / Smartphone',
-                                'Komponen Utama' => 'Sparepart & Komponen Utama (RAM / SSD / HDD / Mobo)',
-                                'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Headset / Adapter)',
-                                'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi',
-                                'Software' => 'Software / Lisensi Aplikasi',
-                                'Lainnya' => 'Lain-lain',
-                            ])
-                            ->default('Laptop')
-                            ->required(),
-
-                        Forms\Components\TextInput::make('quantity')
-                            ->label('Jumlah Unit')
-                            ->numeric()
-                            ->default(1)
-                            ->required()
-                            ->live(),
-
                         Forms\Components\Select::make('priority')
                             ->label('Tingkat Prioritas')
                             ->options([
@@ -115,16 +92,6 @@ class PengajuanAsetResource extends Resource
                             ])
                             ->default('medium')
                             ->required(),
-                    ]),
-
-                    Forms\Components\Grid::make(3)->schema([
-                        Forms\Components\TextInput::make('estimated_cost')
-                            ->label('Estimasi Biaya Per Unit (Rp)')
-                            ->helperText(fn (Forms\Get $get) => 'Total Biaya: Rp ' . number_format(((float) $get('estimated_cost')) * ((int) ($get('quantity') ?? 1)), 0, ',', '.'))
-                            ->numeric()
-                            ->prefix('Rp')
-                            ->placeholder('0')
-                            ->live(),
 
                         Forms\Components\TextInput::make('approver_name')
                             ->label('Nama Atasan (Mengetahui)')
@@ -134,15 +101,65 @@ class PengajuanAsetResource extends Resource
                             ->label('Jabatan Atasan')
                             ->default('GM Finance & Operations'),
                     ]),
+
+                    Forms\Components\Repeater::make('items')
+                        ->label('Rincian Barang & Spesifikasi Teknis')
+                        ->addActionLabel('Tambah Item / Varian Perangkat (+)')
+                        ->icon('heroicon-o-plus-circle')
+                        ->reorderable()
+                        ->cloneable()
+                        ->collapsible()
+                        ->defaultItems(1)
+                        ->columnSpanFull()
+                        ->schema([
+                            Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\TextInput::make('title')
+                                    ->label('Nama / Judul Item')
+                                    ->placeholder('Misal: Laptop Intel Core i7 14th Gen')
+                                    ->required(),
+
+                                Forms\Components\Select::make('item_type')
+                                    ->label('Jenis Perangkat / Asset')
+                                    ->options([
+                                        'Laptop' => 'Laptop / Notebook',
+                                        'PC Desktop' => 'PC Desktop Unit',
+                                        'Monitor' => 'Monitor Display',
+                                        'Printer' => 'Printer / Scanner',
+                                        'Smartphone' => 'Handphone / Smartphone',
+                                        'Komponen Utama' => 'Sparepart & Komponen Utama (RAM / SSD / HDD / Mobo)',
+                                        'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Headset / Adapter)',
+                                        'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi',
+                                        'Software' => 'Software / Lisensi Aplikasi',
+                                        'Lainnya' => 'Lain-lain',
+                                    ])
+                                    ->default('Laptop')
+                                    ->required(),
+
+                                Forms\Components\TextInput::make('quantity')
+                                    ->label('Jumlah Unit')
+                                    ->numeric()
+                                    ->default(1)
+                                    ->required()
+                                    ->live(),
+                            ]),
+
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\TextInput::make('estimated_cost')
+                                    ->label('Estimasi Biaya Per Unit (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->live(),
+
+                                Forms\Components\TextInput::make('specification')
+                                    ->label('Spesifikasi Teknis Yang Diminta')
+                                    ->placeholder('Misal: Intel Core i7, RAM 16GB, SSD 512GB, Windows 11 Pro'),
+                            ]),
+                        ]),
                 ]),
 
-            Forms\Components\Section::make('Spesifikasi Teknis & Alasan Pengajuan')
+            Forms\Components\Section::make('Alasan & Dokumen Lampiran')
                 ->schema([
-                    Forms\Components\TextInput::make('specification_requested')
-                        ->label('Spesifikasi Teknis Yang Diminta / Dibutuhkan')
-                        ->placeholder('Misal: Intel Core i7, RAM 16GB, SSD 512GB, Windows 11 Pro')
-                        ->columnSpanFull(),
-
                     Forms\Components\Textarea::make('reason')
                         ->label('Alasan & Keperluan Pengajuan Aset Baru')
                         ->placeholder('Misal: Untuk penambahan karyawan baru di divisi Marketing atau unit lama sudah rusak berat.')
@@ -166,6 +183,32 @@ class PengajuanAsetResource extends Resource
                         ->maxSize(10240),
                 ]),
         ]);
+    }
+
+    public static function syncLegacyColumns(array $data): array
+    {
+        if (isset($data['items']) && is_array($data['items']) && count($data['items']) > 0) {
+            $firstItem = $data['items'][0];
+            $data['item_type'] = $firstItem['item_type'] ?? 'Laptop';
+            
+            $totalQty = 0;
+            $totalCostSum = 0;
+            $specs = [];
+            foreach ($data['items'] as $item) {
+                $q = (int) ($item['quantity'] ?? 1);
+                if ($q < 1) $q = 1;
+                $c = (float) ($item['estimated_cost'] ?? 0);
+                $totalQty += $q;
+                $totalCostSum += ($c * $q);
+                if (!empty($item['specification'])) {
+                    $specs[] = ($item['title'] ?? 'Item') . ': ' . $item['specification'];
+                }
+            }
+            $data['quantity'] = $totalQty > 0 ? $totalQty : 1;
+            $data['estimated_cost'] = $totalCostSum;
+            $data['specification_requested'] = !empty($specs) ? implode(" | ", $specs) : ($firstItem['specification'] ?? null);
+        }
+        return $data;
     }
 
     public static function table(Table $table): Table
