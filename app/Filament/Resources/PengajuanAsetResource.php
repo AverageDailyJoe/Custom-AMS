@@ -105,7 +105,6 @@ class PengajuanAsetResource extends Resource
                     Forms\Components\Repeater::make('items')
                         ->label('Rincian Barang & Spesifikasi Teknis')
                         ->addActionLabel('Tambah Item / Varian Perangkat (+)')
-                        ->icon('heroicon-o-plus-circle')
                         ->reorderable()
                         ->cloneable()
                         ->collapsible()
