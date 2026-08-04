@@ -196,17 +196,17 @@
                 <td>
                     <p>YANG MENYERAHKAN,<br><strong>PIHAK PERTAMA</strong></p>
                     <div class="sig-space"></div>
-                    <p><strong><u>{{ $beritaAcara->party1_name }}</u></strong><br><small>{{ $beritaAcara->party1_title }}</small></p>
+                    <p><strong><u>{{ $beritaAcara->party1_name }}</u></strong></p>
                 </td>
                 <td>
                     <p>MENYETUJUI,<br>&nbsp;</p>
                     <div class="sig-space"></div>
-                    <p><strong><u>{{ $beritaAcara->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></strong><br><small>{{ $beritaAcara->approver_title ?? 'GM Finance & Operations' }}</small></p>
+                    <p><strong><u>{{ $beritaAcara->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></strong></p>
                 </td>
                 <td>
                     <p>YANG MENERIMA,<br><strong>PIHAK KEDUA</strong></p>
                     <div class="sig-space"></div>
-                    <p><strong><u>{{ $beritaAcara->party2_name }}</u></strong><br><small>{{ $beritaAcara->party2_title ?? 'Pengguna' }}</small></p>
+                    <p><strong><u>{{ $beritaAcara->party2_name }}</u></strong></p>
                 </td>
             </tr>
         </table>
