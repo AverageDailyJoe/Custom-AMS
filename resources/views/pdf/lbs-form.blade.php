@@ -58,6 +58,12 @@
         @php
             $date = $pengajuanAset->request_date ? \Carbon\Carbon::parse($pengajuanAset->request_date) : \Carbon\Carbon::now();
             $period = $date->format('m/y');
+            $qty = (int) ($pengajuanAset->quantity ?? 1);
+            if ($qty < 1) {
+                $qty = 1;
+            }
+            $unitCost = (float) ($pengajuanAset->estimated_cost ?? 0);
+            $totalCost = $unitCost * $qty;
         @endphp
 
         <table class="meta-table">

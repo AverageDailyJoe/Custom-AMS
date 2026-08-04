@@ -33,7 +33,14 @@ class HandoverFormController extends Controller
     public function downloadLBS(\App\Models\PengajuanAset $pengajuanAset)
     {
         $pengajuanAset->load(['createdBy']);
-        return view('pdf.lbs-form', compact('pengajuanAset'));
+        $qty = (int) ($pengajuanAset->quantity ?? 1);
+        if ($qty < 1) {
+            $qty = 1;
+        }
+        $unitCost = (float) ($pengajuanAset->estimated_cost ?? 0);
+        $totalCost = $unitCost * $qty;
+
+        return view('pdf.lbs-form', compact('pengajuanAset', 'qty', 'unitCost', 'totalCost'));
     }
 
     public function downloadDisposal(\App\Models\DisposeAset $disposeAset)
