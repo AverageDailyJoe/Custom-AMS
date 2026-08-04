@@ -73,7 +73,7 @@
                 <td class="meta-value-left border-bottom">{{ $pengajuanAset->requester_name }}</td>
                 <td class="meta-label-right"><strong>Nomor</strong></td>
                 <td class="meta-colon">:</td>
-                <td class="meta-value-right border-bottom"><strong>{{ $pengajuanAset->request_number }}</strong></td>
+                <td class="meta-value-right border-bottom"></td>
             </tr>
             <tr>
                 <td class="meta-label-left"><strong>Area</strong></td>
@@ -181,14 +181,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-right font-bold">UANG MUKA EX PPB NO : {{ $pengajuanAset->request_number }}</td>
-                    <td class="text-right font-bold">
-                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '0' }}
-                    </td>
+                    <td colspan="2" class="text-right font-bold">UANG MUKA EX PPB NO : </td>
+                    <td class="text-right font-bold">-</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-right font-bold">BALANCE YANG AKAN DITRANSFER / DIKEMBALIKAN</td>
-                    <td class="text-right font-bold">0</td>
+                    <td class="text-right font-bold">
+                        {{ $totalCost > 0 ? number_format($totalCost, 0, ',', '.') : '0' }}
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -212,24 +212,21 @@
                     <td>
                         <div class="sig-space"></div>
                         <div class="font-bold"><u>IT Manager / SPV</u></div>
-                        <div style="font-size: 9px; margin-top: 2px;">Information Technology</div>
                     </td>
                     <td>
                         <div class="sig-space"></div>
                         <div class="font-bold"><u>{{ $pengajuanAset->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></div>
-                        <div style="font-size: 9px; margin-top: 2px;">{{ $pengajuanAset->approver_title ?? 'GM Finance & Operations' }}</div>
                     </td>
                     <td>
                         <div class="sig-space"></div>
                         <div class="font-bold"><u>( ..................................... )</u></div>
-                        <div style="font-size: 9px; margin-top: 2px;">Finance / Accounting</div>
                     </td>
                 </tr>
                 <tr>
                     <td>Tgl {{ date('d/m/Y') }}</td>
-                    <td>Tgl {{ date('d/m/Y') }}</td>
-                    <td>Tgl {{ date('d/m/Y') }}</td>
-                    <td>Tgl {{ date('d/m/Y') }}</td>
+                    <td>Tgl </td>
+                    <td>Tgl </td>
+                    <td>Tgl </td>
                 </tr>
             </tbody>
         </table>
