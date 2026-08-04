@@ -58,6 +58,7 @@
         @php
             $date = $pengajuanAset->request_date ? \Carbon\Carbon::parse($pengajuanAset->request_date) : \Carbon\Carbon::now();
             $period = $date->format('m/y');
+            $formattedDate = $date->format('d/m/Y');
             $qty = (int) ($pengajuanAset->quantity ?? 1);
             if ($qty < 1) {
                 $qty = 1;
@@ -196,37 +197,33 @@
         <table class="sig-table">
             <thead>
                 <tr>
-                    <th style="width: 25%;">DIBUAT</th>
-                    <th style="width: 25%;">DIPERIKSA</th>
-                    <th style="width: 25%;">DISETUJUI</th>
-                    <th style="width: 25%;">DIPERIKSA</th>
+                    <th style="width: 14.28%;">DIBUAT</th>
+                    <th style="width: 14.28%;">DIPERIKSA</th>
+                    <th colspan="4" style="width: 57.12%;">DISETUJUI</th>
+                    <th style="width: 14.28%;">DIPERIKSA</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>
+                    <td style="vertical-align: bottom; padding-bottom: 4px;">
                         <div class="sig-space"></div>
-                        <div class="font-bold"><u>{{ $pengajuanAset->requester_name }}</u></div>
-                        <div style="font-size: 9px; margin-top: 2px;">Pemohon</div>
+                        <div class="font-bold" style="font-size: 9.5px;"><u>{{ $pengajuanAset->requester_name }}</u></div>
                     </td>
-                    <td>
-                        <div class="sig-space"></div>
-                        <div class="font-bold"><u>IT Manager / SPV</u></div>
-                    </td>
-                    <td>
-                        <div class="sig-space"></div>
-                        <div class="font-bold"><u>{{ $pengajuanAset->approver_name ?? 'SETYADI CANDRAWINATA' }}</u></div>
-                    </td>
-                    <td>
-                        <div class="sig-space"></div>
-                        <div class="font-bold"><u>( ..................................... )</u></div>
-                    </td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
+                    <td><div class="sig-space"></div></td>
                 </tr>
                 <tr>
-                    <td>Tgl {{ date('d/m/Y') }}</td>
-                    <td>Tgl </td>
-                    <td>Tgl </td>
-                    <td>Tgl </td>
+                    <td>Tgl. {{ $formattedDate }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
