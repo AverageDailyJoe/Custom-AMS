@@ -157,35 +157,34 @@ class PengajuanAsetResource extends Resource
                         ]),
                 ]),
 
-            Forms\Components\Section::make('Rincian Biaya Tambahan Transaksi (Ongkir, Biaya Layanan, Asuransi)')
-                ->description('Catatkan biaya resmi transaksi toko online/vendor agar 100% transparan dan tercantum pada kolom nominal PPB & LBS.')
+            Forms\Components\Section::make('Rincian Biaya Tambahan Transaksi (Dynamic / Custom Fees)')
+                ->description('Gunakan tombol "+ Tambah Biaya Lain" untuk memasukkan rincian biaya transaksi (Misal: Biaya Layanan Tokopedia, Ongkir, Asuransi, Fee Admin) agar 100% transparan.')
                 ->collapsible()
                 ->schema([
-                    Forms\Components\Grid::make(3)->schema([
-                        Forms\Components\TextInput::make('shipping_cost')
-                            ->label('Ongkos Kirim & Asuransi Pengiriman (Rp)')
-                            ->numeric()
-                            ->prefix('Rp')
-                            ->placeholder('0')
-                            ->default(0)
-                            ->live(),
+                    Forms\Components\Repeater::make('additional_fees')
+                        ->label('Daftar Rincian Biaya Tambahan & Operational Fees')
+                        ->addActionLabel('Tambah Biaya Lain (+)')
+                        ->reorderable()
+                        ->cloneable()
+                        ->collapsible()
+                        ->defaultItems(0)
+                        ->columnSpanFull()
+                        ->schema([
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Keterangan / Nama Biaya')
+                                    ->placeholder('Misal: Biaya Layanan Tokopedia, Packing Kayu, Asuransi Pengiriman')
+                                    ->required(),
 
-                        Forms\Components\TextInput::make('service_fee')
-                            ->label('Biaya Layanan & Aplikasi Platform (Rp)')
-                            ->numeric()
-                            ->prefix('Rp')
-                            ->placeholder('0')
-                            ->default(0)
-                            ->live(),
-
-                        Forms\Components\TextInput::make('other_fee')
-                            ->label('Biaya Penanganan / Handling & Admin Fee (Rp)')
-                            ->numeric()
-                            ->prefix('Rp')
-                            ->placeholder('0')
-                            ->default(0)
-                            ->live(),
-                    ]),
+                                Forms\Components\TextInput::make('amount')
+                                    ->label('Nominal Biaya (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->required()
+                                    ->live(),
+                            ]),
+                        ]),
                 ]),
 
             Forms\Components\Section::make('Alasan & Dokumen Lampiran')
@@ -234,6 +233,13 @@ class PengajuanAsetResource extends Resource
                     $specs[] = ($item['title'] ?? 'Item') . ': ' . $item['specification'];
                 }
             }
+
+            if (isset($data['additional_fees']) && is_array($data['additional_fees'])) {
+                foreach ($data['additional_fees'] as $fee) {
+                    $totalCostSum += (float) ($fee['amount'] ?? 0);
+                }
+            }
+
             $shipping = (float) ($data['shipping_cost'] ?? 0);
             $service = (float) ($data['service_fee'] ?? 0);
             $other = (float) ($data['other_fee'] ?? 0);

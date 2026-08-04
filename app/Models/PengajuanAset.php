@@ -25,6 +25,7 @@ class PengajuanAset extends Model
         'shipping_cost',
         'service_fee',
         'other_fee',
+        'additional_fees',
         'approver_name',
         'approver_title',
         'attachments',
@@ -39,6 +40,7 @@ class PengajuanAset extends Model
         'other_fee' => 'decimal:2',
         'attachments' => 'array',
         'items' => 'array',
+        'additional_fees' => 'array',
     ];
 
     public function createdBy(): BelongsTo
@@ -98,11 +100,33 @@ class PengajuanAset extends Model
     }
 
     /**
-     * Get list of additional fee rows (Ongkir, Biaya Layanan, Fee Admin).
+     * Get list of additional fee rows (Dynamic or fixed fallback).
      */
     public function getAdditionalFeesList(): array
     {
         $fees = [];
+
+        // Dynamic additional_fees repeater array
+        if (is_array($this->additional_fees) && count($this->additional_fees) > 0) {
+            foreach ($this->additional_fees as $fee) {
+                $amount = (float) ($fee['amount'] ?? 0);
+                if ($amount == 0) continue;
+
+                $fees[] = [
+                    'title' => $fee['name'] ?? $fee['description'] ?? 'Biaya Lainnya',
+                    'item_type' => 'Biaya Tambahan',
+                    'quantity' => 1,
+                    'unit_cost' => $amount,
+                    'total_cost' => $amount,
+                    'specification' => 'Biaya Transaksi / Operasional',
+                ];
+            }
+            if (count($fees) > 0) {
+                return $fees;
+            }
+        }
+
+        // Fallback to legacy fixed fields
         $shipping = (float) ($this->shipping_cost ?? 0);
         $service = (float) ($this->service_fee ?? 0);
         $other = (float) ($this->other_fee ?? 0);
