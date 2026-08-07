@@ -38,6 +38,16 @@ class UserResource extends Resource
                 ->unique(ignoreRecord: true)
                 ->maxLength(255),
 
+            Forms\Components\Select::make('role')
+                ->label('Role Akses Panel')
+                ->options([
+                    'user' => 'User Biasa (Portal Service User)',
+                    'admin' => 'Administrator (Full Access AMS & Admin)',
+                    'it_staff' => 'Teknisi / Staff IT',
+                ])
+                ->default('user')
+                ->required(),
+
             Forms\Components\TextInput::make('password')
                 ->label('Password')
                 ->password()
@@ -58,6 +68,23 @@ class UserResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('role')
+                    ->label('Role Akses')
+                    ->badge()
+                    ->color(fn (?string $state) => match ($state) {
+                        'admin' => 'danger',
+                        'it_staff' => 'warning',
+                        'user' => 'info',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state) => match ($state) {
+                        'admin' => 'Administrator',
+                        'it_staff' => 'IT Staff',
+                        'user' => 'User Biasa',
+                        default => $state ? ucfirst($state) : 'Admin (Default)',
+                    })
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
