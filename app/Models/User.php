@@ -21,7 +21,11 @@ class User extends Authenticatable implements FilamentUser
 
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'it_staff']);
+        if (empty($this->role) || in_array($this->role, ['admin', 'it_staff'])) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isUser(): bool
