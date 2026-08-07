@@ -9,11 +9,23 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class UserTicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('created_by', Auth::id());
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()?->getId() === 'user';
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
 
