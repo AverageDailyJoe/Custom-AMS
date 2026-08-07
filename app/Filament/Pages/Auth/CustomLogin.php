@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomLogin extends BaseLogin
 {
+    public function mount(): void
+    {
+        if (! Filament::getCurrentPanel()) {
+            Filament::setCurrentPanel(Filament::getPanel('admin'));
+        }
+
+        parent::mount();
+    }
     protected function getRedirectUrl(): string
     {
         $user = Auth::user();

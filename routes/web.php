@@ -5,6 +5,9 @@ use App\Http\Controllers\HandoverFormController;
 use App\Http\Controllers\Auth\OtpRegisterController;
 use App\Http\Controllers\Auth\OtpResetPasswordController;
 
+use App\Filament\Pages\Auth\CustomLogin;
+use Filament\Facades\Filament;
+
 Route::get('/', function () {
     if (auth()->check()) {
         return (auth()->user() && method_exists(auth()->user(), 'isAdmin') && auth()->user()->isAdmin())
@@ -20,12 +23,29 @@ Route::get('/gondowangi/login', function () {
             ? redirect('/admin')
             : redirect('/user');
     }
-    return redirect('/admin/login');
-})->name('gondowangi.login');
+    Filament::setCurrentPanel(Filament::getPanel('admin'));
+    return app()->make(CustomLogin::class)();
+})->middleware([
+    \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+    \Illuminate\Session\Middleware\StartSession::class,
+    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+    \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    \Filament\Http\Middleware\DisableBladeIconComponents::class,
+    \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
+])->name('gondowangi.login');
 
 Route::get('/login', function () {
     return redirect('/gondowangi/login');
 })->name('login');
+
+Route::get('/admin/login', function () {
+    return redirect('/gondowangi/login');
+});
+
+Route::get('/user/login', function () {
+    return redirect('/gondowangi/login');
+});
 
 Route::get('/verify/{token}', [\App\Http\Controllers\AssetVerificationController::class, 'show'])->name('asset.verify');
 
