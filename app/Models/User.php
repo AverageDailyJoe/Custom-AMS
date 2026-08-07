@@ -34,18 +34,10 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Role-based access control for Filament panels.
+     * Allow authenticated users to access panels (panel restriction handled via middleware).
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        if ($panel->getId() === 'admin') {
-            return $this->isAdmin();
-        }
-
-        if ($panel->getId() === 'user') {
-            return true;
-        }
-
         return true;
     }
 
