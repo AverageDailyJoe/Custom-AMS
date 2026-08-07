@@ -32,6 +32,7 @@ class TicketResource extends Resource
     {
         return $form->schema([
             Forms\Components\Section::make('Identitas Pelapor & Lokasi Pengerjaan')
+                ->description('Diisi oleh User / Karyawan pelapor kendala')
                 ->schema([
                     Forms\Components\Grid::make(3)->schema([
                         Forms\Components\TextInput::make('ticket_number')
@@ -42,6 +43,7 @@ class TicketResource extends Resource
 
                         Forms\Components\TextInput::make('reporter_name')
                             ->label('Nama Karyawan / Pelapor')
+                            ->default(fn () => Auth::user()?->name)
                             ->placeholder('Contoh: Bambang Yulianto')
                             ->required(),
 
@@ -143,7 +145,8 @@ class TicketResource extends Resource
                     ]),
                 ]),
 
-            Forms\Components\Section::make('Detail Kendala & Penjadwalan IT (Schedule-Driven)')
+            Forms\Components\Section::make('Detail Kendala & Lampiran Pelapor')
+                ->description('Informasi kendala yang dialami serta tangkapan layar/foto bukti dari User')
                 ->schema([
                     Forms\Components\Grid::make(2)->schema([
                         Forms\Components\Select::make('category')
@@ -202,11 +205,36 @@ class TicketResource extends Resource
                         ->rows(3)
                         ->required(),
 
+                    Forms\Components\FileUpload::make('attachments')
+                        ->label('Upload Foto / Tangkapan Layar Kendala (User)')
+                        ->disk('public')
+                        ->directory('ticket-attachments')
+                        ->visibility('public')
+                        ->multiple()
+                        ->image()
+                        ->imagePreviewHeight('250')
+                        ->openable()
+                        ->downloadable()
+                        ->previewable()
+                        ->reorderable()
+                        ->appendFiles()
+                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'application/pdf'])
+                        ->maxSize(10240),
+                ]),
+
+            Forms\Components\Section::make('Penjadwalan & Penugasan IT (Dikelola Staf IT)')
+                ->schema([
+                    Forms\Components\Select::make('assigned_to')
+                        ->label('Petugas IT Penanggung Jawab')
+                        ->relationship('assignedToUser', 'name')
+                        ->placeholder('-- Belum Ditugaskan --')
+                        ->searchable()
+                        ->preload(),
+
                     Forms\Components\Grid::make(3)->schema([
                         Forms\Components\DatePicker::make('scheduled_date')
                             ->label('Tanggal Rencana Pengerjaan IT')
                             ->default(now())
-                            ->required()
                             ->live()
                             ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
                                 if ($state) {
@@ -239,23 +267,15 @@ class TicketResource extends Resource
                                 '15:00 - 17:00' => 'Sore (15:00 - 17:00)',
                                 'flexible' => 'Fleksibel Seharian',
                             ])
-                            ->default('10:00 - 12:00')
-                            ->required(),
+                            ->default('10:00 - 12:00'),
 
                         Forms\Components\DatePicker::make('due_date')
                             ->label('Target Selesai / SLA')
                             ->default(now()->addDays(2)),
                     ]),
-
-                    Forms\Components\Select::make('assigned_to')
-                        ->label('Petugas IT Penanggung Jawab')
-                        ->relationship('assignedToUser', 'name')
-                        ->default(fn () => Auth::id())
-                        ->searchable()
-                        ->preload(),
                 ]),
 
-            Forms\Components\Section::make('Status Pengerjaan & Solusi IT')
+            Forms\Components\Section::make('Status Pengerjaan & Solusi IT (Staff IT)')
                 ->schema([
                     Forms\Components\Grid::make(2)->schema([
                         Forms\Components\Select::make('status')
@@ -269,7 +289,7 @@ class TicketResource extends Resource
                                 'resolved' => 'Resolved (Selesai Dikerjakan IT)',
                                 'closed' => 'Closed (Ditutup)',
                             ])
-                            ->default('scheduled')
+                            ->default('open')
                             ->required(),
 
                         Forms\Components\DateTimePicker::make('resolved_at')
@@ -286,10 +306,10 @@ class TicketResource extends Resource
                         ->placeholder('Tuliskan langkah perbaikan yang telah dilakukan...')
                         ->rows(3),
 
-                    Forms\Components\FileUpload::make('attachments')
-                        ->label('Upload Foto / Tangkapan Layar Kendala')
+                    Forms\Components\FileUpload::make('it_attachments')
+                        ->label('Upload Foto / Bukti Hasil Perbaikan (Staff IT)')
                         ->disk('public')
-                        ->directory('ticket-attachments')
+                        ->directory('ticket-it-attachments')
                         ->visibility('public')
                         ->multiple()
                         ->image()

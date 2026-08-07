@@ -36,6 +36,7 @@ class Ticket extends Model
         'dispose_aset_id',
         'berita_acara_id',
         'attachments',
+        'it_attachments',
         'created_by',
     ];
 
@@ -44,6 +45,7 @@ class Ticket extends Model
         'due_date' => 'date',
         'resolved_at' => 'datetime',
         'attachments' => 'array',
+        'it_attachments' => 'array',
     ];
 
     public function location(): BelongsTo
