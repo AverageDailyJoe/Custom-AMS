@@ -58,12 +58,12 @@ class CustomLogin extends BaseLogin
 
     protected function getRedirectUrl(): string
     {
-        $user = Auth::user();
+        $user = Auth::user()?->fresh() ?? Auth::user();
 
-        if ($user && method_exists($user, 'isAdmin') && $user->isAdmin()) {
-            return Filament::getPanel('admin')->getUrl();
+        if ($user && $user->role === 'user') {
+            return Filament::getPanel('user')->getUrl();
         }
 
-        return Filament::getPanel('user')->getUrl();
+        return Filament::getPanel('admin')->getUrl();
     }
 }

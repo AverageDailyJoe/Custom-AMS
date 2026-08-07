@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             SubstituteBindings::class,
             DisableBladeIconComponents::class,
             DispatchServingFilamentEvent::class,
+            \App\Http\Middleware\RedirectUserPanelAccess::class,
         ];
 
         if (!app()->environment(['local', 'testing'])) {
