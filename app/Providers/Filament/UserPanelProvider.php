@@ -40,7 +40,7 @@ class UserPanelProvider extends PanelProvider
         return $panel
             ->id('user')
             ->path('user')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\CustomLogin::class)
             ->registration()
             ->passwordReset()
             ->brandName('GTK Portal - Service User')

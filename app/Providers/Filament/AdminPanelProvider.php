@@ -50,7 +50,7 @@ FilamentView::registerRenderHook(
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Auth\CustomLogin::class)
             ->brandName('AMS')
             ->brandLogo(fn () => asset('images/logo.png'))
             ->brandLogoHeight('2.5rem')

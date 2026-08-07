@@ -6,11 +6,25 @@ use App\Http\Controllers\Auth\OtpRegisterController;
 use App\Http\Controllers\Auth\OtpResetPasswordController;
 
 Route::get('/', function () {
-    return redirect('/admin');
+    if (auth()->check()) {
+        return (auth()->user() && method_exists(auth()->user(), 'isAdmin') && auth()->user()->isAdmin())
+            ? redirect('/admin')
+            : redirect('/user');
+    }
+    return redirect('/gondowangi/login');
 });
 
-Route::get('/login', function () {
+Route::get('/gondowangi/login', function () {
+    if (auth()->check()) {
+        return (auth()->user() && method_exists(auth()->user(), 'isAdmin') && auth()->user()->isAdmin())
+            ? redirect('/admin')
+            : redirect('/user');
+    }
     return redirect('/admin/login');
+})->name('gondowangi.login');
+
+Route::get('/login', function () {
+    return redirect('/gondowangi/login');
 })->name('login');
 
 Route::get('/verify/{token}', [\App\Http\Controllers\AssetVerificationController::class, 'show'])->name('asset.verify');
