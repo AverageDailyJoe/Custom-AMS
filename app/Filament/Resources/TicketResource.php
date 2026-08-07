@@ -20,13 +20,13 @@ class TicketResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
-    protected static ?string $navigationLabel = 'IT Service Tickets';
+    protected static ?string $navigationLabel = 'IT Service (IT Staff)';
 
-    protected static ?string $modelLabel = 'IT Ticket';
+    protected static ?string $modelLabel = 'Tiket Kelola IT Staff';
 
-    protected static ?string $pluralModelLabel = 'IT Service Tickets';
+    protected static ?string $pluralModelLabel = 'IT Service (IT Staff)';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
