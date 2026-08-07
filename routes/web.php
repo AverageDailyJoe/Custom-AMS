@@ -41,11 +41,11 @@ Route::get('/login', function () {
 
 Route::get('/admin/login', function () {
     return redirect('/gondowangi/login');
-});
+})->name('filament.admin.auth.login');
 
 Route::get('/user/login', function () {
     return redirect('/gondowangi/login');
-});
+})->name('filament.user.auth.login');
 
 Route::get('/verify/{token}', [\App\Http\Controllers\AssetVerificationController::class, 'show'])->name('asset.verify');
 
