@@ -191,10 +191,6 @@
                         {{ $grandTotalCost > 0 ? number_format($grandTotalCost, 0, ',', '.') : '0' }}
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2" class="text-right font-bold">UANG MUKA EX PPB NO : </td>
-                    <td class="text-right font-bold">-</td>
-                </tr>
                 @php
                     $adj = (float) ($pengajuanAset->adjustment_amount ?? 0);
                     if ($adj < 0) {
