@@ -197,9 +197,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="text-right font-bold">BALANCE YANG AKAN DITRANSFER / DIKEMBALIKAN</td>
-                    <td class="text-right font-bold">
-                        {{ $grandTotalCost > 0 ? number_format($grandTotalCost, 0, ',', '.') : '0' }}
-                    </td>
+                    <td class="text-right font-bold">0</td>
                 </tr>
             </tbody>
         </table>
