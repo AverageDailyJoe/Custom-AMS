@@ -185,6 +185,15 @@ class PengajuanAsetResource extends Resource
                                     ->live(),
                             ]),
                         ]),
+
+                    Forms\Components\TextInput::make('adjustment_amount')
+                        ->label('Selisih / Adjustment Nominal LBS (Rp)')
+                        ->helperText('Isi minus (contoh: -900000) jika ada kekurangan/kurang bayar, atau positif (contoh: 100000) jika ada kelebihan pengembalian.')
+                        ->numeric()
+                        ->prefix('Rp')
+                        ->placeholder('0')
+                        ->default(0)
+                        ->nullable(),
                 ]),
 
             Forms\Components\Section::make('Alasan & Dokumen Lampiran')

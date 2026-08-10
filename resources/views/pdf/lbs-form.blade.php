@@ -195,9 +195,19 @@
                     <td colspan="2" class="text-right font-bold">UANG MUKA EX PPB NO : </td>
                     <td class="text-right font-bold">-</td>
                 </tr>
+                @php
+                    $adj = (float) ($pengajuanAset->adjustment_amount ?? 0);
+                    if ($adj < 0) {
+                        $displayBalance = '-' . number_format(abs($adj), 0, ',', '.');
+                    } elseif ($adj > 0) {
+                        $displayBalance = number_format($adj, 0, ',', '.');
+                    } else {
+                        $displayBalance = '0';
+                    }
+                @endphp
                 <tr>
                     <td colspan="2" class="text-right font-bold">BALANCE YANG AKAN DITRANSFER / DIKEMBALIKAN</td>
-                    <td class="text-right font-bold">0</td>
+                    <td class="text-right font-bold">{{ $displayBalance }}</td>
                 </tr>
             </tbody>
         </table>
