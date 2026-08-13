@@ -74,7 +74,7 @@ class PengajuanAsetResource extends Resource
                             ->label('Perusahaan (Kop Surat)')
                             ->options([
                                 'PT. GONDOWANGI TRADISIONAL KOSMETIKA' => 'PT. Gondowangi Tradisional Kosmetika',
-                                'PT. BUANA INDAH MARKETAMA SEJAHTERA' => 'PT. Buanaindah Marketama Sejahtera',
+                                'PT. BUANAINDAH MARKETAMA SEJAHTERA' => 'PT. Buanaindah Marketama Sejahtera',
                             ])
                             ->default('PT. GONDOWANGI TRADISIONAL KOSMETIKA')
                             ->required(),
