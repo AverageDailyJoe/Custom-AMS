@@ -50,7 +50,7 @@
             <button onclick="window.print()" class="btn-print">🖨️ CETAK / DOWNLOAD PPB (PDF)</button>
         </div>
 
-        <div class="header-title">PT. GONDOWANGI TRADISIONAL KOSMETIKA</div>
+        <div class="header-title">{{ strtoupper($pengajuanAset->company ?? 'PT. GONDOWANGI TRADISIONAL KOSMETIKA') }}</div>
         <div class="header-sub">PERMOHONAN PENGELUARAN BIAYA ( P P B )</div>
 
         @php

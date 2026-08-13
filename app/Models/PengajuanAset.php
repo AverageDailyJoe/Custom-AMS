@@ -31,6 +31,7 @@ class PengajuanAset extends Model
         'approver_title',
         'attachments',
         'created_by',
+        'company',
     ];
 
     protected $casts = [

@@ -51,7 +51,7 @@
         </div>
 
         <div class="header-box">
-            <div class="header-title">PT. GONDOWANGI TRADISIONAL KOSMETIKA</div>
+            <div class="header-title">{{ strtoupper($pengajuanAset->company ?? 'PT. GONDOWANGI TRADISIONAL KOSMETIKA') }}</div>
             <div class="header-sub">LAPORAN BIAYA SETTLEMENT ( L B S )</div>
         </div>
 

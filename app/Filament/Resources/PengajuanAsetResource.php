@@ -54,7 +54,7 @@ class PengajuanAsetResource extends Resource
                             ->required(),
                     ]),
 
-                    Forms\Components\Grid::make(3)->schema([
+                    Forms\Components\Grid::make(2)->schema([
                         Forms\Components\TextInput::make('requester_name')
                             ->label('Nama Pemohon')
                             ->default(fn () => Auth::user()?->name ?? '')
@@ -69,6 +69,15 @@ class PengajuanAsetResource extends Resource
                             ->label('Area Lokasi')
                             ->placeholder('Misal: HQ / Head Office, Factory Jababeka')
                             ->default('HQ / Head Office'),
+
+                        Forms\Components\Select::make('company')
+                            ->label('Perusahaan (Kop Surat)')
+                            ->options([
+                                'PT. GONDOWANGI TRADISIONAL KOSMETIKA' => 'PT. Gondowangi Tradisional Kosmetika',
+                                'PT. BUANA INDAH MARKETAMA SEJAHTERA' => 'PT. Buanaindah Marketama Sejahtera',
+                            ])
+                            ->default('PT. GONDOWANGI TRADISIONAL KOSMETIKA')
+                            ->required(),
                     ]),
                 ]),
 
