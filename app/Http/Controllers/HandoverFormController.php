@@ -217,6 +217,10 @@ class HandoverFormController extends Controller
 
         if ($asset) {
             $asset->load(['assetModel.category', 'location']);
+            if (empty($asset->qr_token)) {
+                $asset->qr_token = (string) \Illuminate\Support\Str::uuid();
+                $asset->saveQuietly();
+            }
             $mappedSlots[$slotNumber] = $asset;
         } elseif ($request->filled('asset_ids')) {
             $assetIds = is_array($request->asset_ids) ? $request->asset_ids : explode(',', $request->input('asset_ids'));
@@ -226,6 +230,10 @@ class HandoverFormController extends Controller
 
             $currentSlot = $slotNumber;
             foreach ($assets as $a) {
+                if (empty($a->qr_token)) {
+                    $a->qr_token = (string) \Illuminate\Support\Str::uuid();
+                    $a->saveQuietly();
+                }
                 $mappedSlots[$currentSlot] = $a;
                 $currentSlot++;
             }

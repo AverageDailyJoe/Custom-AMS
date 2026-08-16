@@ -44,6 +44,21 @@ class Asset extends Model
         'attachments' => 'array',
     ];
 
+    public function getQrTokenAttribute($value): string
+    {
+        if (empty($value)) {
+            $uuid = (string) \Illuminate\Support\Str::uuid();
+            $this->attributes['qr_token'] = $uuid;
+            if ($this->exists) {
+                \Illuminate\Support\Facades\DB::table('assets')
+                    ->where('id', $this->id)
+                    ->update(['qr_token' => $uuid]);
+            }
+            return $uuid;
+        }
+        return $value;
+    }
+
     protected static function boot(): void
     {
         parent::boot();

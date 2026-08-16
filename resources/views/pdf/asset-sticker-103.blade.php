@@ -226,7 +226,11 @@
                             
                             <div class="qr-section">
                                 <div class="qr-code-box">
-                                    {!! \App\Helpers\QrCodeHelper::generateSvg(route('asset.verify', $asset->qr_token), 70) !!}
+                                    @php
+                                        $token = !empty($asset->qr_token) ? $asset->qr_token : (string) \Illuminate\Support\Str::uuid();
+                                        $verifyUrl = route('asset.verify', ['token' => $token]);
+                                    @endphp
+                                    {!! \App\Helpers\QrCodeHelper::generateSvg($verifyUrl, 70) !!}
                                 </div>
                                 <div class="asset-tag-label">{{ $asset->asset_tag }}</div>
                             </div>
