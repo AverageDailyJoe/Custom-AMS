@@ -120,16 +120,22 @@ class AssetResource extends Resource
                 ->schema([
                     Forms\Components\TextInput::make('processor')
                         ->label('Processor')
-                        ->placeholder('Contoh: i3 Gen 10, Intel Pentium'),
+                        ->placeholder('Contoh: Core i5-11400, Intel Pentium'),
                     Forms\Components\TextInput::make('ram')
-                        ->label('RAM')
-                        ->placeholder('Contoh: 8 GB, 4 GB'),
+                        ->label('RAM (GB)')
+                        ->numeric()
+                        ->suffix('GB')
+                        ->placeholder('Contoh: 8, 16'),
                     Forms\Components\TextInput::make('storage_hdd')
-                        ->label('HDD')
-                        ->placeholder('Contoh: 500 GB, 250 GB'),
+                        ->label('HDD (GB)')
+                        ->numeric()
+                        ->suffix('GB')
+                        ->placeholder('Contoh: 500, 1000'),
                     Forms\Components\TextInput::make('storage_ssd')
-                        ->label('SSD')
-                        ->placeholder('Contoh: 256 GB, 128 GB'),
+                        ->label('SSD (GB)')
+                        ->numeric()
+                        ->suffix('GB')
+                        ->placeholder('Contoh: 256, 512'),
                     Forms\Components\TextInput::make('vga_card')
                         ->label('VGA Card')
                         ->placeholder('Contoh: NVIDIA GeForce GT 610'),
@@ -173,13 +179,16 @@ class AssetResource extends Resource
                     Forms\Components\TextInput::make('purchase_year')
                         ->label('Tahun Pembelian')
                         ->numeric()
-                        ->placeholder('Contoh: 2020'),
+                        ->minValue(1990)
+                        ->maxValue((int) date('Y') + 1)
+                        ->placeholder('Contoh: 2024'),
                     Forms\Components\DatePicker::make('purchase_date')
                         ->label('Tanggal Pembelian'),
                     Forms\Components\TextInput::make('purchase_cost')
-                        ->label('Harga')
+                        ->label('Harga Pembelian')
                         ->numeric()
-                        ->prefix('Rp'),
+                        ->prefix('Rp')
+                        ->placeholder('Contoh: 8500000'),
                     Forms\Components\TextInput::make('warranty')
                         ->label('Garansi')
                         ->placeholder('Garansi'),
