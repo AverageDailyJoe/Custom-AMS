@@ -52,6 +52,7 @@ class BeritaAcaraResource extends Resource
                                 'kerusakan_sparepart' => '2. Kerusakan / Perbaikan / Spare Part',
                                 'transfer_asset' => '3. Mutasi / Perpindahan Tangan Asset',
                                 'penggantian_unit' => '4. Penggantian Unit Asset Baru/Pengganti',
+                                'disposal_penjualan' => '5. Berita Acara Disposal / Penjualan / Scrap',
                             ])
                             ->default('kehilangan')
                             ->required()
@@ -69,9 +70,36 @@ class BeritaAcaraResource extends Resource
                                 } elseif ($state === 'penggantian_unit') {
                                     $set('title', 'Berita Acara Penyerahan Unit Asset Baru/Pengganti');
                                     $set('description_points', "1. Bahwa dilakukan penyerahan unit pengganti/baru untuk mendukung pekerjaan PIHAK KEDUA.\n2. Bahwa PIHAK KEDUA telah menerima unit pengganti dalam kondisi baik dan siap pakai.\n3. Bahwa unit lama telah dikembalikan penuh ke pihak IT.");
+                                } elseif ($state === 'disposal_penjualan') {
+                                    $set('title', 'Berita Acara Disposal & Penjualan / Scrap Aset IT');
+                                    $set('description_points', "1. Bahwa unit aset IT telah melalui proses verifikasi teknis dan dinyatakan tidak ekonomis untuk diperbaiki / berstatus afkir.\n2. Bahwa unit tersebut telah disetujui untuk diproses disposal (penjualan/scrap/trade-in) sesuai prosedur resmi perusahaan.\n3. Bahwa seluruh data, media penyimpanan, dan dokumen legalitas aset telah diselesaikan.");
                                 }
                             }),
                     ]),
+
+                    Forms\Components\Select::make('dispose_aset_id')
+                        ->label('Merujuk No. Disposal (ID Disposal Terkait)')
+                        ->relationship('disposeAset', 'disposal_number')
+                        ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->disposal_number} - {$record->asset_tag} ({$record->asset_name})")
+                        ->searchable()
+                        ->preload()
+                        ->nullable()
+                        ->live()
+                        ->afterStateUpdated(function (Set $set, ?string $state) {
+                            if ($state) {
+                                $disp = \App\Models\DisposeAset::with('asset')->find($state);
+                                if ($disp) {
+                                    if ($disp->asset_id) $set('asset_id', $disp->asset_id);
+                                    $set('asset_tag', $disp->asset_tag);
+                                    $set('asset_name', $disp->asset_name);
+                                    $set('title', "Berita Acara Disposal & Penjualan Aset IT - {$disp->disposal_number}");
+                                    $set('category', 'disposal_penjualan');
+                                    $set('description_points', "1. Bahwa unit aset {$disp->asset_tag} ({$disp->asset_name}) telah dinyatakan afkir/disposal sesuai Formulir Disposal No. {$disp->disposal_number}.\n2. Bahwa unit tersebut telah dievaluasi oleh Tim IT dan disetujui untuk diproses disposal ({$disp->disposal_type}).\n3. Bahwa seluruh data, hak akses, dan serah terima unit telah diselesaikan sesuai prosedur IT & GA perusahaan.");
+                                }
+                            }
+                        })
+                        ->columnSpanFull()
+                        ->helperText('Pilih No. Disposal jika Berita Acara ini merujuk langsung ke formulir disposal aset.'),
 
                     Forms\Components\TextInput::make('title')
                         ->label('Judul / Hal Berita Acara')
@@ -213,13 +241,23 @@ class BeritaAcaraResource extends Resource
                         'kerusakan_sparepart' => 'warning',
                         'transfer_asset' => 'info',
                         'penggantian_unit' => 'success',
+                        'disposal_penjualan' => 'danger',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state) => match ($state) {
                         'kehilangan' => 'Kehilangan',
                         'kerusakan_sparepart' => 'Perbaikan/Sparepart',
                         'transfer_asset' => 'Mutasi/Transfer',
                         'penggantian_unit' => 'Penggantian Unit',
+                        'disposal_penjualan' => 'Disposal / Scrap',
+                        default => ucfirst($state),
                     }),
+
+                Tables\Columns\TextColumn::make('disposeAset.disposal_number')
+                    ->label('No. Disposal')
+                    ->placeholder('-')
+                    ->searchable()
+                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('asset_tag')
                     ->label('ID Inventaris')

@@ -107,19 +107,19 @@ class DisposeAsetResource extends Resource
                     ]),
                 ]),
 
-            Forms\Components\Section::make('Keterangan Kerusakan & Metode Disposal')
+            Forms\Components\Section::make('Keterangan Kerusakan & Kategori Disposal')
                 ->schema([
                     Forms\Components\Grid::make(2)->schema([
                         Forms\Components\Select::make('disposal_type')
-                            ->label('Proses / Metode Disposal')
+                            ->label('Proses / Kategori Disposal')
                             ->options([
                                 'sale' => 'Penjualan Aset',
-                                'destruction' => 'Pemusnahan Aset',
-                                'trade_in' => 'Trade-In / Tukar Tambah',
                                 'scrap' => 'Scrap / Afkir',
+                                'trade_in' => 'Trade-In / Tukar Tambah',
                             ])
                             ->default('sale')
-                            ->required(),
+                            ->required()
+                            ->live(),
 
                         Forms\Components\TextInput::make('estimated_salvage_value')
                             ->label('Estimasi Nilai Jual / Salvage Value (Jika Ada)')
@@ -133,6 +133,39 @@ class DisposeAsetResource extends Resource
                         ->placeholder('Misal: Laptop mati total, motherboard konslet, layar pecah, dan biaya perbaikan tidak ekonomis.')
                         ->rows(4)
                         ->required(),
+
+                    Forms\Components\Select::make('berita_acara_id')
+                        ->label('Lampiran Berita Acara IT Terkait (Opsional)')
+                        ->relationship('beritaAcara', 'letter_number')
+                        ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->letter_number} - {$record->title} (" . ($record->letter_date ? $record->letter_date->format('d/m/Y') : '') . ")")
+                        ->searchable()
+                        ->preload()
+                        ->nullable()
+                        ->helperText('Pilih Berita Acara IT jika proses disposal ini merujuk ke Berita Acara kerusakan/kehilangan sebelumnya.')
+                        ->columnSpanFull(),
+                ]),
+
+            Forms\Components\Section::make('Informasi Pembeli & Kesepakatan Harga (Khusus Penjualan / Scrap)')
+                ->description('Lengkapi identitas pembeli/vendor rekanan untuk pembuatan dokumen Serah Terima & Quotation Penjualan.')
+                ->collapsible()
+                ->schema([
+                    Forms\Components\Grid::make(3)->schema([
+                        Forms\Components\TextInput::make('buyer_name')
+                            ->label('Nama Pembeli / Rekanan Vendor')
+                            ->placeholder('Misal: CV Berkah Jaya / Bapak Hendra'),
+                        Forms\Components\TextInput::make('buyer_contact')
+                            ->label('Kontak / No. HP')
+                            ->placeholder('Misal: 0812-xxxx-xxxx'),
+                        Forms\Components\TextInput::make('selling_price')
+                            ->label('Harga Kesepakatan Penjualan (Rp)')
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->placeholder('0'),
+                    ]),
+                    Forms\Components\TextInput::make('buyer_address')
+                        ->label('Alamat Pembeli / Lokasi Pengambilan')
+                        ->placeholder('Misal: Jl. Raya Industri No. 12, Cikarang')
+                        ->columnSpanFull(),
                 ]),
 
             Forms\Components\Section::make('Penanggung Jawab & Serah Terima GA')
@@ -199,19 +232,20 @@ class DisposeAsetResource extends Resource
                     ->limit(25),
 
                 Tables\Columns\TextColumn::make('disposal_type')
-                    ->label('Proses')
+                    ->label('Kategori')
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
                         'sale' => 'success',
-                        'destruction' => 'danger',
                         'trade_in' => 'info',
                         'scrap' => 'warning',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state) => match ($state) {
                         'sale' => 'Penjualan',
-                        'destruction' => 'Pemusnahan',
                         'trade_in' => 'Trade-In',
-                        'scrap' => 'Scrap',
+                        'scrap' => 'Scrap / Afkir',
+                        'destruction' => 'Pemusnahan',
+                        default => ucfirst($state),
                     }),
 
                 Tables\Columns\TextColumn::make('status')
@@ -233,10 +267,23 @@ class DisposeAsetResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\Action::make('pdf_disposal')
-                    ->label('Cetak PDF')
+                    ->label('Form Disposal')
                     ->icon('heroicon-o-printer')
                     ->color('success')
                     ->url(fn ($record) => route('dispose-asets.pdf', $record))
+                    ->openUrlInNewTab(),
+                Tables\Actions\Action::make('pdf_serah_terima')
+                    ->label('Serah Terima')
+                    ->icon('heroicon-o-document-check')
+                    ->color('primary')
+                    ->url(fn ($record) => route('dispose-asets.pdf-serah-terima', $record))
+                    ->openUrlInNewTab(),
+                Tables\Actions\Action::make('pdf_quotation')
+                    ->label('Quotation')
+                    ->icon('heroicon-o-currency-dollar')
+                    ->color('warning')
+                    ->visible(fn ($record) => in_array($record->disposal_type, ['sale', 'scrap']))
+                    ->url(fn ($record) => route('dispose-asets.pdf-quotation', $record))
                     ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

@@ -49,6 +49,18 @@ class HandoverFormController extends Controller
         return view('pdf.disposal-form', compact('disposeAset'));
     }
 
+    public function downloadSerahTerimaDisposal(\App\Models\DisposeAset $disposeAset)
+    {
+        $disposeAset->load(['asset.assetModel.category', 'createdBy']);
+        return view('pdf.serah-terima-disposal-pdf', compact('disposeAset'));
+    }
+
+    public function downloadQuotationDisposal(\App\Models\DisposeAset $disposeAset)
+    {
+        $disposeAset->load(['asset.assetModel.category', 'createdBy']);
+        return view('pdf.quotation-penjualan-pdf', compact('disposeAset'));
+    }
+
     public function downloadTicket(\App\Models\Ticket $ticket)
     {
         $ticket->load(['location', 'asset.assetModel.category', 'assignedToUser', 'createdBy']);

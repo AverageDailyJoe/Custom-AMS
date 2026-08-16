@@ -18,6 +18,11 @@ class DisposeAset extends Model
         'disposal_type',
         'status',
         'estimated_salvage_value',
+        'buyer_name',
+        'buyer_contact',
+        'buyer_address',
+        'selling_price',
+        'berita_acara_id',
         'created_by_name',
         'spv_name',
         'manager_name',
@@ -60,12 +65,23 @@ class DisposeAset extends Model
     protected $casts = [
         'disposal_date' => 'date',
         'estimated_salvage_value' => 'decimal:2',
+        'selling_price' => 'decimal:2',
         'attachments' => 'array',
     ];
 
     public function asset(): BelongsTo
     {
         return $this->belongsTo(Asset::class, 'asset_id');
+    }
+
+    public function beritaAcara(): BelongsTo
+    {
+        return $this->belongsTo(BeritaAcara::class, 'berita_acara_id');
+    }
+
+    public function beritaAcaras(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BeritaAcara::class, 'dispose_aset_id');
     }
 
     public function createdBy(): BelongsTo

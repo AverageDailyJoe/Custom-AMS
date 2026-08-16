@@ -13,6 +13,7 @@ class BeritaAcara extends Model
         'category',
         'title',
         'asset_id',
+        'dispose_aset_id',
         'asset_tag',
         'asset_name',
         'quantity',
@@ -38,6 +39,11 @@ class BeritaAcara extends Model
     public function asset(): BelongsTo
     {
         return $this->belongsTo(Asset::class);
+    }
+
+    public function disposeAset(): BelongsTo
+    {
+        return $this->belongsTo(DisposeAset::class, 'dispose_aset_id');
     }
 
     public function createdBy(): BelongsTo
