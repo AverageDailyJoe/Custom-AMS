@@ -78,6 +78,16 @@ class PengajuanAsetResource extends Resource
                             ])
                             ->default('PT. GONDOWANGI TRADISIONAL KOSMETIKA')
                             ->required(),
+
+                        Forms\Components\Select::make('asset_id')
+                            ->label('Target Aset Terkait (Opsional / Upgrade / Servis)')
+                            ->relationship('asset', 'asset_tag')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->asset_tag} - " . ($record->assetModel?->name ?? 'Aset') . " [" . ($record->holder_name !== '-' ? $record->holder_name : 'In Stock') . "]")
+                            ->searchable()
+                            ->preload()
+                            ->nullable()
+                            ->columnSpanFull()
+                            ->helperText('Pilih unit aset jika pengajuan ini ditujukan untuk upgrade atau penggantian komponen aset eksisting.'),
                     ]),
                 ]),
 
@@ -293,6 +303,12 @@ class PengajuanAsetResource extends Resource
                     ->label('Pemohon')
                     ->searchable(),
 
+                Tables\Columns\TextColumn::make('asset.asset_tag')
+                    ->label('Target Aset')
+                    ->formatStateUsing(fn ($record) => $record->asset ? "{$record->asset->asset_tag} (" . ($record->asset->holder_name !== '-' ? $record->asset->holder_name : ($record->asset->location?->name ?? 'Aset')) . ")" : '-')
+                    ->searchable()
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('item_type')
                     ->label('Item'),
 
@@ -327,6 +343,57 @@ class PengajuanAsetResource extends Resource
                     }),
             ])
             ->defaultSort('created_at', 'desc')
+            ->filters([
+                Tables\Filters\SelectFilter::make('requester_name')
+                    ->label('Filter Pemohon')
+                    ->options(fn () => PengajuanAset::distinct()->whereNotNull('requester_name')->pluck('requester_name', 'requester_name')->toArray())
+                    ->searchable(),
+
+                Tables\Filters\SelectFilter::make('item_type')
+                    ->label('Filter Kategori Barang')
+                    ->options([
+                        'Laptop' => 'Laptop / Notebook',
+                        'PC Desktop' => 'PC Desktop Unit',
+                        'Monitor' => 'Monitor Display',
+                        'Printer' => 'Printer / Scanner',
+                        'Smartphone' => 'Handphone / Smartphone',
+                        'Komponen Utama' => 'Sparepart & Komponen Utama (RAM / SSD / Mobo)',
+                        'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Adapter)',
+                        'Aksesoris IT' => 'Aksesoris IT & Kabel',
+                        'Software' => 'Software / Lisensi',
+                        'Lainnya' => 'Lain-lain',
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (!empty($data['value'])) {
+                            $val = $data['value'];
+                            $query->where(function ($q) use ($val) {
+                                $q->where('item_type', $val)
+                                  ->orWhere('specification_requested', 'ILIKE', "%{$val}%")
+                                  ->orWhereRaw("items::text ILIKE ?", ["%\"item_type\":\"{$val}\"%"]);
+                            });
+                        }
+                    }),
+
+                Tables\Filters\SelectFilter::make('asset_id')
+                    ->label('Filter Target Aset')
+                    ->relationship('asset', 'asset_tag')
+                    ->searchable()
+                    ->preload(),
+
+                Tables\Filters\SelectFilter::make('requester_department')
+                    ->label('Filter Departemen')
+                    ->options(fn () => PengajuanAset::distinct()->whereNotNull('requester_department')->pluck('requester_department', 'requester_department')->toArray())
+                    ->searchable(),
+
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Filter Status')
+                    ->options([
+                        'pending' => 'Pending (Menunggu Approval)',
+                        'approved' => 'Approved (Disetujui)',
+                        'rejected' => 'Rejected (Ditolak)',
+                        'completed' => 'Completed (Selesai Pengadaan)',
+                    ]),
+            ])
             ->actions([
                 Tables\Actions\Action::make('pdf_ppb')
                     ->label('Cetak PPB')

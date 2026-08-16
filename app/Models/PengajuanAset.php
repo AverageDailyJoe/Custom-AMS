@@ -13,6 +13,7 @@ class PengajuanAset extends Model
         'title',
         'requester_name',
         'requester_department',
+        'asset_id',
         'area',
         'item_type',
         'quantity',
@@ -45,6 +46,11 @@ class PengajuanAset extends Model
         'items' => 'array',
         'additional_fees' => 'array',
     ];
+
+    public function asset(): BelongsTo
+    {
+        return $this->belongsTo(Asset::class);
+    }
 
     public function createdBy(): BelongsTo
     {
