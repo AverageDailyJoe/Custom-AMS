@@ -14,15 +14,17 @@
     },
     "live_infrastructure": {
       "vps_provider": "IDCloudHost Cloud VPS (SouthJKT-a)",
-      "vps_ip": "157.10.160.81",
+      "vps_ip": "103.23.199.83",
       "domains": [
         "https://gtkportal.my.id/admin",
-        "http://157.10.160.81/admin"
+        "http://103.23.199.83/admin"
       ],
-      "os": "Ubuntu 22.04 LTS",
+      "os": "Ubuntu 22.04 LTS (Fresh Re-install 16 Aug 2026)",
       "web_server": "Nginx 1.18.0 + Let's Encrypt SSL",
-      "ssh_user": "admin",
-      "app_directory": "/var/www/ams-app"
+      "ssh_user": "adilijkw",
+      "ssh_password_note": "HidupBlonde1",
+      "app_directory": "/var/www/ams-app",
+      "incident_notes": "5-8 Aug 2026 SRBMiner/Xminer rootkit attack; server fresh wiped & database dump restored 100%"
     },
     "local_device_setup": {
       "environment": "Termux (Android)",
