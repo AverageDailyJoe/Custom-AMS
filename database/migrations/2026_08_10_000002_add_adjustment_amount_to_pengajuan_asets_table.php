@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('pengajuan_asets', function (Blueprint $table) {
-            $table->decimal('adjustment_amount', 15, 2)->default(0)->nullable()->after('additional_fees');
-        });
+        if (!Schema::hasColumn('pengajuan_asets', 'adjustment_amount')) {
+            Schema::table('pengajuan_asets', function (Blueprint $table) {
+                $table->decimal('adjustment_amount', 15, 2)->default(0)->nullable()->after('additional_fees');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('pengajuan_asets', function (Blueprint $table) {
-            $table->dropColumn('adjustment_amount');
-        });
+        if (Schema::hasColumn('pengajuan_asets', 'adjustment_amount')) {
+            Schema::table('pengajuan_asets', function (Blueprint $table) {
+                $table->dropColumn('adjustment_amount');
+            });
+        }
     }
 };

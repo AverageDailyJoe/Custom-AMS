@@ -8,16 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('pengajuan_asets', function (Blueprint $table) {
-            $table->foreignId('asset_id')->nullable()->after('requester_department')->constrained('assets')->nullOnDelete();
-        });
+        if (!Schema::hasColumn('pengajuan_asets', 'asset_id')) {
+            Schema::table('pengajuan_asets', function (Blueprint $table) {
+                $table->foreignId('asset_id')->nullable()->after('requester_department')->constrained('assets')->nullOnDelete();
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('pengajuan_asets', function (Blueprint $table) {
-            $table->dropForeign(['asset_id']);
-            $table->dropColumn('asset_id');
-        });
+        if (Schema::hasColumn('pengajuan_asets', 'asset_id')) {
+            Schema::table('pengajuan_asets', function (Blueprint $table) {
+                $table->dropForeign(['asset_id']);
+                $table->dropColumn('asset_id');
+            });
+        }
     }
 };

@@ -8,16 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            $table->json('it_attachments')->nullable()->after('resolution_notes');
-            $table->date('scheduled_date')->nullable()->change();
-        });
+        if (!Schema::hasColumn('tickets', 'it_attachments')) {
+            Schema::table('tickets', function (Blueprint $table) {
+                $table->json('it_attachments')->nullable()->after('attachments');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('tickets', function (Blueprint $table) {
-            $table->dropColumn('it_attachments');
-        });
+        if (Schema::hasColumn('tickets', 'it_attachments')) {
+            Schema::table('tickets', function (Blueprint $table) {
+                $table->dropColumn('it_attachments');
+            });
+        }
     }
 };

@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('pengajuan_asets', function (Blueprint $table) {
-            $table->json('items')->nullable()->after('specification_requested');
-        });
+        if (!Schema::hasColumn('pengajuan_asets', 'items')) {
+            Schema::table('pengajuan_asets', function (Blueprint $table) {
+                $table->json('items')->nullable()->after('specification_requested');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('pengajuan_asets', function (Blueprint $table) {
-            $table->dropColumn('items');
-        });
+        if (Schema::hasColumn('pengajuan_asets', 'items')) {
+            Schema::table('pengajuan_asets', function (Blueprint $table) {
+                $table->dropColumn('items');
+            });
+        }
     }
 };

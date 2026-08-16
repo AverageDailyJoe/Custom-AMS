@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('assets', function (Blueprint $table) {
-            $table->string('qr_token')->nullable()->unique()->after('asset_tag');
-        });
+        if (!Schema::hasColumn('assets', 'qr_token')) {
+            Schema::table('assets', function (Blueprint $table) {
+                $table->string('qr_token')->nullable()->unique()->after('asset_tag');
+            });
+        }
 
         // Backfill existing assets
-        $assets = \App\Models\Asset::all();
+        $assets = \App\Models\Asset::whereNull('qr_token')->orWhere('qr_token', '')->get();
         foreach ($assets as $asset) {
             $asset->qr_token = (string) \Illuminate\Support\Str::uuid();
             $asset->saveQuietly(); // save without triggering events
@@ -28,8 +30,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('assets', function (Blueprint $table) {
-            $table->dropColumn('qr_token');
-        });
+        if (Schema::hasColumn('assets', 'qr_token')) {
+            Schema::table('assets', function (Blueprint $table) {
+                $table->dropColumn('qr_token');
+            });
+        }
     }
 };
