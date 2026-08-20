@@ -11,6 +11,7 @@ class PengajuanDepartmentChart extends ChartWidget
     protected static ?string $heading = 'Top Pengajuan Aset per Divisi';
     protected static ?int $sort = 3;
     protected static ?string $maxHeight = '300px';
+    protected static bool $isDiscovered = false;
 
     public ?string $filter = 'this_year';
 

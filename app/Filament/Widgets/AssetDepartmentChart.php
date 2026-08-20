@@ -11,6 +11,7 @@ class AssetDepartmentChart extends ChartWidget
     protected static ?string $heading = 'Total Nilai Aset per Divisi (Rp)';
     protected static ?int $sort = 2;
     protected static ?string $maxHeight = '300px';
+    protected static bool $isDiscovered = false;
 
     protected function getData(): array
     {
