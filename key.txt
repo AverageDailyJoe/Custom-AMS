@@ -1,0 +1,1 @@
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINrzjetiVUA7K1Bx4PSPDg5kfY3d5MovNfz3sxcixc6h muhamad.farhan@gondowangi.com
