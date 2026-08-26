@@ -318,6 +318,16 @@ class AssetResource extends Resource
                 Tables\Filters\SelectFilter::make('location_id')
                     ->relationship('location', 'name')
                     ->label('Location'),
+                Tables\Filters\SelectFilter::make('department')
+                    ->label('Departemen')
+                    ->options(fn () => \App\Models\Asset::query()
+                        ->whereNotNull('department')
+                        ->where('department', '!=', '')
+                        ->distinct()
+                        ->pluck('department', 'department')
+                        ->toArray()
+                    )
+                    ->searchable(),
             ])
             ->actions([
                 Tables\Actions\Action::make('schedule_maintenance')
