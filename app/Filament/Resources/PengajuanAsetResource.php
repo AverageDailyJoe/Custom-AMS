@@ -132,9 +132,14 @@ class PengajuanAsetResource extends Resource
                         ->schema([
                             Forms\Components\Grid::make(3)->schema([
                                 Forms\Components\TextInput::make('title')
-                                    ->label('Nama / Judul Item')
+                                    ->label('Nama / Judul Item (Di PPB)')
                                     ->placeholder('Misal: Laptop Intel Core i7 14th Gen')
                                     ->required(),
+                                    
+                                Forms\Components\TextInput::make('lbs_title')
+                                    ->label('Judul / Uraian Khusus di LBS (Opsional)')
+                                    ->placeholder('Misal: Pembelian Laptop Intel Core i7')
+                                    ->helperText('Jika kosong, akan mengikuti judul PPB di atas.'),
 
                                 Forms\Components\Select::make('item_type')
                                     ->label('Jenis Perangkat / Asset')

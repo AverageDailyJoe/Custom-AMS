@@ -160,8 +160,7 @@
                 @foreach($itemList as $index => $item)
                     @php
                         $grandTotalCost += (float) ($item['total_cost'] ?? 0);
-                        // Rename "Pengajuan" to "Pembelian" for LBS
-                        $itemTitle = preg_replace('/^Pengajuan\s+/i', 'Pembelian ', $item['title']);
+                        $itemTitle = !empty($item['lbs_title']) ? $item['lbs_title'] : $item['title'];
                     @endphp
                     <tr>
                         <td class="text-center"></td>
@@ -206,7 +205,7 @@
                     }
                 @endphp
                 <tr>
-                    <td colspan="2" class="text-right font-bold">Pengajuan Uang muka</td>
+                    <td colspan="2" class="text-right font-bold">PENGAJUAN UANG MUKA</td>
                     <td class="text-right font-bold">
                         {{ $uangMuka != 0 ? number_format($uangMuka, 0, ',', '.') : '0' }}
                     </td>
@@ -251,12 +250,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <div style="margin-top: 20px; font-size: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
-            <strong>Uang Muka</strong><br>
-            Jika Gondowangi kurang (+) &mdash; Jika Gondowangi atau Buana kurang<br>
-            Jika user kembalikan uang (-) &mdash; Jika user harus mengembalikan
-        </div>
     </div>
 </body>
 </html>

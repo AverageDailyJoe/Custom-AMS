@@ -82,6 +82,7 @@ class PengajuanAset extends Model
 
                 $formatted[] = [
                     'title' => $item['title'] ?? $item['item_name'] ?? 'Item Aset',
+                    'lbs_title' => $item['lbs_title'] ?? null,
                     'item_type' => $item['item_type'] ?? 'Laptop',
                     'quantity' => $qty,
                     'unit_cost' => $unitCost,
