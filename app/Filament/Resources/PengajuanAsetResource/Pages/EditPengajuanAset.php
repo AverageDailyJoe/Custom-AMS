@@ -33,4 +33,26 @@ class EditPengajuanAset extends EditRecord
     {
         return PengajuanAsetResource::syncLegacyColumns($data);
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        if (empty($data['items'])) {
+            $qty = (int) ($data['quantity'] ?? 1);
+            if ($qty < 1) $qty = 1;
+            $unitCost = (float) ($data['estimated_cost'] ?? 0);
+
+            if ($unitCost > 0) {
+                $data['items'] = [
+                    [
+                        'title' => $data['title'] ?? 'Item Aset',
+                        'item_type' => $data['item_type'] ?? 'Laptop',
+                        'quantity' => $qty,
+                        'estimated_cost' => $unitCost,
+                        'specification' => $data['specification_requested'] ?? '',
+                    ]
+                ];
+            }
+        }
+        return $data;
+    }
 }

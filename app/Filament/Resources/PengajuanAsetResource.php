@@ -210,6 +210,15 @@ class PengajuanAsetResource extends Resource
                             ]),
                         ]),
 
+                    Forms\Components\TextInput::make('uang_muka')
+                        ->label('Nominal Pengajuan Uang Muka (Rp)')
+                        ->helperText('Diisi jika meminta uang muka. Kosongkan jika tidak ada/sistem reimburse (pakai uang pribadi dulu).')
+                        ->numeric()
+                        ->prefix('Rp')
+                        ->placeholder('0')
+                        ->default(0)
+                        ->nullable(),
+
                     Forms\Components\TextInput::make('adjustment_amount')
                         ->label('Selisih / Adjustment Nominal LBS (Rp)')
                         ->helperText('Isi positif (+) jika Gondowangi kurang bayar (reimburse ke user). Isi minus (-) jika user kembalikan uang (sisa uang muka).')

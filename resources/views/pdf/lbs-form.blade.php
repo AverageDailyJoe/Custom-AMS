@@ -193,8 +193,13 @@
                     </td>
                 </tr>
                 @php
+                    $uangMuka = (float) ($pengajuanAset->uang_muka ?? 0);
                     $adj = (float) ($pengajuanAset->adjustment_amount ?? 0);
-                    $uangMuka = $grandTotalCost - $adj;
+                    
+                    // Auto-compute balance if uang_muka is provided and adjustment_amount is 0
+                    if ($uangMuka > 0 && $adj == 0) {
+                        $adj = $grandTotalCost - $uangMuka;
+                    }
                     
                     if ($adj < 0) {
                         $displayBalance = '-' . number_format(abs($adj), 0, ',', '.');
