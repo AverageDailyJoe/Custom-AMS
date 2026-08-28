@@ -330,6 +330,35 @@ class AssetResource extends Resource
                     ->searchable(),
             ])
             ->actions([
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('maintenance_now')
+                        ->label('Maintenance Dadakan')
+                        ->icon('heroicon-o-wrench')
+                        ->color('danger')
+                        ->visible(fn ($record) => $record->status !== 'disposed')
+                        ->requiresConfirmation()
+                        ->modalHeading(fn ($record) => "Mulai Maintenance Darurat: {$record->asset_tag}?")
+                        ->modalDescription('Ini akan membuat tiket berstatus Open untuk unit aset ini segera.')
+                        ->action(function ($record) {
+                            $ticket = \App\Models\Ticket::create([
+                                'ticket_number' => \App\Models\Ticket::generateTicketNumber(),
+                                'reporter_name' => $record->holder_name !== '-' ? $record->holder_name : 'Tim IT',
+                                'reporter_department' => $record->department ?? 'IT Operations',
+                                'contact_number' => 'Ext IT',
+                                'location_id' => $record->location_id,
+                                'room' => $record->room ?? 'Ruangan IT',
+                                'asset_id' => $record->id,
+                                'asset_tag' => $record->asset_tag,
+                                'asset_name' => "{$record->assetModel?->manufacturer} {$record->assetModel?->name}",
+                                'category' => 'service',
+                                'subject' => "Incident / Darurat - {$record->asset_tag}",
+                                'description' => "Perbaikan dadakan untuk unit {$record->asset_tag}.",
+                                'priority' => 'high',
+                                'status' => 'open',
+                                'assigned_to' => \Illuminate\Support\Facades\Auth::id() ?: 1,
+                            ]);
+                            \Filament\Notifications\Notification::make()->title("Tiket {$ticket->ticket_number} Dibuat")->success()->send();
+                        }),
                 Tables\Actions\Action::make('schedule_maintenance')
                     ->label('Jadwalkan Maintenance')
                     ->icon('heroicon-o-wrench-screwdriver')
@@ -522,6 +551,7 @@ class AssetResource extends Resource
                     ->visible(fn (Asset $record) => $record->status !== 'disposed'),
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn (Asset $record) => $record->status !== 'disposed'),
+                ])->label('Actions')->icon('heroicon-m-ellipsis-vertical')->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -590,3 +620,4 @@ class AssetResource extends Resource
             ]);
     }
 }
+
