@@ -112,6 +112,11 @@ class Asset extends Model
         return $this->hasMany(Ticket::class)->latest('scheduled_date');
     }
 
+    public function pengajuanAsets(): HasMany
+    {
+        return $this->hasMany(PengajuanAset::class, 'asset_id')->latest('request_date');
+    }
+
     public function maintenanceLogs(): HasMany
     {
         return $this->hasMany(AssetMaintenanceLog::class)->latest('performed_at');

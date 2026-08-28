@@ -597,6 +597,7 @@ class AssetResource extends Resource
         return [
             CheckoutsRelationManager::class,
             TicketsRelationManager::class,
+            RelationManagers\PengajuanAsetsRelationManager::class,
         ];
     }
 

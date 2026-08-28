@@ -142,6 +142,14 @@ class TicketResource extends Resource
 
                         Forms\Components\TextInput::make('asset_name')
                             ->label('Nama / Model Unit'),
+
+                        Forms\Components\Select::make('pengajuan_aset_id')
+                            ->label('Link / Nomor Pengajuan Terkait (Opsional)')
+                            ->placeholder('Pilih Pengajuan Aset (Jika ada pembelian parts/upgrade)')
+                            ->options(\App\Models\PengajuanAset::orderBy('created_at', 'desc')->pluck('request_number', 'id'))
+                            ->searchable()
+                            ->nullable()
+                            ->columnSpan(2),
                     ]),
                 ]),
 
