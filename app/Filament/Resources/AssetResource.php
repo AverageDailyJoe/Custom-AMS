@@ -350,7 +350,7 @@ class AssetResource extends Resource
                                 'asset_id' => $record->id,
                                 'asset_tag' => $record->asset_tag,
                                 'asset_name' => "{$record->assetModel?->manufacturer} {$record->assetModel?->name}",
-                                'category' => 'service',
+                                'category' => 'hardware',
                                 'subject' => "Incident / Darurat - {$record->asset_tag}",
                                 'description' => "Perbaikan dadakan untuk unit {$record->asset_tag}.",
                                 'priority' => 'high',
