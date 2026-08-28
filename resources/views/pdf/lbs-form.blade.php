@@ -165,9 +165,12 @@
                     <tr>
                         <td class="text-center"></td>
                         <td style="padding-left: 20px;">
-                            {{ $index + 1 }}. <strong>{{ $itemTitle }}</strong> ({{ $item['quantity'] }} Unit{{ $item['unit_cost'] > 0 && $item['quantity'] > 1 ? ' @ Rp ' . number_format($item['unit_cost'], 0, ',', '.') : '' }})
-                            @if(!empty($item['specification']))
-                                <br><small style="color: #374151;">Spec: {{ $item['specification'] }}</small>
+                            {{ $index + 1 }}. <strong>{{ $itemTitle }}</strong>
+                            @if(($item['item_type'] ?? '') !== 'Biaya Tambahan')
+                                ({{ $item['quantity'] }} Unit{{ $item['unit_cost'] > 0 && $item['quantity'] > 1 ? ' @ Rp ' . number_format($item['unit_cost'], 0, ',', '.') : '' }})
+                                @if(!empty($item['specification']))
+                                    <br><small style="color: #374151;">Spec: {{ $item['specification'] }}</small>
+                                @endif
                             @endif
                         </td>
                         <td class="text-right font-bold">
