@@ -147,12 +147,12 @@ class PengajuanAsetResource extends Resource
                                         'Laptop' => 'Laptop / Notebook',
                                         'PC Desktop' => 'PC Desktop Unit',
                                         'Monitor' => 'Monitor Display',
-                                        'Printer' => 'Printer / Scanner',
+                                        'Printer/Scanner' => 'Printer / Scanner',
                                         'Smartphone' => 'Handphone / Smartphone',
-                                        'Komponen Utama' => 'Sparepart & Komponen Utama (RAM / SSD / HDD / Mobo)',
+                                        'Sparepart dan Komponen utama' => 'Sparepart & Komponen Utama (RAM / SSD / HDD / Mobo)',
                                         'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Headset / Adapter)',
                                         'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi',
-                                        'Software' => 'Software / Lisensi Aplikasi',
+                                        'Software/Lisensi' => 'Software / Lisensi Aplikasi',
                                         'Lainnya' => 'Lain-lain',
                                     ])
                                     ->default('Laptop')
