@@ -160,11 +160,13 @@
                 @foreach($itemList as $index => $item)
                     @php
                         $grandTotalCost += (float) ($item['total_cost'] ?? 0);
+                        // Rename "Pengajuan" to "Pembelian" for LBS
+                        $itemTitle = preg_replace('/^Pengajuan\s+/i', 'Pembelian ', $item['title']);
                     @endphp
                     <tr>
                         <td class="text-center"></td>
                         <td style="padding-left: 20px;">
-                            {{ $index + 1 }}. <strong>{{ $item['title'] }}</strong> ({{ $item['quantity'] }} Unit{{ $item['unit_cost'] > 0 && $item['quantity'] > 1 ? ' @ Rp ' . number_format($item['unit_cost'], 0, ',', '.') : '' }})
+                            {{ $index + 1 }}. <strong>{{ $itemTitle }}</strong> ({{ $item['quantity'] }} Unit{{ $item['unit_cost'] > 0 && $item['quantity'] > 1 ? ' @ Rp ' . number_format($item['unit_cost'], 0, ',', '.') : '' }})
                             @if(!empty($item['specification']))
                                 <br><small style="color: #374151;">Spec: {{ $item['specification'] }}</small>
                             @endif
@@ -193,6 +195,8 @@
                 </tr>
                 @php
                     $adj = (float) ($pengajuanAset->adjustment_amount ?? 0);
+                    $uangMuka = $grandTotalCost - $adj;
+                    
                     if ($adj < 0) {
                         $displayBalance = '-' . number_format(abs($adj), 0, ',', '.');
                     } elseif ($adj > 0) {
@@ -201,6 +205,12 @@
                         $displayBalance = '0';
                     }
                 @endphp
+                <tr>
+                    <td colspan="2" class="text-right font-bold">Pengajuan Uang muka</td>
+                    <td class="text-right font-bold">
+                        {{ $uangMuka != 0 ? number_format($uangMuka, 0, ',', '.') : '0' }}
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2" class="text-right font-bold">BALANCE YANG AKAN DITRANSFER / DIKEMBALIKAN</td>
                     <td class="text-right font-bold">{{ $displayBalance }}</td>
@@ -241,6 +251,12 @@
                 </tr>
             </tbody>
         </table>
+
+        <div style="margin-top: 20px; font-size: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+            <strong>Uang Muka</strong><br>
+            Jika Gondowangi kurang (+) &mdash; Jika Gondowangi atau Buana kurang<br>
+            Jika user kembalikan uang (-) &mdash; Jika user harus mengembalikan
+        </div>
     </div>
 </body>
 </html>
