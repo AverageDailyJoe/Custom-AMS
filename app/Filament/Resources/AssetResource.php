@@ -548,6 +548,20 @@ class AssetResource extends Resource
                         ]);
                         $livewire->js("window.open('{$url}', '_blank');");
                     }),
+                Tables\Actions\Action::make('print_checkout')
+                    ->label('Form Serah Terima (PDF)')
+                    ->icon('heroicon-o-document-text')
+                    ->color('warning')
+                    ->visible(fn (\App\Models\Asset $record) => $record->checkouts()->exists())
+                    ->url(fn (\App\Models\Asset $record) => route('checkouts.pdf-handover', $record->checkouts()->latest('checked_out_at')->first()))
+                    ->openUrlInNewTab(),
+                Tables\Actions\Action::make('print_checkin')
+                    ->label('Form Pengembalian (PDF)')
+                    ->icon('heroicon-o-arrow-left-on-rectangle')
+                    ->color('danger')
+                    ->visible(fn (\App\Models\Asset $record) => $record->checkouts()->whereNotNull('checked_in_at')->exists())
+                    ->url(fn (\App\Models\Asset $record) => route('checkouts.pdf-return', $record->checkouts()->whereNotNull('checked_in_at')->latest('checked_in_at')->first()))
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make()
                     ->visible(fn (Asset $record) => $record->status !== 'disposed'),
                 Tables\Actions\DeleteAction::make()
