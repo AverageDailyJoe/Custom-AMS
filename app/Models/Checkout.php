@@ -66,6 +66,11 @@ class Checkout extends Model
         return $this->belongsTo(User::class, 'checked_in_by');
     }
 
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
+
     public function isActive(): bool
     {
         return $this->checked_in_at === null;
