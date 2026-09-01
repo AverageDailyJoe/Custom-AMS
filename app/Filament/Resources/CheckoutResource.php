@@ -102,6 +102,50 @@ class CheckoutResource extends Resource
                     ),
             ])
             ->actions([
+                Tables\Actions\EditAction::make()
+                    ->label('Edit')
+                    ->icon('heroicon-o-pencil')
+                    ->color('warning')
+                    ->form([
+                        Forms\Components\TextInput::make('primary_user')
+                            ->label('Pengguna 1 (Utama)')
+                            ->required(),
+                        Forms\Components\TextInput::make('secondary_user')
+                            ->label('Pengguna 2 (Pendamping)'),
+                        Forms\Components\Select::make('department')
+                            ->label('Departemen / Bagian')
+                            ->options(\App\Models\Asset::select('department')->distinct()->whereNotNull('department')->where('department', '!=', '')->pluck('department', 'department'))
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\Select::make('location_id')
+                            ->label('Lokasi Utama')
+                            ->relationship('location', 'name')
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\TextInput::make('room')
+                            ->label('Ruangan / Posisi Detail'),
+                        Forms\Components\DateTimePicker::make('checked_out_at')
+                            ->label('Tanggal Checkout')
+                            ->required(),
+                        Forms\Components\DateTimePicker::make('checked_in_at')
+                            ->label('Tanggal Checkin (Kosong = Aktif)'),
+                    ])
+                    ->using(function (\App\Models\Checkout $record, array $data): \App\Models\Checkout {
+                        $record->update($data);
+
+                        // Sinkronisasi otomatis ke profil Aset jika Checkout ini sedang AKTIF (belum dikembalikan)
+                        if ($record->isActive()) {
+                            $record->asset->update([
+                                'primary_user' => $data['primary_user'],
+                                'secondary_user' => $data['secondary_user'] ?? null,
+                                'department' => $data['department'],
+                                'location_id' => $data['location_id'],
+                                'room' => $data['room'] ?? null,
+                            ]);
+                        }
+
+                        return $record;
+                    }),
                 Tables\Actions\Action::make('edit_checklist')
                     ->label('Edit Tabel Pengecekan')
                     ->icon('heroicon-o-pencil-square')

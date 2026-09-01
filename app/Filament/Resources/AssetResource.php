@@ -412,6 +412,18 @@ class AssetResource extends Resource
                             ->required(),
                         Forms\Components\TextInput::make('secondary_user')
                             ->label('Pengguna 2 (Pendamping)'),
+                        Forms\Components\Select::make('department')
+                            ->label('Departemen / Bagian')
+                            ->options(\App\Models\Asset::select('department')->distinct()->whereNotNull('department')->where('department', '!=', '')->pluck('department', 'department'))
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\Select::make('location_id')
+                            ->label('Lokasi Utama')
+                            ->relationship('location', 'name')
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\TextInput::make('room')
+                            ->label('Ruangan / Posisi Detail'),
                         Forms\Components\Textarea::make('notes')
                             ->label('Catatan Checkout'),
                         Forms\Components\FileUpload::make('checkout_attachments')
@@ -431,6 +443,9 @@ class AssetResource extends Resource
                         $record->checkoutToUser(
                             $data['primary_user'],
                             $data['secondary_user'] ?? null,
+                            $data['department'] ?? null,
+                            $data['location_id'] ?? null,
+                            $data['room'] ?? null,
                             null,
                             $data['notes'] ?? null,
                             $data['checkout_attachments'] ?? null
