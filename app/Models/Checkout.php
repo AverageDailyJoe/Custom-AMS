@@ -13,6 +13,7 @@ class Checkout extends Model
         'primary_user',
         'secondary_user',
         'department',
+        'position',
         'location_id',
         'room',
         'checked_out_by',

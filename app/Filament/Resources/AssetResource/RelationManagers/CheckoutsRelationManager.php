@@ -92,6 +92,9 @@ class CheckoutsRelationManager extends RelationManager
                             ->options(\App\Models\Asset::select('department')->distinct()->whereNotNull('department')->where('department', '!=', '')->pluck('department', 'department'))
                             ->searchable()
                             ->required(),
+                        Forms\Components\TextInput::make('position')
+                            ->label('Posisi / Jabatan')
+                            ->required(),
                         Forms\Components\Select::make('location_id')
                             ->label('Lokasi Utama')
                             ->relationship('location', 'name')
@@ -114,6 +117,7 @@ class CheckoutsRelationManager extends RelationManager
                                 'primary_user' => $data['primary_user'],
                                 'secondary_user' => $data['secondary_user'] ?? null,
                                 'department' => $data['department'],
+                                'position' => $data['position'],
                                 'location_id' => $data['location_id'],
                                 'room' => $data['room'] ?? null,
                             ]);

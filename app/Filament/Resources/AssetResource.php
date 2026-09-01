@@ -105,6 +105,9 @@ class AssetResource extends Resource
                     Forms\Components\TextInput::make('department')
                         ->label('Departemen')
                         ->placeholder('Contoh: PPIC, FINANCE & ACCOUNTING, PURCHASING'),
+                    Forms\Components\TextInput::make('position')
+                        ->label('Posisi / Jabatan')
+                        ->placeholder('Contoh: Data Analyst, SPV HRD'),
                 ])->columns(2),
 
             Forms\Components\Section::make('Pengguna & Penanggung Jawab')
@@ -417,6 +420,9 @@ class AssetResource extends Resource
                             ->options(\App\Models\Asset::select('department')->distinct()->whereNotNull('department')->where('department', '!=', '')->pluck('department', 'department'))
                             ->searchable()
                             ->required(),
+                        Forms\Components\TextInput::make('position')
+                            ->label('Posisi / Jabatan')
+                            ->required(),
                         Forms\Components\Select::make('location_id')
                             ->label('Lokasi Utama')
                             ->relationship('location', 'name')
@@ -444,6 +450,7 @@ class AssetResource extends Resource
                             $data['primary_user'],
                             $data['secondary_user'] ?? null,
                             $data['department'] ?? null,
+                            $data['position'] ?? null,
                             $data['location_id'] ?? null,
                             $data['room'] ?? null,
                             null,

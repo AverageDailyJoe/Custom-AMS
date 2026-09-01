@@ -17,6 +17,7 @@ class Asset extends Model
         'location_id',
         'room',
         'department',
+        'position',
         'primary_user',
         'secondary_user',
         'processor',
@@ -195,7 +196,7 @@ class Asset extends Model
     /**
      * Check out this asset to a user / primary user.
      */
-    public function checkoutToUser(?string $primaryUser = null, ?string $secondaryUser = null, ?string $department = null, ?int $locationId = null, ?string $room = null, ?User $user = null, ?string $notes = null, $attachments = null): Checkout
+    public function checkoutToUser(?string $primaryUser = null, ?string $secondaryUser = null, ?string $department = null, ?string $position = null, ?int $locationId = null, ?string $room = null, ?User $user = null, ?string $notes = null, $attachments = null): Checkout
     {
         $adminId = Auth::id() ?: 1;
         $attachmentsArray = is_array($attachments) ? $attachments : ($attachments ? [$attachments] : null);
@@ -205,6 +206,7 @@ class Asset extends Model
             'primary_user' => $primaryUser,
             'secondary_user' => $secondaryUser,
             'department' => $department,
+            'position' => $position,
             'location_id' => $locationId,
             'room' => $room,
             'checked_out_by' => $adminId,
@@ -219,6 +221,7 @@ class Asset extends Model
             'primary_user' => $primaryUser,
             'secondary_user' => $secondaryUser,
             'department' => $department,
+            'position' => $position,
             'location_id' => $locationId,
             'room' => $room,
         ]);

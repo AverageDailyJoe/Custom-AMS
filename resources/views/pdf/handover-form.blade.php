@@ -216,7 +216,12 @@
                 <td>
                     <p>Diterima Oleh,<br><strong>PIHAK KEDUA</strong></p>
                     <div class="sig-space"></div>
-                    <p><u>( {{ $checkout->primary_user ?? 'Pengguna Unit' }} )</u><br><small>{{ $checkout->asset->department ?? 'User' }}</small></p>
+                    @php
+                        $dept = $checkout->department ?? $checkout->asset->department ?? 'User';
+                        $pos = $checkout->position ?? $checkout->asset->position ?? null;
+                        $subtitle = $pos ? "{$pos} - {$dept}" : $dept;
+                    @endphp
+                    <p><u>( {{ $checkout->primary_user ?? 'Pengguna Unit' }} )</u><br><small>{{ $subtitle }}</small></p>
                 </td>
                 <td>
                     <p>Mengetahui,<br><strong>ATASAN / SPV</strong></p>

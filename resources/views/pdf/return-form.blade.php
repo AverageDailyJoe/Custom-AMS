@@ -371,8 +371,13 @@
                 <td>
                     <p>Diterima Oleh,<br><strong>PENGGUNA (PIHAK PERTAMA)</strong></p>
                     <div class="sig-space"></div>
+                    @php
+                        $dept = $checkout->department ?? $checkout->asset->department ?? 'User';
+                        $pos = $checkout->position ?? $checkout->asset->position ?? null;
+                        $subtitle = $pos ? "{$pos} - {$dept}" : $dept;
+                    @endphp
                     <p><u>( {{ $checkout->primary_user ?? 'Pengguna Unit' }}
-                            )</u><br><small></small></p>
+                            )</u><br><small>{{ $subtitle }}</small></p>
                 </td>
                 <td>
                     <p>Mengetahui,<br><strong>ATASAN / SPV</strong></p>
