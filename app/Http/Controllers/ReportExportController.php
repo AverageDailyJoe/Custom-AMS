@@ -58,16 +58,111 @@ class ReportExportController extends Controller
             if ($start) $query->whereDate('request_date', '>=', $start);
             if ($end) $query->whereDate('request_date', '<=', $end);
             
-            $dataRows = $query->get()->map(fn($row) => [
-                $row->request_number, 
-                $row->request_date ? $row->request_date->format('Y-m-d') : '-', 
-                $row->requester_name, 
-                $row->requester_department, 
-                $row->item_type, 
-                $row->quantity, 
-                $row->estimated_cost, 
-                $row->status
-            ])->toArray();
+            $dataRows = $query->get()->map(function($row) {
+                return [
+                    $row->request_number,
+                    $row->request_date?->format('d/m/Y'),
+                    $row->requester_name,
+                    $row->requester_department,
+                    $row->item_type,
+                    $row->quantity,
+                    $row->estimated_cost,
+                    $row->status,
+                ];
+            })->toArray();
+        }
+        elseif ($type === 'asset_tco') {
+            $columns = ['Asset Tag', 'Nama Aset', 'Departemen', 'Tanggal Pengajuan', 'Nama Pemohon', 'Target Asset', 'Item', 'Qty', 'Biaya Pembelian (Rp)', 'Total Biaya Maintenance (Rp)', 'Total TCO (Rp)'];
+            $assets = Asset::with(['pengajuanAsets' => function($q) { $q->oldest('request_date'); }])
+                           ->withSum('maintenanceLogs as total_maintenance_cost', 'cost')
+                           ->get();
+                           
+            $dataRows = $assets->map(function($asset) {
+                $pengajuan = $asset->pengajuanAsets->first();
+                $purchaseCost = $asset->purchase_cost ?? 0;
+                $maintenanceCost = $asset->total_maintenance_cost ?? 0;
+                $tco = $purchaseCost + $maintenanceCost;
+                
+                return [
+                    $asset->asset_tag,
+                    $asset->asset_name,
+                    $asset->department,
+                    $pengajuan?->request_date?->format('d/m/Y') ?? '-',
+                    $pengajuan?->requester_name ?? '-',
+                    $asset->asset_tag, // Since Target Asset is the asset itself
+                    $pengajuan?->item_type ?? $pengajuan?->title ?? '-',
+                    $pengajuan?->quantity ?? '-',
+                    $purchaseCost,
+                    $maintenanceCost,
+                    $tco,
+                ];
+            })->toArray();
+        }
+        elseif ($type === 'ticket_per_asset') {
+            $columns = ['Asset Tag', 'Nama Aset', 'Departemen', 'Jumlah Tiket/Perbaikan', 'Total Biaya Maintenance (Rp)'];
+            
+            $query = Asset::withCount(['tickets' => function($q) use ($start, $end) {
+                                if ($start) $q->whereDate('created_at', '>=', $start);
+                                if ($end) $q->whereDate('created_at', '<=', $end);
+                            }])
+                            ->withSum(['maintenanceLogs as total_maintenance_cost' => function($q) use ($start, $end) {
+                                if ($start) $q->whereDate('performed_at', '>=', $start);
+                                if ($end) $q->whereDate('performed_at', '<=', $end);
+                            }], 'cost')
+                            ->whereHas('tickets', function($q) use ($start, $end) {
+                                if ($start) $q->whereDate('created_at', '>=', $start);
+                                if ($end) $q->whereDate('created_at', '<=', $end);
+                            })
+                            ->orderByDesc('tickets_count');
+                            
+            $dataRows = $query->get()->map(function($asset) {
+                return [
+                    $asset->asset_tag,
+                    $asset->asset_name,
+                    $asset->department,
+                    $asset->tickets_count,
+                    $asset->total_maintenance_cost ?? 0,
+                ];
+            })->toArray();
+        }
+        elseif ($type === 'ticket_per_dept') {
+            $columns = ['Departemen', 'Jumlah Tiket', 'Total Biaya Maintenance (Rp)'];
+            
+            $ticketQuery = \App\Models\Ticket::select('reporter_department', DB::raw('COUNT(*) as total_tickets'))
+                ->whereNotNull('reporter_department')
+                ->where('reporter_department', '!=', '');
+                
+            if ($start) $ticketQuery->whereDate('created_at', '>=', $start);
+            if ($end) $ticketQuery->whereDate('created_at', '<=', $end);
+            
+            $ticketStats = $ticketQuery->groupBy('reporter_department')->get()->keyBy('reporter_department');
+            
+            $costQuery = \App\Models\AssetMaintenanceLog::select('tickets.reporter_department', DB::raw('SUM(asset_maintenance_logs.cost) as total_cost'))
+                ->join('tickets', 'asset_maintenance_logs.ticket_id', '=', 'tickets.id')
+                ->whereNotNull('tickets.reporter_department')
+                ->where('tickets.reporter_department', '!=', '');
+                
+            if ($start) $costQuery->whereDate('asset_maintenance_logs.performed_at', '>=', $start);
+            if ($end) $costQuery->whereDate('asset_maintenance_logs.performed_at', '<=', $end);
+            
+            $costStats = $costQuery->groupBy('tickets.reporter_department')->get()->keyBy('reporter_department');
+            
+            $departments = $ticketStats->keys()->merge($costStats->keys())->unique();
+            
+            foreach ($departments as $dept) {
+                $tickets = $ticketStats->has($dept) ? $ticketStats[$dept]->total_tickets : 0;
+                $cost = $costStats->has($dept) ? $costStats[$dept]->total_cost : 0;
+                $dataRows[] = [
+                    $dept,
+                    $tickets,
+                    $cost,
+                ];
+            }
+            
+            // Sort by total tickets desc
+            usort($dataRows, function($a, $b) {
+                return $b[1] <=> $a[1];
+            });
         }
         elseif ($type === 'berita_acara_recap') {
             $columns = ['No BA', 'Tanggal', 'Penerima', 'Departemen', 'Aset Terkait', 'Status'];

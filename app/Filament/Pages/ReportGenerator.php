@@ -40,6 +40,9 @@ class ReportGenerator extends Page implements HasForms
                             ->options([
                                 'asset_per_dept' => 'Rekap Aset per Departemen',
                                 'asset_overall' => 'Rekap Aset Keseluruhan (Total & Status)',
+                                'asset_tco' => 'Total Biaya Kepemilikan (TCO) per Aset',
+                                'ticket_per_asset' => 'Rekap Frekuensi Perbaikan & Tiket per Aset',
+                                'ticket_per_dept' => 'Rekap Tiket Maintenance per Departemen',
                                 'pengajuan_per_dept' => 'Rekap Pengajuan per Departemen & User',
                                 'pengajuan_recap' => 'Rekap Riwayat Pengajuan (Berdasarkan Rentang Waktu)',
                                 'berita_acara_recap' => 'Rekap Riwayat Berita Acara',
@@ -49,10 +52,10 @@ class ReportGenerator extends Page implements HasForms
                             ->reactive(),
                         DatePicker::make('start_date')
                             ->label('Tanggal Mulai')
-                            ->hidden(fn (\Filament\Forms\Get $get) => !in_array($get('report_type'), ['pengajuan_recap', 'berita_acara_recap', 'disposal_recap'])),
+                            ->hidden(fn (\Filament\Forms\Get $get) => !in_array($get('report_type'), ['pengajuan_recap', 'berita_acara_recap', 'disposal_recap', 'ticket_per_asset', 'ticket_per_dept'])),
                         DatePicker::make('end_date')
                             ->label('Tanggal Sampai')
-                            ->hidden(fn (\Filament\Forms\Get $get) => !in_array($get('report_type'), ['pengajuan_recap', 'berita_acara_recap', 'disposal_recap'])),
+                            ->hidden(fn (\Filament\Forms\Get $get) => !in_array($get('report_type'), ['pengajuan_recap', 'berita_acara_recap', 'disposal_recap', 'ticket_per_asset', 'ticket_per_dept'])),
                     ])->columns(2)
             ])
             ->statePath('data');
