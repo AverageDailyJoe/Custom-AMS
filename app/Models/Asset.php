@@ -253,6 +253,10 @@ class Asset extends Model
             'status' => $newStatus,
             'primary_user' => null,
             'secondary_user' => null,
+            'department' => null,
+            'position' => null,
+            'location_id' => null,
+            'room' => null,
         ]);
 
         return $checkout;
