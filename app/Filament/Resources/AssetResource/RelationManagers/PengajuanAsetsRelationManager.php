@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\AssetResource\RelationManagers;
 
-use App\Models\PengajuanAset;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
