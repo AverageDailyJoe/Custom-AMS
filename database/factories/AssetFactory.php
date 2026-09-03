@@ -17,7 +17,6 @@ class AssetFactory extends Factory
         return [
             'asset_tag' => 'GTK-' . fake()->unique()->numerify('##-##-##'),
             'asset_model_id' => AssetModel::factory(),
-            'category_id' => Category::factory(),
             'location_id' => Location::factory(),
             'status' => 'in_stock',
             'purchase_cost' => fake()->numberBetween(5000000, 25000000),

@@ -14,8 +14,9 @@ class AssetDepreciationTest extends TestCase
     public function test_standard_laptop_depreciation_rate_is_25_percent(): void
     {
         $category = Category::factory()->create(['name' => 'LAPTOP']);
+        $assetModel = \App\Models\AssetModel::factory()->create(['category_id' => $category->id]);
         $asset = Asset::factory()->create([
-            'category_id' => $category->id,
+            'asset_model_id' => $assetModel->id,
             'purchase_cost' => 10000000,
             'purchase_year' => (int) date('Y') - 2, // 2 years old
         ]);
@@ -28,8 +29,9 @@ class AssetDepreciationTest extends TestCase
     public function test_server_depreciation_rate_is_20_percent(): void
     {
         $category = Category::factory()->create(['name' => 'SERVER']);
+        $assetModel = \App\Models\AssetModel::factory()->create(['category_id' => $category->id]);
         $asset = Asset::factory()->create([
-            'category_id' => $category->id,
+            'asset_model_id' => $assetModel->id,
             'purchase_cost' => 20000000,
             'purchase_year' => (int) date('Y') - 5, // 5 years old (100% depreciated)
         ]);
@@ -42,8 +44,9 @@ class AssetDepreciationTest extends TestCase
     public function test_depreciation_percent_never_exceeds_100_percent(): void
     {
         $category = Category::factory()->create(['name' => 'LAPTOP']);
+        $assetModel = \App\Models\AssetModel::factory()->create(['category_id' => $category->id]);
         $asset = Asset::factory()->create([
-            'category_id' => $category->id,
+            'asset_model_id' => $assetModel->id,
             'purchase_cost' => 12000000,
             'purchase_year' => (int) date('Y') - 10, // 10 years old (way past useful life)
         ]);
