@@ -17,11 +17,11 @@ class PengajuanAsetResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-plus';
 
-    protected static ?string $navigationLabel = 'Pengajuan Aset Baru';
+    protected static ?string $navigationLabel = 'Pengajuan Baru';
 
-    protected static ?string $modelLabel = 'Pengajuan Aset Baru';
+    protected static ?string $modelLabel = 'Pengajuan Baru';
 
-    protected static ?string $pluralModelLabel = 'Pengajuan Aset Baru';
+    protected static ?string $pluralModelLabel = 'Pengajuan Baru';
 
     protected static ?int $navigationSort = 6;
 
@@ -232,7 +232,7 @@ class PengajuanAsetResource extends Resource
             Forms\Components\Section::make('Alasan & Dokumen Lampiran')
                 ->schema([
                     Forms\Components\Textarea::make('reason')
-                        ->label('Alasan & Keperluan Pengajuan Aset Baru')
+                        ->label('Alasan & Keperluan Pengajuan Baru')
                         ->placeholder('Misal: Untuk penambahan karyawan baru di divisi Marketing atau unit lama sudah rusak berat.')
                         ->rows(4)
                         ->required(),

@@ -60,7 +60,7 @@ Saat ini, tumpukan teknologi berbasis **Laravel 13 + Filament v3 + Livewire SSR*
 - **Dashboard & Analytical Widgets**: Grafik tiket harian, statistik aset per lokasi, SLA tracker.
 - **Aset Management**: Master data aset, histori checkout/checkin, cetak Stiker Barcode/QR 103.
 - **IT Service Desk Desk**: Pengelolaan tiket, penugasan teknisi IT, penyesuaian SLA & status.
-- **Pengajuan & Procurement (PPB / LBS)**: Form pengajuan aset baru, kalkulasi biaya tambahan, cetak PDF PPB/LBS.
+- **Pengajuan & Procurement (PPB / LBS)**: Form Pengajuan Baru, kalkulasi biaya tambahan, cetak PDF PPB/LBS.
 - **Berita Acara & Disposal**: Berita acara perbaikan, penonaktifan aset (disposal), cetak form resmi PDF.
 
 ---
