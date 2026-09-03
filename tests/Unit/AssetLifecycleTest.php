@@ -14,6 +14,9 @@ class AssetLifecycleTest extends TestCase
 
     public function test_checkout_to_user_creates_record_and_updates_asset_status(): void
     {
+        $admin = \App\Models\User::factory()->create();
+        $this->actingAs($admin);
+
         $asset = Asset::factory()->create([
             'status' => 'in_stock',
         ]);
@@ -45,6 +48,9 @@ class AssetLifecycleTest extends TestCase
 
     public function test_checkin_resets_asset_fields_and_closes_checkout(): void
     {
+        $admin = \App\Models\User::factory()->create();
+        $this->actingAs($admin);
+
         $asset = Asset::factory()->create(['status' => 'in_stock']);
         $location = Location::factory()->create();
 

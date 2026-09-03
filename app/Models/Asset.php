@@ -200,7 +200,7 @@ class Asset extends Model
      */
     public function checkoutToUser(?string $primaryUser = null, ?string $secondaryUser = null, ?string $department = null, ?string $position = null, ?int $locationId = null, ?string $room = null, ?User $user = null, ?string $notes = null, $attachments = null): Checkout
     {
-        $adminId = Auth::id() ?: 1;
+        $adminId = Auth::id();
         $attachmentsArray = is_array($attachments) ? $attachments : ($attachments ? [$attachments] : null);
 
         $checkout = $this->checkouts()->create([
@@ -236,7 +236,7 @@ class Asset extends Model
      */
     public function checkin(?string $notes = null, $attachments = null, string $newStatus = 'in_stock', ?array $componentChecklist = null): ?Checkout
     {
-        $adminId = Auth::id() ?: 1;
+        $adminId = Auth::id();
         $checkout = $this->currentCheckout()->first();
         $attachmentsArray = is_array($attachments) ? $attachments : ($attachments ? [$attachments] : null);
 
