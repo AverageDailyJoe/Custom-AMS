@@ -41,8 +41,8 @@ class UserPanelProvider extends PanelProvider
             ->id('user')
             ->path('user')
             ->login(\App\Filament\Pages\Auth\CustomLogin::class)
-            // Registration & password reset ditangani oleh OTP custom routes (/register, /forgot-password)
-            // JANGAN aktifkan ->registration() dan ->passwordReset() karena mem-bypass keamanan OTP
+            ->registration()   // OTP disabled sementara, pakai registrasi manual Filament
+            ->passwordReset()  // OTP disabled sementara, pakai reset password manual Filament
             ->brandName('GTK Portal - Service User')
             ->brandLogo(fn () => asset('images/logo.png'))
             ->brandLogoHeight('2.5rem')
