@@ -39,12 +39,12 @@ class AdminPanelProvider extends PanelProvider
 
         if (!app()->environment(['local', 'testing'])) {
             $middleware = array_merge($middleware, [PreventRequestForgery::class]);
-        
-FilamentView::registerRenderHook(
-    PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
-    fn (): string => view('auth.login-links')->render()
-);
-}
+        }
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+            fn (): string => view('auth.login-links')->render()
+        );
 
 
         return $panel

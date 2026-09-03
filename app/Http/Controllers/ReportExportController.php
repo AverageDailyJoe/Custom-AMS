@@ -73,7 +73,7 @@ class ReportExportController extends Controller
         }
         elseif ($type === 'asset_tco') {
             $columns = ['Asset Tag', 'Nama Aset', 'Departemen', 'Tanggal Pengajuan', 'Nama Pemohon', 'Target Asset', 'Item', 'Qty', 'Biaya Pembelian (Rp)', 'Total Biaya Maintenance (Rp)', 'Total TCO (Rp)'];
-            $assets = Asset::with(['pengajuanAsets' => function($q) { $q->oldest('request_date'); }])
+            $assets = Asset::with(['assetModel', 'pengajuanAsets' => function($q) { $q->oldest('request_date'); }])
                            ->withSum('maintenanceLogs as total_maintenance_cost', 'cost')
                            ->get();
                            
@@ -85,7 +85,7 @@ class ReportExportController extends Controller
                 
                 return [
                     $asset->asset_tag,
-                    $asset->asset_name,
+                    $asset->assetModel?->full_name ?? $asset->asset_tag,
                     $asset->department,
                     $pengajuan?->request_date?->format('d/m/Y') ?? '-',
                     $pengajuan?->requester_name ?? '-',
@@ -100,7 +100,8 @@ class ReportExportController extends Controller
         }
         elseif ($type === 'ticket_per_asset') {
             $columns = ['Asset Tag', 'Nama Aset', 'Departemen', 'Jumlah Tiket/Perbaikan', 'Total Biaya Maintenance (Rp)'];
-            
+
+            // Eager load assetModel for display name
             $query = Asset::withCount(['tickets' => function($q) use ($start, $end) {
                                 if ($start) $q->whereDate('created_at', '>=', $start);
                                 if ($end) $q->whereDate('created_at', '<=', $end);
@@ -115,10 +116,10 @@ class ReportExportController extends Controller
                             })
                             ->orderByDesc('tickets_count');
                             
-            $dataRows = $query->get()->map(function($asset) {
+            $dataRows = $query->with('assetModel')->get()->map(function($asset) {
                 return [
                     $asset->asset_tag,
-                    $asset->asset_name,
+                    $asset->assetModel?->full_name ?? $asset->asset_tag,
                     $asset->department,
                     $asset->tickets_count,
                     $asset->total_maintenance_cost ?? 0,
@@ -165,18 +166,18 @@ class ReportExportController extends Controller
             });
         }
         elseif ($type === 'berita_acara_recap') {
-            $columns = ['No BA', 'Tanggal', 'Penerima', 'Departemen', 'Aset Terkait', 'Status'];
+            $columns = ['No BA', 'Tanggal', 'Kategori', 'Penerima', 'Departemen', 'Aset Terkait'];
             $query = BeritaAcara::query()->orderBy('letter_date', 'desc');
             if ($start) $query->whereDate('letter_date', '>=', $start);
             if ($end) $query->whereDate('letter_date', '<=', $end);
             
             $dataRows = $query->get()->map(fn($row) => [
                 $row->letter_number, 
-                $row->letter_date ? \Carbon\Carbon::parse($row->letter_date)->format('Y-m-d') : '-', 
+                $row->letter_date ? \Carbon\Carbon::parse($row->letter_date)->format('d/m/Y') : '-', 
+                $row->category ?? '-',
                 $row->party2_name, 
                 $row->party2_department, 
-                $row->asset_tag ?? '-', 
-                $row->status ?? '-'
+                $row->asset_tag ?? '-',
             ])->toArray();
         }
         elseif ($type === 'disposal_recap') {

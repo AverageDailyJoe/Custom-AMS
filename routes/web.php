@@ -35,6 +35,10 @@ Route::get('/gondowangi/login', function () {
     \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
 ])->name('gondowangi.login');
 
+Route::post('/gondowangi/login', function () {
+    return redirect('/gondowangi/login');
+});
+
 Route::get('/login', function () {
     return redirect('/gondowangi/login');
 })->name('login');
