@@ -258,7 +258,6 @@ class AssetResource extends Resource
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('assetModel.name')
                     ->label('Model')
-                    ->formatStateUsing(fn ($record) => "{$record->assetModel?->manufacturer} {$record->assetModel?->name}")
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('assetModel.category.name')
