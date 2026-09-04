@@ -32,29 +32,16 @@ class RekapPenambahanAsetController extends Controller
         // BAGIAN 1: PENAMBAHAN ASET PER QUARTER PER TAHUN
         // ============================================================
 
-        // Ambil semua tahun unik dari purchase_date
-        $years = Asset::whereNotNull('purchase_date')
-            ->selectRaw('EXTRACT(YEAR FROM purchase_date) as year')
-            ->distinct()
-            ->orderBy('year')
-            ->pluck('year')
-            ->map(fn ($y) => (int) $y)
-            ->values()
-            ->toArray();
+        // Ambil rentang tahun dari request (user pilih di Generate Laporan)
+        $yearFrom = (int) $request->input('year_from', date('Y') - 2);
+        $yearTo = (int) $request->input('year_to', date('Y'));
 
-        // Fallback: juga cek purchase_year jika purchase_date kosong
-        $yearsFromPurchaseYear = Asset::whereNull('purchase_date')
-            ->whereNotNull('purchase_year')
-            ->distinct()
-            ->pluck('purchase_year')
-            ->map(fn ($y) => (int) $y)
-            ->toArray();
-
-        $years = collect(array_merge($years, $yearsFromPurchaseYear))->unique()->sort()->values()->toArray();
-
-        if (empty($years)) {
-            $years = [(int) date('Y')];
+        // Pastikan year_from <= year_to
+        if ($yearFrom > $yearTo) {
+            [$yearFrom, $yearTo] = [$yearTo, $yearFrom];
         }
+
+        $years = range($yearFrom, $yearTo);
 
         // Hitung data per tahun per quarter
         $yearlyData = [];
