@@ -168,8 +168,11 @@ class RekapPenambahanAsetController extends Controller
         $sheet->getRowDimension($dataRow)->setRowHeight(8);
         $dataRow++;
 
-        // Ambil semua kategori
-        $categories = Category::orderBy('name')->pluck('name', 'id')->toArray();
+        // Ambil semua kategori dan kelompokkan secara case-insensitive (e.g., LAPTOP & Laptop digabung)
+        $categoriesGrouped = Category::all()
+            ->filter(fn($cat) => !empty(trim($cat->name)) && trim($cat->name) !== '-')
+            ->groupBy(fn($cat) => strtoupper(trim($cat->name)))
+            ->sortKeys();
 
         // Build header columns: JENIS ASSET | Q1 Y1 | Q2 Y1 | Q3 Y1 | Q4 Y1 | TOTAL Y1 | Q1 Y2 | ...
         $headerRow = $dataRow;
@@ -195,7 +198,8 @@ class RekapPenambahanAsetController extends Controller
         $dataRow++;
 
         // Data rows per category
-        foreach ($categories as $catId => $catName) {
+        foreach ($categoriesGrouped as $catName => $catGroup) {
+            $catIds = $catGroup->pluck('id')->toArray();
             $colIndex = 1;
             $bgColor = ($dataRow % 2 === 0) ? self::COLOR_WHITE : self::COLOR_LIGHT;
 
@@ -210,8 +214,8 @@ class RekapPenambahanAsetController extends Controller
                     $startMonth = ($q - 1) * 3 + 1;
                     $endMonth = $q * 3;
 
-                    $count = Asset::whereHas('assetModel', function ($query) use ($catId) {
-                        $query->where('category_id', $catId);
+                    $count = Asset::whereHas('assetModel', function ($query) use ($catIds) {
+                        $query->whereIn('category_id', $catIds);
                     })->where(function ($query) use ($year, $startMonth, $endMonth) {
                         $query->where(function ($q2) use ($year, $startMonth, $endMonth) {
                             $q2->whereNotNull('purchase_date')

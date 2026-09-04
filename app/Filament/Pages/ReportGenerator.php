@@ -16,7 +16,7 @@ class ReportGenerator extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-down';
     protected static ?string $navigationGroup = 'Laporan';
-    protected static ?string $title = 'Generate Laporan Ekspor';
+    protected static ?string $title = 'Generate Report';
     protected static ?int $navigationSort = 2;
 
     protected static string $view = 'filament.pages.report-generator';
