@@ -129,6 +129,16 @@ class ListAssets extends ListRecords
                     return redirect()->away($url);
                 }),
 
+            Actions\Action::make('excel_penambahan_aset')
+                ->label('Laporan Penambahan Aset (Excel)')
+                ->icon('heroicon-o-chart-bar')
+                ->color('info')
+                ->tooltip('Download laporan Penambahan Aset per Quarter & Jenis Aset dalam format Excel (.xlsx)')
+                ->action(function ($livewire) {
+                    $url = route('rekap-penambahan-aset.excel');
+                    $livewire->js("window.open('{$url}', '_blank');");
+                }),
+
             Actions\CreateAction::make()->label('Tambah Aset Baru'),
         ];
     }

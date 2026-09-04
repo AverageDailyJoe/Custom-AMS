@@ -10,7 +10,8 @@
         "chillerlan/php-qrcode": "^6.0",
         "filament/filament": "^3.0",
         "laravel/framework": "^13.8",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "phpoffice/phpspreadsheet": "^4.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

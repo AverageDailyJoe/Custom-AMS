@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/rekap-aset/excel', [HandoverFormController::class, 'exportAsetExcel'])->name('rekap-aset.excel');
     Route::get('/admin/rekap-tiket/pdf', [HandoverFormController::class, 'downloadRekapTiket'])->name('rekap-tiket.pdf');
     Route::get('/admin/laporan/download', [\App\Http\Controllers\ReportExportController::class, 'download'])->name('laporan.download');
+    Route::get('/admin/rekap-penambahan-aset/excel', [\App\Http\Controllers\RekapPenambahanAsetController::class, 'export'])->name('rekap-penambahan-aset.excel');
     Route::get('/admin/assets/sticker-103', [HandoverFormController::class, 'downloadSticker103'])->name('assets.sticker-103.bulk');
     Route::get('/admin/assets/{asset}/sticker-103', [HandoverFormController::class, 'downloadSticker103'])->name('assets.sticker-103');
 
