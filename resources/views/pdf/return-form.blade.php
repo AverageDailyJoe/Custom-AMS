@@ -259,7 +259,7 @@
             </tr>
             <tr>
                 <th>TIPE / MODEL UNIT</th>
-                <td>{{ $checkout->asset->assetModel?->manufacturer }} {{ $checkout->asset->assetModel?->name }}
+                <td>{{ $checkout->asset->assetModel?->name }}
                     ({{ $checkout->asset->assetModel?->category?->name }})</td>
             </tr>
             <tr>

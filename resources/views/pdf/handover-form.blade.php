@@ -117,7 +117,7 @@
             </tr>
             <tr>
                 <th>TIPE / MODEL UNIT</th>
-                <td>{{ $checkout->asset->assetModel?->manufacturer }} {{ $checkout->asset->assetModel?->name }} ({{ $checkout->asset->assetModel?->category?->name }})</td>
+                <td>{{ $checkout->asset->assetModel?->name }} ({{ $checkout->asset->assetModel?->category?->name }})</td>
             </tr>
             <tr>
                 <th>SERIAL NUMBER (SN)</th>

@@ -101,15 +101,10 @@ class AssetResource extends Resource
                     Forms\Components\TextInput::make('room')
                         ->label('Ruangan / Detail Lokasi')
                         ->placeholder('Contoh: OFFICE ATAS, RUANGAN PRODUKSI'),
-                    Forms\Components\TextInput::make('department')
-                        ->label('Departemen')
-                        ->placeholder('Contoh: PPIC, FINANCE & ACCOUNTING, PURCHASING'),
-                    Forms\Components\TextInput::make('position')
-                        ->label('Posisi / Jabatan')
-                        ->placeholder('Contoh: Data Analyst, SPV HRD'),
                 ])->columns(2),
 
             Forms\Components\Section::make('Pengguna & Penanggung Jawab')
+                ->description('Informasi Karyawan / Pemegang Unit Aset')
                 ->schema([
                     Forms\Components\TextInput::make('primary_user')
                         ->label('Pengguna 1 (Utama)')
@@ -117,6 +112,12 @@ class AssetResource extends Resource
                     Forms\Components\TextInput::make('secondary_user')
                         ->label('Pengguna 2 (Pendamping)')
                         ->placeholder('Nama Pengguna Cadangan / Pendamping'),
+                    Forms\Components\TextInput::make('department')
+                        ->label('Departemen')
+                        ->placeholder('Contoh: PPIC, FINANCE & ACCOUNTING, PURCHASING'),
+                    Forms\Components\TextInput::make('position')
+                        ->label('Posisi / Jabatan Karyawan')
+                        ->placeholder('Contoh: Data Analyst, SPV HRD'),
                 ])->columns(2),
 
             Forms\Components\Section::make('Spesifikasi Hardware')

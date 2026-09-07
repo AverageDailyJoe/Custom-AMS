@@ -196,7 +196,7 @@ class HandoverFormController extends Controller
                 fputcsv($file, [
                     $asset->asset_tag,
                     $asset->serial ?? '-',
-                    ($asset->assetModel?->manufacturer . ' ' . $asset->assetModel?->name),
+                    ($asset->assetModel?->name ?? '-'),
                     $asset->assetModel?->category?->name ?? '-',
                     $asset->processor ?? '-',
                     $asset->ram ?? '-',

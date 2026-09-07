@@ -180,7 +180,7 @@
             <tbody>
                 <tr>
                     <td><strong>{{ $beritaAcara->asset_tag ?? ($beritaAcara->asset?->asset_tag ?? '-') }}</strong></td>
-                    <td>{{ $beritaAcara->asset_name ?? ($beritaAcara->asset?->assetModel?->manufacturer . ' ' . $beritaAcara->asset?->assetModel?->name) }}</td>
+                    <td>{{ $beritaAcara->asset_name ?? ($beritaAcara->asset?->assetModel?->name) }}</td>
                     <td>{{ $beritaAcara->quantity ?? '1 Unit' }}</td>
                     <td>{{ $beritaAcara->completeness ?? '1 Unit Laptop + Charger' }}</td>
                 </tr>
