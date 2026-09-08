@@ -151,7 +151,9 @@ class PengajuanAsetResource extends Resource
                                         'Smartphone' => 'Handphone / Smartphone',
                                         'Sparepart dan Komponen utama' => 'Sparepart & Komponen Utama (RAM / SSD / HDD / Mobo)',
                                         'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Headset / Adapter)',
-                                        'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi',
+                                        'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi (RJ45 / Kabel LAN / Ties)',
+                                        'Peralatan IT' => 'Peralatan & Tools IT (Solder / Tang Crimping / LAN Tester / Obeng Set)',
+                                        'Network Equipment' => 'Perangkat Jaringan & Infrastructure (Switch / Router / AP)',
                                         'Software/Lisensi' => 'Software / Lisensi Aplikasi',
                                         'Lainnya' => 'Lain-lain',
                                     ])
@@ -381,7 +383,9 @@ class PengajuanAsetResource extends Resource
                         'Smartphone' => 'Handphone / Smartphone',
                         'Komponen Utama' => 'Sparepart & Komponen Utama (RAM / SSD / Mobo)',
                         'Peripheral IT' => 'Peripheral IT (Keyboard / Mouse / Adapter)',
-                        'Aksesoris IT' => 'Aksesoris IT & Kabel',
+                        'Aksesoris IT' => 'Aksesoris IT & Kabel Transmisi (RJ45 / Kabel LAN / Ties)',
+                        'Peralatan IT' => 'Peralatan & Tools IT (Solder / Tang Crimping / LAN Tester / Obeng Set)',
+                        'Network Equipment' => 'Perangkat Jaringan & Infrastructure (Switch / Router / AP)',
                         'Software' => 'Software / Lisensi',
                         'Lainnya' => 'Lain-lain',
                     ])
