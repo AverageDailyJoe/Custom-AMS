@@ -16,6 +16,7 @@ class PengajuanAset extends Model
         'requester_name',
         'requester_department',
         'asset_id',
+        'target_asset_holder',
         'area',
         'item_type',
         'quantity',
@@ -59,6 +60,20 @@ class PengajuanAset extends Model
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (PengajuanAset $pengajuan) {
+            if ($pengajuan->asset_id && empty($pengajuan->target_asset_holder)) {
+                $asset = Asset::find($pengajuan->asset_id);
+                if ($asset) {
+                    $pengajuan->target_asset_holder = $asset->holder_name !== '-' ? $asset->holder_name : ($asset->location?->name ?? 'In Stock');
+                }
+            }
+        });
     }
 
     public static function generateRequestNumber(): string

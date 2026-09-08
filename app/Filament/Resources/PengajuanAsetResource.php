@@ -319,7 +319,15 @@ class PengajuanAsetResource extends Resource
 
                 Tables\Columns\TextColumn::make('asset.asset_tag')
                     ->label('Target Aset')
-                    ->formatStateUsing(fn ($record) => $record->asset ? "{$record->asset->asset_tag} (" . ($record->asset->holder_name !== '-' ? $record->asset->holder_name : ($record->asset->location?->name ?? 'Aset')) . ")" : '-')
+                    ->formatStateUsing(function ($record) {
+                        if (!$record->asset) {
+                            return '-';
+                        }
+                        $holder = !empty($record->target_asset_holder)
+                            ? $record->target_asset_holder
+                            : ($record->asset->holder_name !== '-' ? $record->asset->holder_name : ($record->asset->location?->name ?? 'Aset'));
+                        return "{$record->asset->asset_tag} ({$holder})";
+                    })
                     ->searchable()
                     ->toggleable(),
 
