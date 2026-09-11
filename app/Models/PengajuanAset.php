@@ -26,6 +26,9 @@ class PengajuanAset extends Model
         'specification_requested',
         'estimated_cost',
         'items',
+        'has_lbs',
+        'lbs_items',
+        'lbs_notes',
         'shipping_cost',
         'service_fee',
         'other_fee',
@@ -47,8 +50,10 @@ class PengajuanAset extends Model
         'other_fee' => 'decimal:2',
         'uang_muka' => 'decimal:2',
         'adjustment_amount' => 'decimal:2',
+        'has_lbs' => 'boolean',
         'attachments' => 'array',
         'items' => 'array',
+        'lbs_items' => 'array',
         'additional_fees' => 'array',
     ];
 
@@ -197,11 +202,43 @@ class PengajuanAset extends Model
     }
 
     /**
+     * Get list of LBS realization items (if filled), or fall back to PPB items.
+     */
+    public function getLbsItemsList(): array
+    {
+        if ($this->has_lbs && is_array($this->lbs_items) && count($this->lbs_items) > 0) {
+            $formatted = [];
+            foreach ($this->lbs_items as $item) {
+                $qty = (int) ($item['quantity'] ?? 1);
+                if ($qty < 1) $qty = 1;
+                $unitCost = (float) ($item['unit_cost'] ?? $item['estimated_cost'] ?? 0);
+                $total = $unitCost * $qty;
+                if (isset($item['ppn_amount']) && (float)$item['ppn_amount'] > 0) {
+                    $total += (float)$item['ppn_amount'];
+                }
+
+                $formatted[] = [
+                    'title' => $item['title'] ?? 'Item Realisasi LBS',
+                    'lbs_title' => $item['title'] ?? null,
+                    'item_type' => $item['item_type'] ?? 'Laptop',
+                    'quantity' => $qty,
+                    'unit_cost' => $unitCost,
+                    'total_cost' => $total,
+                    'specification' => $item['specification'] ?? '',
+                ];
+            }
+            return $formatted;
+        }
+
+        return $this->getItemDetailsList();
+    }
+
+    /**
      * Get combined list of item details + additional fee rows.
      */
-    public function getAllRequestItemsList(): array
+    public function getAllRequestItemsList(bool $forLbs = false): array
     {
-        $items = $this->getItemDetailsList();
+        $items = ($forLbs || $this->has_lbs) ? $this->getLbsItemsList() : $this->getItemDetailsList();
         $fees = $this->getAdditionalFeesList();
 
         return array_merge($items, $fees);

@@ -91,12 +91,12 @@ class PengajuanAsetResource extends Resource
                     ]),
                 ]),
 
-            Forms\Components\Section::make('Item & Rincian Pengajuan Barang')
-                ->description('Gunakan tombol "+ Tambah Item / Varian Perangkat" di bawah jika terdapat lebih dari satu barang atau varian.')
+            Forms\Components\Section::make('📋 [PPB] Permohonan Pembelian Barang (Pengajuan Awal & Budget)')
+                ->description('Bagian ini diisi saat pertama kali mengajukan budget / permohonan uang muka ke atasan.')
                 ->schema([
                     Forms\Components\TextInput::make('title')
-                        ->label('Judul / Perihal Pengajuan Aset')
-                        ->placeholder('Misal: Pengajuan Laptop & Perangkat IT Baru untuk Digital Marketing')
+                        ->label('Judul / Perihal Pengajuan Aset (PPB)')
+                        ->placeholder('Misal: Pengajuan 5 Unit Laptop Lenovo T480')
                         ->required()
                         ->columnSpanFull(),
 
@@ -122,8 +122,8 @@ class PengajuanAsetResource extends Resource
                     ]),
 
                     Forms\Components\Repeater::make('items')
-                        ->label('Rincian Barang & Spesifikasi Teknis')
-                        ->addActionLabel('Tambah Item / Varian Perangkat (+)')
+                        ->label('Rincian Barang & Estimasi Biaya PPB (Pengajuan Awal)')
+                        ->addActionLabel('Tambah Item PPB (+)')
                         ->reorderable()
                         ->cloneable()
                         ->collapsible()
@@ -133,13 +133,8 @@ class PengajuanAsetResource extends Resource
                             Forms\Components\Grid::make(3)->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->label('Nama / Judul Item (Di PPB)')
-                                    ->placeholder('Misal: Laptop Intel Core i7 14th Gen')
+                                    ->placeholder('Misal: Laptop Intel Core i7')
                                     ->required(),
-                                    
-                                Forms\Components\TextInput::make('lbs_title')
-                                    ->label('Judul / Uraian Khusus di LBS (Opsional)')
-                                    ->placeholder('Misal: Pembelian Laptop Intel Core i7')
-                                    ->helperText('Jika kosong, akan mengikuti judul PPB di atas.'),
 
                                 Forms\Components\Select::make('item_type')
                                     ->label('Jenis Perangkat / Asset')
@@ -161,7 +156,7 @@ class PengajuanAsetResource extends Resource
                                     ->required(),
 
                                 Forms\Components\TextInput::make('quantity')
-                                    ->label('Jumlah Unit')
+                                    ->label('Jumlah Unit (Estimasi)')
                                     ->numeric()
                                     ->default(1)
                                     ->required()
@@ -178,17 +173,76 @@ class PengajuanAsetResource extends Resource
 
                                 Forms\Components\TextInput::make('specification')
                                     ->label('Spesifikasi Teknis Yang Diminta')
-                                    ->placeholder('Misal: Intel Core i7, RAM 16GB, SSD 512GB, Windows 11 Pro'),
+                                    ->placeholder('Misal: Intel Core i7, RAM 16GB, SSD 512GB'),
                             ]),
                         ]),
+
+                    Forms\Components\TextInput::make('uang_muka')
+                        ->label('Nominal Pengajuan Uang Muka PPB (Rp)')
+                        ->helperText('Nominal uang muka yang dimohonkan/diterima di awal.')
+                        ->numeric()
+                        ->prefix('Rp')
+                        ->placeholder('0')
+                        ->default(0)
+                        ->nullable(),
                 ]),
 
-            Forms\Components\Section::make('Rincian Biaya Tambahan Transaksi (Dynamic / Custom Fees)')
-                ->description('Gunakan tombol "+ Tambah Biaya Lain" untuk memasukkan rincian biaya transaksi (Misal: Biaya Layanan Tokopedia, Ongkir, Asuransi, Fee Admin) agar 100% transparan.')
+            Forms\Components\Section::make('📄 [LBS] Laporan Biaya Settlement (Realisasi Belanja & Nota/Faktur)')
+                ->description('Bagian ini diisi setelah barang selesai dibeli untuk mempertanggungjawabkan realisasi nota/faktur pajak aktual & selisih/balance transfer.')
                 ->collapsible()
                 ->schema([
+                    Forms\Components\Toggle::make('has_lbs')
+                        ->label('Aktifkan / Isi Realisasi Belanja LBS (Settlement Nota/Faktur)')
+                        ->helperText('Aktifkan jika barang sudah dibeli dan ingin mencetak LBS dengan rincian nota/faktur aktual.')
+                        ->live(),
+
+                    Forms\Components\Repeater::make('lbs_items')
+                        ->label('Rincian Barang & Harga Realisasi Aktual (Di Nota / Faktur Pajak)')
+                        ->addActionLabel('Tambah Item Realisasi LBS (+)')
+                        ->reorderable()
+                        ->cloneable()
+                        ->collapsible()
+                        ->defaultItems(1)
+                        ->columnSpanFull()
+                        ->visible(fn (\Filament\Forms\Get $get) => (bool) $get('has_lbs'))
+                        ->schema([
+                            Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\TextInput::make('title')
+                                    ->label('Nama Barang di Nota / Faktur')
+                                    ->placeholder('Misal: Laptop Lenovo T480 14"')
+                                    ->required(),
+
+                                Forms\Components\TextInput::make('quantity')
+                                    ->label('Jumlah Unit Aktual')
+                                    ->numeric()
+                                    ->default(1)
+                                    ->required()
+                                    ->live(),
+
+                                Forms\Components\TextInput::make('unit_cost')
+                                    ->label('Harga Dasar Per Unit (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->live(),
+                            ]),
+
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\TextInput::make('ppn_amount')
+                                    ->label('Total PPN / Pajak Tambahan Nota (Rp)')
+                                    ->numeric()
+                                    ->prefix('Rp')
+                                    ->placeholder('0')
+                                    ->helperText('Nominal PPN 11% / Pajak faktur jika ada.'),
+
+                                Forms\Components\TextInput::make('specification')
+                                    ->label('Keterangan Nota / No. Faktur / Garansi')
+                                    ->placeholder('Misal: Nota Star Com 01801 / Faktur 0400260036508963'),
+                            ]),
+                        ]),
+
                     Forms\Components\Repeater::make('additional_fees')
-                        ->label('Daftar Rincian Biaya Tambahan & Operational Fees')
+                        ->label('Rincian Biaya Tambahan Transaksi (Ongkir, Fee Layanan, Handling)')
                         ->addActionLabel('Tambah Biaya Lain (+)')
                         ->reorderable()
                         ->cloneable()
@@ -212,23 +266,20 @@ class PengajuanAsetResource extends Resource
                             ]),
                         ]),
 
-                    Forms\Components\TextInput::make('uang_muka')
-                        ->label('Nominal Pengajuan Uang Muka (Rp)')
-                        ->helperText('Diisi jika meminta uang muka. Kosongkan jika tidak ada/sistem reimburse (pakai uang pribadi dulu).')
+                    Forms\Components\TextInput::make('adjustment_amount')
+                        ->label('Selisih / Balance Settlement LBS (Rp)')
+                        ->helperText('Nominal kurang/lebih bayar. Diisi positif (+) jika Gondowangi kurang bayar (reimburse ke user). Diisi minus (-) jika ada sisa uang muka dikembalikan.')
                         ->numeric()
                         ->prefix('Rp')
                         ->placeholder('0')
                         ->default(0)
                         ->nullable(),
 
-                    Forms\Components\TextInput::make('adjustment_amount')
-                        ->label('Selisih / Adjustment Nominal LBS (Rp)')
-                        ->helperText('Isi positif (+) jika Gondowangi kurang bayar (reimburse ke user). Isi minus (-) jika user kembalikan uang (sisa uang muka).')
-                        ->numeric()
-                        ->prefix('Rp')
-                        ->placeholder('0')
-                        ->default(0)
-                        ->nullable(),
+                    Forms\Components\Textarea::make('lbs_notes')
+                        ->label('Catatan Keterangan LBS / Settlement')
+                        ->placeholder('Misal: Realisasi pembelian 5 unit laptop di Star Com Harco. Selisih Rp 250.000 mohon ditransfer ke rekening user.')
+                        ->rows(2)
+                        ->columnSpanFull(),
                 ]),
 
             Forms\Components\Section::make('Alasan & Dokumen Lampiran')
