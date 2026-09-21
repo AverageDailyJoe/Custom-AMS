@@ -217,16 +217,30 @@
                     <p>Diterima Oleh,<br><strong>PIHAK KEDUA</strong></p>
                     <div class="sig-space"></div>
                     @php
-                        $dept = $checkout->department ?? $checkout->asset->department ?? 'User';
-                        $pos = $checkout->position ?? $checkout->asset->position ?? null;
-                        $subtitle = $pos ? "{$pos} - {$dept}" : $dept;
+                        $dept = trim($checkout->asset?->department ?: ($checkout->department ?: 'User'));
+                        $rawPos = trim($checkout->asset?->position ?: ($checkout->position ?: ''));
+
+                        $pos = '';
+                        if (!empty($rawPos)) {
+                            $words = explode(' ', $rawPos);
+                            $uniqueWords = [];
+                            foreach ($words as $w) {
+                                $lower = strtolower($w);
+                                if (!in_array($lower, array_map('strtolower', $uniqueWords))) {
+                                    $uniqueWords[] = $w;
+                                }
+                            }
+                            $pos = implode(' ', $uniqueWords);
+                        }
+
+                        $subtitle = !empty($pos) ? "{$pos} - {$dept}" : $dept;
                     @endphp
                     <p><u>( {{ $checkout->primary_user ?? 'Pengguna Unit' }} )</u><br><small>{{ $subtitle }}</small></p>
                 </td>
                 <td>
                     <p>Mengetahui,<br><strong>ATASAN / SPV</strong></p>
                     <div class="sig-space"></div>
-                    <p><u>( ..................................... )</u><br><small></small></p>
+                    <p><u>( {{ $checkout->approver_name ?? 'SETYADI CANDRAWINATA' }} )</u><br><small></small></p>
                 </td>
             </tr>
         </table>
