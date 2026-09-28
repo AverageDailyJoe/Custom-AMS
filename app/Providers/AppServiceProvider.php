@@ -22,10 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Force HTTPS scheme so Filament/Laravel assets tidak di-serve lewat http://
-        // Diperlukan karena app berjalan di balik Nginx reverse proxy yang handle SSL
-        if (config('app.env') === 'production') {
-            URL::forceScheme('https');
-        }
+        // Force HTTPS - app berjalan di balik Nginx reverse proxy yang handle SSL termination
+        URL::forceScheme('https');
     }
 }
