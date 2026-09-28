@@ -100,8 +100,8 @@ class PengajuanAsetResource extends Resource
                                     return [];
                                 }
                             })
-                            ->searchable()
                             ->nullable()
+                            ->native(false)
                             ->placeholder('— Tidak Ada (Pengajuan Baru) —')
                             ->columnSpanFull()
                             ->helperText('Pilih unit aset jika pengajuan ini ditujukan untuk upgrade atau penggantian komponen aset eksisting.'),
