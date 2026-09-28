@@ -78,7 +78,51 @@ class PengajuanAset extends Model
                     $pengajuan->target_asset_holder = $asset->holder_name !== '-' ? $asset->holder_name : ($asset->location?->name ?? 'In Stock');
                 }
             }
+
+            if ($pengajuan->isLbsFilled()) {
+                $pengajuan->has_lbs = true;
+            }
         });
+    }
+
+    /**
+     * Check if any LBS (Laporan Biaya Settlement) data has been filled.
+     */
+    public function isLbsFilled(): bool
+    {
+        if ($this->has_lbs) {
+            return true;
+        }
+
+        if (is_array($this->lbs_items) && count($this->lbs_items) > 0) {
+            foreach ($this->lbs_items as $item) {
+                if (!empty($item['title']) || (isset($item['unit_cost']) && (float)$item['unit_cost'] > 0)) {
+                    return true;
+                }
+            }
+        }
+
+        if (is_array($this->additional_fees) && count($this->additional_fees) > 0) {
+            foreach ($this->additional_fees as $fee) {
+                if (!empty($fee['name']) || (isset($fee['amount']) && (float)$fee['amount'] > 0)) {
+                    return true;
+                }
+            }
+        }
+
+        if ((float)($this->shipping_cost ?? 0) > 0 || (float)($this->service_fee ?? 0) > 0 || (float)($this->other_fee ?? 0) > 0) {
+            return true;
+        }
+
+        if (!empty(trim((string) $this->lbs_notes))) {
+            return true;
+        }
+
+        if ((float)($this->adjustment_amount ?? 0) != 0) {
+            return true;
+        }
+
+        return false;
     }
 
     public static function generateRequestNumber(): string

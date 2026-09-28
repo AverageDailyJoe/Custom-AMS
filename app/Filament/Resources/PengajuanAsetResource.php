@@ -409,15 +409,11 @@ class PengajuanAsetResource extends Resource
                     ->label('Qty')
                     ->formatStateUsing(fn ($state) => "{$state} Unit"),
 
-                Tables\Columns\TextColumn::make('priority')
-                    ->label('Prioritas')
+                Tables\Columns\TextColumn::make('is_lbs_filled')
+                    ->label('LBS')
                     ->badge()
-                    ->color(fn (string $state) => match ($state) {
-                        'low' => 'gray',
-                        'medium' => 'info',
-                        'high' => 'warning',
-                        'urgent' => 'danger',
-                    }),
+                    ->state(fn (PengajuanAset $record) => $record->isLbsFilled() ? 'Sudah LBS' : 'Belum LBS')
+                    ->color(fn (PengajuanAset $record) => $record->isLbsFilled() ? 'success' : 'gray'),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
@@ -488,6 +484,56 @@ class PengajuanAsetResource extends Resource
                         'rejected' => 'Rejected (Ditolak)',
                         'completed' => 'Completed (Selesai Pengadaan)',
                     ]),
+
+                Tables\Filters\SelectFilter::make('lbs_status')
+                    ->label('Filter Realisasi LBS')
+                    ->options([
+                        'sudah' => 'Sudah LBS',
+                        'belum' => 'Belum LBS',
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (!empty($data['value'])) {
+                            if ($data['value'] === 'sudah') {
+                                $query->where(function ($q) {
+                                    $q->where('has_lbs', true)
+                                      ->orWhereRaw("lbs_items IS NOT NULL AND lbs_items::text != '[]' AND lbs_items::text != 'null'")
+                                      ->orWhereRaw("additional_fees IS NOT NULL AND additional_fees::text != '[]' AND additional_fees::text != 'null'")
+                                      ->orWhere('shipping_cost', '>', 0)
+                                      ->orWhere('service_fee', '>', 0)
+                                      ->orWhere('other_fee', '>', 0)
+                                      ->orWhereNotNull('lbs_notes')
+                                      ->orWhere('adjustment_amount', '!=', 0);
+                                });
+                            } elseif ($data['value'] === 'belum') {
+                                $query->where(function ($q) {
+                                    $q->where(function ($sub) {
+                                        $sub->where('has_lbs', false)->orWhereNull('has_lbs');
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('lbs_items')->orWhereRaw("lbs_items::text = '[]'")->orWhereRaw("lbs_items::text = 'null'");
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('additional_fees')->orWhereRaw("additional_fees::text = '[]'")->orWhereRaw("additional_fees::text = 'null'");
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('shipping_cost')->orWhere('shipping_cost', 0);
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('service_fee')->orWhere('service_fee', 0);
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('other_fee')->orWhere('other_fee', 0);
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('lbs_notes')->orWhere('lbs_notes', '');
+                                    })
+                                    ->where(function ($sub) {
+                                        $sub->whereNull('adjustment_amount')->orWhere('adjustment_amount', 0);
+                                    });
+                                });
+                            }
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\Action::make('pdf_ppb')
