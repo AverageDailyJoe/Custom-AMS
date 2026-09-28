@@ -100,6 +100,7 @@ class PengajuanAsetResource extends Resource
                                     return [];
                                 }
                             })
+                            ->searchable()
                             ->nullable()
                             ->placeholder('— Tidak Ada (Pengajuan Baru) —')
                             ->columnSpanFull()
