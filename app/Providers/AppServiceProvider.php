@@ -22,7 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Force HTTPS - app berjalan di balik Nginx reverse proxy yang handle SSL termination
+        // Force HTTPS & Server HTTPS flag - app berjalan di balik Nginx / Cloudflare reverse proxy
         URL::forceScheme('https');
+        request()->server->set('HTTPS', 'on');
     }
 }
