@@ -20,6 +20,7 @@ class Asset extends Model
         'room',
         'department',
         'position',
+        'approver_name',
         'primary_user',
         'secondary_user',
         'processor',

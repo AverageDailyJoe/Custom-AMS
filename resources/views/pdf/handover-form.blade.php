@@ -240,7 +240,7 @@
                 <td>
                     <p>Mengetahui,<br><strong>ATASAN / SPV</strong></p>
                     <div class="sig-space"></div>
-                    <p><u>( {{ $checkout->approver_name ?? 'SETYADI CANDRAWINATA' }} )</u><br><small></small></p>
+                    <p><u>( {{ $checkout->asset?->approver_name ?? ($checkout->approver_name ?? 'SETYADI CANDRAWINATA') }} )</u><br><small></small></p>
                 </td>
             </tr>
         </table>

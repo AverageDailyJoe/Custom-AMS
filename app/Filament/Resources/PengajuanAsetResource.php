@@ -81,8 +81,12 @@ class PengajuanAsetResource extends Resource
 
                         Forms\Components\Select::make('asset_id')
                             ->label('Target Aset Terkait (Opsional / Upgrade / Servis)')
-                            ->relationship('asset', 'asset_tag')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->asset_tag} - " . ($record->assetModel?->name ?? 'Aset') . " [" . ($record->holder_name !== '-' ? $record->holder_name : 'In Stock') . "]")
+                            ->relationship('asset', 'asset_tag', fn ($query) => $query->with(['assetModel', 'location']))
+                            ->getOptionLabelFromRecordUsing(function ($record) {
+                                $holder = !empty($record->primary_user) ? $record->primary_user : ($record->location?->name ?? 'In Stock');
+                                $modelName = $record->assetModel?->name ?? 'Aset';
+                                return "{$record->asset_tag} - {$modelName} ({$holder})";
+                            })
                             ->searchable()
                             ->preload()
                             ->nullable()

@@ -118,6 +118,11 @@ class AssetResource extends Resource
                     Forms\Components\TextInput::make('position')
                         ->label('Posisi / Jabatan Karyawan')
                         ->placeholder('Contoh: Data Analyst, SPV HRD'),
+                    Forms\Components\TextInput::make('approver_name')
+                        ->label('Nama Atasan / SPV (Mengetahui)')
+                        ->default('SETYADI CANDRAWINATA')
+                        ->placeholder('Contoh: SETYADI CANDRAWINATA')
+                        ->columnSpanFull(),
                 ])->columns(2),
 
             Forms\Components\Section::make('Spesifikasi Hardware')
