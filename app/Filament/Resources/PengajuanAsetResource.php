@@ -81,19 +81,22 @@ class PengajuanAsetResource extends Resource
 
                         Forms\Components\Select::make('asset_id')
                             ->label('Target Aset Terkait (Opsional / Upgrade / Servis)')
-                            ->relationship(
-                                name: 'asset',
-                                titleAttribute: 'asset_tag',
-                                modifyQueryUsing: fn ($query) => $query->with(['assetModel', 'location'])->orderBy('asset_tag')
-                            )
-                            ->getOptionLabelFromRecordUsing(function ($record) {
-                                $holder = !empty($record->primary_user) ? $record->primary_user : ($record->location?->name ?? 'In Stock');
-                                $modelName = $record->assetModel?->name ?? 'Aset';
-                                return "{$record->asset_tag} - {$modelName} ({$holder})";
+                            ->options(function () {
+                                return \App\Models\Asset::with(['assetModel', 'location'])
+                                    ->orderBy('asset_tag')
+                                    ->get()
+                                    ->mapWithKeys(function ($asset) {
+                                        $holder = !empty($asset->primary_user)
+                                            ? $asset->primary_user
+                                            : ($asset->location?->name ?? 'In Stock');
+                                        $modelName = $asset->assetModel?->name ?? 'Aset';
+                                        return [$asset->id => "{$asset->asset_tag} - {$modelName} ({$holder})"];
+                                    })
+                                    ->toArray();
                             })
-                            ->searchable(['asset_tag', 'primary_user'])
-                            ->preload()
+                            ->searchable()
                             ->nullable()
+                            ->placeholder('— Tidak Ada (Pengajuan Baru) —')
                             ->columnSpanFull()
                             ->helperText('Pilih unit aset jika pengajuan ini ditujukan untuk upgrade atau penggantian komponen aset eksisting.'),
                     ]),
