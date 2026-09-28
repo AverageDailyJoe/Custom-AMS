@@ -82,19 +82,24 @@ class PengajuanAsetResource extends Resource
                         Forms\Components\Select::make('asset_id')
                             ->label('Target Aset Terkait (Opsional / Upgrade / Servis)')
                             ->options(function () {
-                                return \App\Models\Asset::with(['assetModel', 'location'])
-                                    ->orderBy('asset_tag')
-                                    ->get()
-                                    ->mapWithKeys(function ($asset) {
-                                        $holder = !empty($asset->primary_user)
-                                            ? $asset->primary_user
-                                            : ($asset->location?->name ?? 'In Stock');
-                                        $modelName = $asset->assetModel?->name ?? 'Aset';
-                                        return [$asset->id => "{$asset->asset_tag} - {$modelName} ({$holder})"];
-                                    })
-                                    ->toArray();
+                                try {
+                                    return \App\Models\Asset::with(['assetModel', 'location'])
+                                        ->orderBy('asset_tag')
+                                        ->get()
+                                        ->mapWithKeys(function ($asset) {
+                                            $holder = !empty($asset->primary_user)
+                                                ? $asset->primary_user
+                                                : ($asset->location?->name ?? 'In Stock');
+                                            $modelName = $asset->assetModel?->name ?? 'Aset';
+                                            // Cast ke string agar JSON key tidak numeric (TomSelect requirement)
+                                            return [(string) $asset->id => "{$asset->asset_tag} - {$modelName} ({$holder})"];
+                                        })
+                                        ->toArray();
+                                } catch (\Throwable $e) {
+                                    \Illuminate\Support\Facades\Log::error('asset_id options error: ' . $e->getMessage());
+                                    return [];
+                                }
                             })
-                            ->searchable()
                             ->nullable()
                             ->placeholder('— Tidak Ada (Pengajuan Baru) —')
                             ->columnSpanFull()
