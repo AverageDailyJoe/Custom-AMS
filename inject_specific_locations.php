@@ -4,12 +4,12 @@ require __DIR__ . '/vendor/autoload.php';
 $app = require_once __DIR__ . '/bootstrap/app.php';
 $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-use App\Models\Asset;
 use Illuminate\Support\Facades\DB;
 
 echo "=== INJECTING LOKASI SPESIFIK (RUANGAN) TO ASSETS ===\n";
 
 $roomMappings = [
+    // Image 1: GTK-01-01 & GTK-01-03
     'GTK-01-01-01' => 'OFFICE ATAS',
     'GTK-01-01-02' => 'RUANGAN FINANCE & ACCOUNTING',
     'GTK-01-01-03' => 'OFFICE ATAS',
@@ -34,6 +34,38 @@ $roomMappings = [
     'GTK-01-01-22' => 'RUANGAN SERVER',
     'GTK-01-03-01' => 'RUANGAN BUSINESS DEVELOPMENT',
     'GTK-01-03-02' => 'OFFICE ATAS',
+
+    // Image 3: GTK-02-03, GTK-03-01 & GTK-03-03
+    'GTK-02-03-60' => 'RUANGAN FINANCE & ACCOUNTING',
+    'GTK-02-03-61' => 'LEMARI IT',
+    'GTK-02-03-62' => 'RUANGAN MARKETING',
+    'GTK-02-03-63' => 'LEMARI IT',
+    'GTK-02-03-64' => 'RUANGAN PRODUKSI',
+    'GTK-03-01-01' => 'RUANGAN OPERASIONAL BMS',
+    'GTK-03-01-02' => 'GUDANG JAKARTA',
+    'GTK-03-01-03' => 'GUDANG JAKARTA',
+    'GTK-03-01-04' => 'GUDANG JAKARTA',
+    'GTK-03-01-05' => 'RUANGAN LIVESTREAMING',
+    'GTK-03-01-06' => 'GUDANG MEDAN',
+    'GTK-03-01-07' => 'GUDANG MEDAN',
+    'GTK-03-01-08' => 'GUDANG MAKASSAR',
+    'GTK-03-01-09' => 'GUDANG MAKASSAR',
+    'GTK-03-01-10' => 'GUDANG BANJARMASIN',
+    'GTK-03-01-11' => 'GUDANG BANJARMASIN',
+    'GTK-03-01-12' => 'GUDANG PONTIANAK',
+    'GTK-03-01-13' => 'GUDANG PONTIANAK',
+    'GTK-03-01-14' => 'GUDANG PEKANBARU',
+    'GTK-03-01-15' => 'GUDANG PEKANBARU',
+    'GTK-03-01-16' => 'GUDANG PALEMBANG',
+    'GTK-03-01-17' => 'GUDANG PALEMBANG',
+    'GTK-03-01-18' => 'GUDANG DENPASAR',
+    'GTK-03-01-19' => 'GUDANG DENPASAR',
+    'GTK-03-01-20' => 'GUDANG SURABAYA',
+    'GTK-03-01-21' => 'GUDANG SURABAYA',
+    'GTK-03-01-22' => 'RUANGAN LIVESTREAMING',
+    'GTK-03-01-23' => 'RUANGAN LIVESTREAMING',
+    'GTK-03-03-01' => 'LEMARI IT',
+    'GTK-03-03-02' => 'RUANGAN FINANCE & ACCOUNTING',
 ];
 
 $updatedCount = 0;
